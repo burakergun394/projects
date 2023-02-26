@@ -1,0 +1,118 @@
+﻿@page
+@model PusulaGroup.WebApp.Pages.Admin.OurCustomersModel
+@{
+    Layout = "_LayoutAdmin";
+}
+
+@section Contentheader {
+    <div class="col-sm-6">
+    </div><!-- /.col -->
+    <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item active">Our Customers</li>
+        </ol>
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">Insert / Update</h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <form method="post" id="uploadForm" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label asp-for="AdminOurCustomerViewModel.OurCustomer.Header">Header</label>
+                        <input asp-for="AdminOurCustomerViewModel.OurCustomer.Header" type="text" class="form-control" placeholder="Enter header" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="AdminOurCustomerViewModel.OurCustomer.SubHeader">Sub header</label>
+                        <input asp-for="AdminOurCustomerViewModel.OurCustomer.SubHeader" type="text" class="form-control" placeholder="Enter sub header" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="AdminOurCustomerViewModel.OurCustomer.Content">Content</label>
+                        <textarea asp-for="AdminOurCustomerViewModel.OurCustomer.Content" type="text" class="form-control" id="content"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="images">
+                            Choose files
+                            <code class="ml-2">the image size must be width: 170px - height: 170px</code>
+                        </label>
+                        <div class="input-group">
+                            <input type="file" id="image" name="image">
+                        </div>
+                        <img class="mt-2"
+                             src="@Model.AdminOurCustomerViewModel.OurCustomer.ImagePath"
+                             style="width: 150px; height: 200px;">
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" name="id" value="@Model.AdminOurCustomerViewModel.OurCustomer.Id" />
+                        <button type="submit" class="btn btn-primary" asp-page-handler="InsertOrUpdate" asp-route-id="@Model.AdminOurCustomerViewModel.OurCustomer.Id">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <!-- Default box -->
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">List</h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <form method="post">
+                                <div class="card-body table-responsive p-0">
+                                    <table class="table table-hover text-nowrap">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Header</th>
+                                                <th>SubHeader</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model.AdminOurCustomerViewModel.OurCustomers)
+                                            {
+                                                <tr>
+                                                    <td>@item.Id</td>
+                                                    <td>@item.Header</td>
+                                                    <td>@item.SubHeader</td>
+                                                    <td>
+                                                        <a href="ourcustomers?id=@item.Id" class="btn btn-success">Update</a>
+                                                        <input type="submit" asp-page-handler="Delete" asp-route-id="@item.Id" onclick="return confirm('Are you sure to delete?')" class="btn btn-danger" value="Delete" />
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </form>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+            </div>
+        </div>
+        <!-- /.card-body -->
+    </div>
+    <!-- /.card -->
+</div>

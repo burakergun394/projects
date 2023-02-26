@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{8832FC36-DE6A-4BB5-8C5F-6A5E96DB0255}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PusulaGroup.WebApp", "src\PusulaGroup.WebApp\PusulaGroup.WebApp.csproj", "{FACC3AFD-3C6A-4C27-A4F8-40B7596E16C4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PusulaGroup.Console", "src\PusulaGroup.Console\PusulaGroup.Console.csproj", "{AD95C74D-8B2A-44DD-B5A8-B060232891E7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FACC3AFD-3C6A-4C27-A4F8-40B7596E16C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FACC3AFD-3C6A-4C27-A4F8-40B7596E16C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FACC3AFD-3C6A-4C27-A4F8-40B7596E16C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FACC3AFD-3C6A-4C27-A4F8-40B7596E16C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD95C74D-8B2A-44DD-B5A8-B060232891E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD95C74D-8B2A-44DD-B5A8-B060232891E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD95C74D-8B2A-44DD-B5A8-B060232891E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD95C74D-8B2A-44DD-B5A8-B060232891E7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{FACC3AFD-3C6A-4C27-A4F8-40B7596E16C4} = {8832FC36-DE6A-4BB5-8C5F-6A5E96DB0255}
+		{AD95C74D-8B2A-44DD-B5A8-B060232891E7} = {8832FC36-DE6A-4BB5-8C5F-6A5E96DB0255}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3D68BD2E-7A65-4CF0-8CB8-CC97DA182608}
+	EndGlobalSection
+EndGlobal

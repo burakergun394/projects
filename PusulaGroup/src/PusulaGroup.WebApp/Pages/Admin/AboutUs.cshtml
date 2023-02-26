@@ -1,0 +1,72 @@
+﻿@page
+@model PusulaGroup.WebApp.Pages.Admin.AboutUsModel
+@{
+    Layout = "_LayoutAdmin";
+}
+
+@section Contentheader {
+    <div class="col-sm-6">
+    </div><!-- /.col -->
+    <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item active">About Us</li>
+        </ol>
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">Save</h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <form method="post" id="uploadForm" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="images">Choose files
+                            <code class="ml-2">the image size must be width: 850px - height: 700px</code>
+                        </label>
+                        <div class="input-group">
+                            <input type="file" id="image" name="image">                    
+                        </div>
+                        <img class="mt-2"
+                             src="@Model.AdminAboutUsViewModel.AboutUs.ImagePath"
+                             style="width: 300px; height: 250px;">
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="AdminAboutUsViewModel.AboutUs.AboutUsContent">About us content</label>
+                        <textarea asp-for="AdminAboutUsViewModel.AboutUs.AboutUsContent" type="text" class="form-control summernote"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="AdminAboutUsViewModel.AboutUs.OurVisionContent">Our vision content</label>
+                        <textarea asp-for="AdminAboutUsViewModel.AboutUs.OurVisionContent" type="text" class="form-control summernote"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="AdminAboutUsViewModel.AboutUs.SeoTitle">Seo title</label>
+                        <input asp-for="AdminAboutUsViewModel.AboutUs.SeoTitle" type="text" class="form-control" placeholder="Enter seo title" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="AdminAboutUsViewModel.AboutUs.SeoDescription">Seo description</label>
+                        <textarea asp-for="AdminAboutUsViewModel.AboutUs.SeoDescription" type="text" class="form-control" placeholder="Enter seo description" rows="4"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="AdminAboutUsViewModel.AboutUs.SeoKeywords">Seo Keywords</label>
+                        <textarea asp-for="AdminAboutUsViewModel.AboutUs.SeoKeywords" type="text" class="form-control" placeholder="Enter seo keywords" rows="4"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="AdminAboutUsViewModel.AboutUs.SeoAuthor">Seo Author</label>
+                        <textarea asp-for="AdminAboutUsViewModel.AboutUs.SeoAuthor" type="text" class="form-control" placeholder="Enter seo author" rows="4"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary" asp-page-handler="Save">Save</button>
+                    </div> 
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

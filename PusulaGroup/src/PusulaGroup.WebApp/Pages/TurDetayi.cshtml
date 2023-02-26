@@ -1,0 +1,71 @@
+﻿@page "/turlarimiz/{name}"
+@model PusulaGroup.WebApp.Pages.TurDetayiModel
+@{
+}
+<!-- tour detail section start -->
+<div class="tour_detail_section layout_padding">
+    <div class="container">
+        <div class="tour_detail_section_2">
+            <div class="tour_detail_name">@Model.TourDetails.UserFriendlyName</div>
+            <div class="tour_detail_content_text">
+                @Html.Raw(@Model.TourDetails.Content)
+            </div>
+            <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                <ol class="carousel-indicators">
+                    @{
+                        int count = Model.TourDetails.IsMainTour ? Model.TourDetails.TourImages.Count : Model.TourDetails.SubTours.Count;
+                        for (int i = 0; i < count; i++)
+                        {
+                            string activeClassName = i == Model.ActiveTourImageIndex ? "active" : string.Empty;
+                            <li data-target="#carouselExampleIndicators" data-slide-to="@i" class="@activeClassName" />
+                        }
+                    }
+                </ol>
+                <div class="carousel-inner">
+                    @{
+                        if (Model.TourDetails.IsMainTour)
+                        {
+                            foreach (var item in Model.TourDetails.TourImages.Select((Value, Index) => new { Index, Value }))
+                            {
+                                string activeClassName = item.Index == Model.ActiveTourImageIndex ? "active" : string.Empty;
+                                <div class="carousel-item @activeClassName">
+                                    <div class="tour_detail_main">
+                                        <div class="tour_detail_box">
+                                            <div class="tour_detail_sub_content">
+                                                <div class="tour_detail_sub_img">
+                                                    <img src="@item.Value">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            foreach (var item in Model.TourDetails.SubTours.Select((Value, Index) => new { Index, Value }))
+                            {
+                                string activeClassName = item.Index == Model.ActiveTourImageIndex ? "active" : string.Empty;
+                                <div class="carousel-item @activeClassName">
+                                    <div class="tour_detail_main">
+                                        <div class="tour_detail_box">
+                                            <div class="tour_detail_sub_content">
+                                                <h4 class="tour_detail_sub_name">@item.Value.UserFriendlyName</h4>
+                                                <div class="tour_detail_sub_img">
+                                                    <a href="/turlarimiz/@item.Value.Name">
+                                                        <img src="@item.Value.ImagePath" />
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- tour detail section start -->

@@ -1,0 +1,30 @@
+﻿@page
+@model PusulaGroup.WebApp.Pages.IletisimModel
+@{
+}
+<!-- contact section start -->
+<div class="contact_section layout_padding">
+    <div class="container">
+        <form method="post">
+            <h1 class="contact_taital">İletişim Formu</h1>
+            <div class="email_text">
+                <div class="form-group">
+                    <input asp-for="ContactViewModel.Name" type="text" class="email-bt" placeholder="Ad soyad giriniz.">
+                </div>
+                <div class="form-group">
+                    <input asp-for="ContactViewModel.PhoneNumber" type="text" class="email-bt" placeholder="Telefon numarası giriniz.">
+                </div>
+                <div class="form-group">
+                    <input asp-for="ContactViewModel.Email" type="email" class="email-bt" placeholder="Email adresinizi giriniz." >
+                </div>
+                <div class="form-group">
+                    <textarea asp-for="ContactViewModel.Message" class="massage-bt" placeholder="Mesajınızı giriniz." rows="5"></textarea>
+                </div>
+                <div class="send_btn">
+                    <button type="submit" asp-page-handler="Send">GÖNDER</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- contact section end -->

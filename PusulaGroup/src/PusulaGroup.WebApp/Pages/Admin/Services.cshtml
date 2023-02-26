@@ -1,0 +1,115 @@
+﻿@page
+@model PusulaGroup.WebApp.Pages.Admin.ServicesModel
+@{
+    Layout = "_LayoutAdmin";
+}
+@section Contentheader {
+    <div class="col-sm-6">
+    </div><!-- /.col -->
+    <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item active">Services</li>
+        </ol>
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">Insert / Update</h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <form method="post" id="uploadForm" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label asp-for="AdminServicesViewModel.Service.UserFriendlyName">Name</label>
+                        <input asp-for="AdminServicesViewModel.Service.UserFriendlyName" type="text" class="form-control" placeholder="Enter name" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="AdminServicesViewModel.Service.Content">Content</label>
+                        <textarea asp-for="AdminServicesViewModel.Service.Content" type="text" class="form-control summernote" id="content"></textarea>
+                    </div>             
+                    <div class="form-group">
+                        <label asp-for="AdminServicesViewModel.Service.SeoTitle">Seo title</label>
+                        <input asp-for="AdminServicesViewModel.Service.SeoTitle" type="text" class="form-control" placeholder="Enter seo title" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="AdminServicesViewModel.Service.SeoDescription">Seo description</label>
+                        <textarea asp-for="AdminServicesViewModel.Service.SeoDescription" type="text" class="form-control" placeholder="Enter seo description" rows="4"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="AdminServicesViewModel.Service.SeoKeywords">Seo Keywords</label>
+                        <textarea asp-for="AdminServicesViewModel.Service.SeoKeywords" type="text" class="form-control" placeholder="Enter seo keywords" rows="4"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="AdminServicesViewModel.Service.SeoAuthor">Seo Author</label>
+                        <textarea asp-for="AdminServicesViewModel.Service.SeoAuthor" type="text" class="form-control" placeholder="Enter seo author" rows="4"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" name="id" value="@Model.AdminServicesViewModel.Service.Id" />
+                        <button type="submit" class="btn btn-primary" asp-page-handler="InsertOrUpdate" asp-route-id="@Model.AdminServicesViewModel.Service.Id">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <!-- Default box -->
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">List</h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <form method="post">
+                                <div class="card-body table-responsive p-0">
+                                    <table class="table table-hover text-nowrap">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Service Name</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model.AdminServicesViewModel.Services)
+                                            {
+                                                <tr>
+                                                    <td>@item.ServiceId</td>
+                                                    <td>@item.UserFriendlyName</td>
+                                                    <td>
+                                                        <a href="services?id=@item.ServiceId" class="btn btn-success">Update</a>
+                                                        <input type="submit" asp-page-handler="Delete" asp-route-id="@item.ServiceId" onclick="return confirm('Are you sure to delete?')" class="btn btn-danger" value="Delete" />
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </form>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+            </div>
+        </div>
+        <!-- /.card-body -->
+    </div>
+    <!-- /.card -->
+</div>

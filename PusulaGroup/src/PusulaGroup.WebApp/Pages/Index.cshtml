@@ -1,0 +1,131 @@
+﻿@page
+@model IndexModel
+@{
+}
+@section banner {
+    <div class="banner_section layout_padding">
+        <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
+            @foreach (var item in Model.IndexViewModel.Sliders.Select((Value, Index) => new { Index, Value }))
+            {
+                var className = "carousel-item";
+                if (item.Index == 0)
+                {
+                    className += " active";
+                }
+
+                <div class="@className">
+                    <div class="container">
+                        <h1 class="banner_taital">@item.Value.UserFriendlyName</h1>
+                        <p class="banner_text">
+                            @item.Value.Text
+                        </p>
+                        <div class="read_bt"><a href="@item.Value.Url">Daha Fazla Bilgi Alın</a></div>
+                    </div>
+                </div>
+
+            }
+        </div>
+    </div>
+}
+<!-- tours section start -->
+<div class="services_section layout_padding">
+    <div class="container">
+        <h1 class="services_taital">Turlarımız </h1>
+        <div class="services_section_2">
+            @for (var i = 0; i <= Model.IndexViewModel.DivisionTour; i++)
+                {
+                    <div class="row mt-4">
+                        @foreach (var item in Model.IndexViewModel.Tours.Skip(i * Model.IndexViewModel.NumberOfToursInRow).Take(Model.IndexViewModel.NumberOfToursInRow))
+                        {
+                            <div class="col-md-4">
+                                <div>
+                                    <img src="@item.ImagePath" class="services_img">
+                                </div>
+                                <div class="btn_main">
+                                    <a href="/turlarimiz/@item.Name">@item.UserFriendlyName</a>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+        </div>
+    </div>
+</div>
+<!-- tours section end -->
+<!-- services section start -->
+<div class="services_section layout_padding">
+    <div class="container">
+        <h1 class="services_taital">Hizmetlerimiz </h1>
+        <div class="services_section_2">
+            @for (var i = 0; i <= Model.IndexViewModel.DivisionService; i++)
+            {
+                <div class="row mt-4">
+                    @foreach (var item in Model.IndexViewModel.Services.Skip(i * Model.IndexViewModel.NumberOfServicesInRow).Take(Model.IndexViewModel.NumberOfServicesInRow))
+                    {
+                        <div class="col-md-4">
+                            <div>
+                                <img src="@item.ImagePath" class="services_img">
+                            </div>
+                            <div class="btn_main">
+                                <a href="/hizmetlerimiz/@item.Name">@item.UserFriendlyName</a>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<!-- services section end -->
+<!-- client section start -->
+<div class="client_section layout_padding">
+    <div class="container">
+        <h1 class="client_taital">Müşteri Değerlendirmeleri</h1>
+        <div class="client_section_2">
+            <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                <ol class="carousel-indicators">
+                    @foreach (var item in Model.IndexViewModel.OurCustomers.Select((Value, Index) => new { Index, Value }))
+                    {
+                        var className = "";
+                        if (item.Index == 0)
+                        {
+                            className += " active";
+                        }
+
+                        <li data-target="#carouselExampleIndicators" data-slide-to="@item.Index" class="@className"></li>
+                    }
+                </ol>
+                <div class="carousel-inner">
+                    @foreach (var item in Model.IndexViewModel.OurCustomers.Select((Value, Index) => new { Index, Value }))
+                    {
+                        var className = "carousel-item";
+                        if (item.Index == 0)
+                        {
+                            className += " active";
+                        }
+                        <div class="@className">
+                            <div class="client_main">
+                                <div class="box_left">
+                                    <p class="lorem_text">
+                                        @item.Value.Content
+                                    </p>
+                                </div>
+                                <div class="box_right">
+                                    <div class="client_taital_left">
+                                        <div class="client_img"><img src="@item.Value.ImagePath"></div>
+                                        <div class="quick_icon"><img src="/images/ourcustomers/quick-icon.png"></div>
+                                    </div>
+                                    <div class="client_taital_right">
+                                        <h4 class="client_name">@item.Value.Header</h4>
+                                        <p class="customer_text">@item.Value.SubHeader</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- client section end -->

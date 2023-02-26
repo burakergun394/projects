@@ -1,0 +1,48 @@
+﻿@page "/hizmetlerimiz/{name}"
+@model PusulaGroup.WebApp.Pages.HizmetDetayiModel
+@{
+ 
+}
+
+<!-- tour detail section start -->
+<div class="tour_detail_section layout_padding">
+    <div class="container">
+        <div class="tour_detail_section_2">
+            <div class="tour_detail_name">@Model.Service.UserFriendlyName</div>
+            <div class="tour_detail_content_text">
+                @Html.Raw(@Model.Service.Content)
+            </div>
+            <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                <ol class="carousel-indicators">
+                    @{
+                        for (int i = 0; i < Model.Service.Images.Count; i++)
+                        {
+                            string activeClassName = i == Model.ActiveTourImageIndex ? "active" : string.Empty;
+                            <li data-target="#carouselExampleIndicators" data-slide-to="@i" class="@activeClassName" />
+                        }
+                    }
+                </ol>
+                <div class="carousel-inner">
+                    @{
+                        for (int i = 0; i < Model.Service.Images.Count; i++)
+                        {
+                            string activeClassName = i == Model.ActiveTourImageIndex ? "active" : string.Empty;
+                            <div class="carousel-item @activeClassName">
+                                <div class="tour_detail_main">
+                                    <div class="tour_detail_box">
+                                        <div class="tour_detail_sub_content">
+                                            <div class="tour_detail_sub_img">
+                                                <img src="@Model.Service.Images[i].Path">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- tour detail section start -->

@@ -1,0 +1,139 @@
+﻿@page
+@model PusulaGroup.WebApp.Pages.Admin.ToursModel
+@{
+    Layout = "_LayoutAdmin";
+}
+
+@section Contentheader {
+    <div class="col-sm-6">
+    </div><!-- /.col -->
+    <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item active">Tours</li>
+        </ol>
+    </div>
+}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">Insert / Update</h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <form method="post" id="uploadForm" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label asp-for="AdminToursViewModel.Tour.UserFriendlyName">Name</label>
+                        <input asp-for="AdminToursViewModel.Tour.UserFriendlyName" type="text" class="form-control" placeholder="Enter name" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="AdminToursViewModel.Tour.Content">Content</label>
+                        <textarea asp-for="AdminToursViewModel.Tour.Content" type="text" class="form-control summernote" id="content"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputStatus">Main Tour</label>
+                        <select asp-for="AdminToursViewModel.Tour.ParentId" class="form-control custom-select">
+                            <option value="0" selected>Main Tour</option>
+                            @foreach (var item in Model.AdminToursViewModel.Tours)
+                            {
+                                <option value="@item.TourId">@item.UserFriendlyName</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="AdminToursViewModel.Tour.SliderText">Slider Text</label>
+                        <textarea asp-for="AdminToursViewModel.Tour.SliderText" type="text" class="form-control" placeholder="Enter slider text" rows="4"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="AdminToursViewModel.Tour.SliderOrderIndex">Slider Order Index</label>
+                        <input asp-for="AdminToursViewModel.Tour.SliderOrderIndex" type="number" class="form-control" placeholder="Enter slider order index" />
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" asp-for="AdminToursViewModel.Tour.IsShowSlider">
+                        <label class="form-check-label" asp-for="AdminToursViewModel.Tour.IsShowSlider">Is Show Slider</label>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="AdminToursViewModel.Tour.SeoTitle">Seo title</label>
+                        <input asp-for="AdminToursViewModel.Tour.SeoTitle" type="text" class="form-control" placeholder="Enter seo title" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="AdminToursViewModel.Tour.SeoDescription">Seo description</label>
+                        <textarea asp-for="AdminToursViewModel.Tour.SeoDescription" type="text" class="form-control" placeholder="Enter seo description" rows="4"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="AdminToursViewModel.Tour.SeoKeywords">Seo Keywords</label>
+                        <textarea asp-for="AdminToursViewModel.Tour.SeoKeywords" type="text" class="form-control" placeholder="Enter seo keywords" rows="4"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="AdminToursViewModel.Tour.SeoAuthor">Seo Author</label>
+                        <textarea asp-for="AdminToursViewModel.Tour.SeoAuthor" type="text" class="form-control" placeholder="Enter seo author" rows="4"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" name="id" value="@Model.AdminToursViewModel.Tour.Id" />
+                        <button type="submit" class="btn btn-primary" asp-page-handler="InsertOrUpdate" asp-route-id="@Model.AdminToursViewModel.Tour.Id">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <!-- Default box -->
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">List</h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <form method="post">
+                                <div class="card-body table-responsive p-0">
+                                    <table class="table table-hover text-nowrap">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Main Tour Name</th>
+                                                <th>Tour Name</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model.AdminToursViewModel.Tours)
+                                            {
+                                                <tr>
+                                                    <td>@item.TourId</td>
+                                                    <td>@item.MainTourName</td>
+                                                    <td>@item.UserFriendlyName</td>
+                                                    <td>
+                                                        <a href="tours?id=@item.TourId" class="btn btn-success">Update</a>
+                                                        <input type="submit" asp-page-handler="Delete" asp-route-id="@item.TourId" onclick="return confirm('Are you sure to delete?')" class="btn btn-danger" value="Delete" />
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </form>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+            </div>
+        </div>
+        <!-- /.card-body -->
+    </div>
+    <!-- /.card -->
+</div>

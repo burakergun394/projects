@@ -1,0 +1,116 @@
+﻿@page
+@model PusulaGroup.WebApp.Pages.Admin.IndexModel
+@{
+    Layout = "_LayoutAdmin";
+}
+
+@section Contentheader {
+    <div class="col-sm-6">
+    </div><!-- /.col -->
+    <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item active">General Info</li>
+        </ol>
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">Save</h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <form method="post" id="uploadForm" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="images">Choose files
+                            <code class="ml-2">the image size must be width: 150px - height: 200px</code>
+                        </label>
+                        <div class="input-group">
+                            <input type="file" id="image" name="image">                    
+                        </div>
+                        <img class="mt-2"
+                             src="@Model.AdminIndexViewModel.GeneralInfo.LogoPath"
+                             style="width: 150px; height: 200px;">
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="AdminIndexViewModel.GeneralInfo.Email">Email</label>
+                        <input asp-for="AdminIndexViewModel.GeneralInfo.Email" type="email" class="form-control" placeholder="Enter email" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="AdminIndexViewModel.GeneralInfo.EMailHost">Email Host</label>
+                        <input asp-for="AdminIndexViewModel.GeneralInfo.EMailHost" type="text" class="form-control" placeholder="Enter email host" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="AdminIndexViewModel.GeneralInfo.EmailPort">Email Port</label>
+                        <input asp-for="AdminIndexViewModel.GeneralInfo.EmailPort" type="number" class="form-control" placeholder="Enter email port" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="AdminIndexViewModel.GeneralInfo.EmailFrom">Email From</label>
+                        <input asp-for="AdminIndexViewModel.GeneralInfo.EmailFrom" type="email" class="form-control" placeholder="Enter email" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="AdminIndexViewModel.GeneralInfo.EmailPassword">Email Password</label>
+                        <input asp-for="AdminIndexViewModel.GeneralInfo.EmailPassword" type="text" class="form-control" placeholder="Enter email password" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="AdminIndexViewModel.GeneralInfo.Address1">Address 1</label>
+                        <textarea asp-for="AdminIndexViewModel.GeneralInfo.Address1" type="text" class="form-control" placeholder="Enter address 1" rows="1"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="AdminIndexViewModel.GeneralInfo.Address2">Address 2</label>
+                        <textarea asp-for="AdminIndexViewModel.GeneralInfo.Address2" type="text" class="form-control" placeholder="Enter address 2" rows="1"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="AdminIndexViewModel.GeneralInfo.FacebookUrl">Facebook Url</label>
+                        <input asp-for="AdminIndexViewModel.GeneralInfo.FacebookUrl" type="url" class="form-control" placeholder="Enter facebook url" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="AdminIndexViewModel.GeneralInfo.InstagramUrl">Instagram Url</label>
+                        <input asp-for="AdminIndexViewModel.GeneralInfo.InstagramUrl" type="url" class="form-control" placeholder="Enter instagram url" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="AdminIndexViewModel.GeneralInfo.TwitterUrl">Twitter Url</label>
+                        <input asp-for="AdminIndexViewModel.GeneralInfo.TwitterUrl" type="url" class="form-control" placeholder="Enter twitter url" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="AdminIndexViewModel.GeneralInfo.LinkedinUrl">Linkedin Url</label>
+                        <input asp-for="AdminIndexViewModel.GeneralInfo.LinkedinUrl" type="url" class="form-control" placeholder="Enter linkedin url" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="AdminIndexViewModel.GeneralInfo.TelephoneNumber">Telephone Number</label>
+                        <input asp-for="AdminIndexViewModel.GeneralInfo.TelephoneNumber" type="text" class="form-control" placeholder="Enter telephone number" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="AdminIndexViewModel.GeneralInfo.WhatsappTelephoneNumber">Whatsapp Telephone Number</label>
+                        <input asp-for="AdminIndexViewModel.GeneralInfo.WhatsappTelephoneNumber" type="text" class="form-control" placeholder="Enter telephone number" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="AdminIndexViewModel.GeneralInfo.SeoTitle">Seo Title</label>
+                        <input asp-for="AdminIndexViewModel.GeneralInfo.SeoTitle" type="text" class="form-control" placeholder="Enter seo title" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="AdminIndexViewModel.GeneralInfo.SeoDescription">Seo Description</label>
+                        <textarea asp-for="AdminIndexViewModel.GeneralInfo.SeoDescription" type="text" class="form-control" placeholder="Enter seo description" rows="4"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="AdminIndexViewModel.GeneralInfo.SeoKeywords">Seo Keywords</label>
+                        <textarea asp-for="AdminIndexViewModel.GeneralInfo.SeoKeywords" type="text" class="form-control" placeholder="Enter seo keywords" rows="4"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="AdminIndexViewModel.GeneralInfo.SeoAuthor">Seo Author</label>
+                        <textarea asp-for="AdminIndexViewModel.GeneralInfo.SeoAuthor" type="text" class="form-control" placeholder="Enter seo author" rows="4"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary" asp-page-handler="Save">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
