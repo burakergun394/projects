@@ -119,7 +119,7 @@ namespace PusulaGroup.WebApp.Pages
         {
             var result = new List<IndexTourDetail>();
 
-            if (!cache.TryGet<List<IndexTourDetail>>("Tour.Index.GetTours", out var value))
+            if (!cache.TryGet<List<IndexTourDetail>>("Tours.Index.GetTours", out var value))
             {
                 var datas = await tourRepository.GetListByPredicateAsync(x => x.ParentId == 0);
 
@@ -138,7 +138,7 @@ namespace PusulaGroup.WebApp.Pages
                     });
                 }
 
-                cache.Add("Tour.Index.GetTours", result, 1440);
+                cache.Add("Tours.Index.GetTours", result, 1440);
             }
             else
             {
@@ -152,7 +152,7 @@ namespace PusulaGroup.WebApp.Pages
         {
             var result = new List<IndexSliderDetail>();
 
-            if (!cache.TryGet<List<IndexSliderDetail>>("Tour.Index.GetSliderTours", out var value))
+            if (!cache.TryGet<List<IndexSliderDetail>>("Tours.Index.GetSliderTours", out var value))
             {
                 var datas = await tourRepository.GetListByPredicateAsync(x => x.IsShowSlider);
 
@@ -169,7 +169,7 @@ namespace PusulaGroup.WebApp.Pages
                         Name = data.Name
                     });
                 }
-                cache.Add("Tour.Index.GetSliderTours", result, 1440);
+                cache.Add("Tours.Index.GetSliderTours", result, 1440);
             }
             else
             {

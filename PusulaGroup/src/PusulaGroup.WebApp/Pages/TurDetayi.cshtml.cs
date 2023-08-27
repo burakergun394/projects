@@ -45,13 +45,13 @@ namespace PusulaGroup.WebApp.Pages
 
             Tour mainTour = null;
 
-            if (!cache.TryGet<Tour>($"Tour.TourDetails.TourNameEqual{Name}", out var tourFromCache))
+            if (!cache.TryGet<Tour>($"Tours.TourDetails.TourNameEqual{Name}", out var tourFromCache))
             {
                 var tourFromDb = await tourRepository.GetAsync(x => x.Name == Name.ToLower());
                 if (tourFromDb != null)
                 {
                     mainTour = tourFromDb;
-                    cache.Add($"Tour.TourDetails.TourNameEqual{Name}", tourFromDb, 1440);
+                    cache.Add($"Tours.TourDetails.TourNameEqual{Name}", tourFromDb, 1440);
                 }
             }
             else
@@ -70,13 +70,13 @@ namespace PusulaGroup.WebApp.Pages
 
             List<Tour> subTours = null;
 
-            if (!cache.TryGet<List<Tour>>($"Tour.TourDetails.ParentIdEqual{mainTour.Id}", out var subToursFromCache))
+            if (!cache.TryGet<List<Tour>>($"Tours.TourDetails.ParentIdEqual{mainTour.Id}", out var subToursFromCache))
             {
                 var subToursDb = await tourRepository.GetListByPredicateAsync(x => x.ParentId == mainTour.Id);
                 if (subToursDb != null)
                 {
                     subTours = subToursDb;
-                    cache.Add($"Tour.TourDetails.ParentIdEqual{mainTour.Id}", subToursDb, 1440);
+                    cache.Add($"Tours.TourDetails.ParentIdEqual{mainTour.Id}", subToursDb, 1440);
                 }
             }
             else
@@ -100,12 +100,12 @@ namespace PusulaGroup.WebApp.Pages
             TourDetails.IsMainTour = true;
 
             List<TourImage> mainTourImages = null;
-            if (!cache.TryGet<List<TourImage>>($"Tour.TourDetails.GetTourImagesByTourIdEqual{mainTour.Id}", out var mainTourImagesFromCache))
+            if (!cache.TryGet<List<TourImage>>($"Tours.TourDetails.GetTourImagesByTourIdEqual{mainTour.Id}", out var mainTourImagesFromCache))
             {
                 var mainTourImagesDb = await tourImageRepository.GetListByPredicateAsync(x => x.TourId == mainTour.Id);
                 if (mainTourImagesDb != null)
                 {
-                    cache.Add($"Tour.TourDetails.GetTourImagesByTourIdEqual{mainTour.Id}", mainTourImagesDb, 1440);
+                    cache.Add($"Tours.TourDetails.GetTourImagesByTourIdEqual{mainTour.Id}", mainTourImagesDb, 1440);
                     mainTourImages = mainTourImagesDb;
                 }
             }
@@ -137,13 +137,13 @@ namespace PusulaGroup.WebApp.Pages
             foreach (var subTour in subTours)
             {
                 string imagePath;
-                if (!cache.TryGet<string>($"Tour.TourDetails.GetSubTourMainImageBySubTourIdEqual{subTour.Id}", out var subTourMainImageFromCache))
+                if (!cache.TryGet<string>($"Tours.TourDetails.GetSubTourMainImageBySubTourIdEqual{subTour.Id}", out var subTourMainImageFromCache))
                 {
                     var subTourImageDb = await tourImageRepository.GetAsync(x => x.IsMain && x.TourId == subTour.Id);
                     imagePath = subTourImageDb == null
                                 ? PusulaGroupConstants.ImagePathNoImage
                                 : subTourImageDb.Path;
-                    cache.Add($"Tour.TourDetails.GetSubTourMainImageBySubTourIdEqual{subTour.Id}", imagePath, 1440);
+                    cache.Add($"Tours.TourDetails.GetSubTourMainImageBySubTourIdEqual{subTour.Id}", imagePath, 1440);
                 }
                 else
                 {

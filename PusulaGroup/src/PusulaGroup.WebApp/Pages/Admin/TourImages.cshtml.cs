@@ -226,9 +226,7 @@ namespace PusulaGroup.WebApp.Pages.Admin
 
         private void RemoveAllCache()
         {
-            cache.Remove("Index.GetTours");
-            cache.Remove("Index.GetSliderTours");
-            cache.Remove("Tours.GetListTourDetail");
+            cache.RemoveKeysByStartingValue("Tours.");
         }
     }
 }
