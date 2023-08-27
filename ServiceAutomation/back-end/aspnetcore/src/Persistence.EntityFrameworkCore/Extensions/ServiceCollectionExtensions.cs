@@ -1,8 +1,10 @@
 ﻿using Domain.Products;
+using Domain.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Persistence.EntityFrameworkCore.Products;
+using Persistence.EntityFrameworkCore.Users;
 
 namespace Persistence.EntityFrameworkCore.Extensions;
 
@@ -16,6 +18,7 @@ public static class ServiceCollectionExtensions
         });
 
         services.AddScoped<IProductRepository, EfCoreProductRepository>();
+        services.AddScoped<IUserRepository, EfCoreUserRepository>();
 
         return services;
     }

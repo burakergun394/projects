@@ -20,7 +20,7 @@ public class ProductUpdateCommandHandler : IRequestHandler<ProductUpdateCommand,
     public async Task<Product> Handle(ProductUpdateCommand request, CancellationToken cancellationToken)
     {
         var product = await _productRepository.GetAsNoTrackingByIdAsync(request.Id, cancellationToken) 
-                            ?? throw new NotFoundException("Product not found");
+                            ?? throw new ValueNotFoundException("Product not found");
 
         var updatingProduct = product.Update(request.Status, request.Code, request.Name, request.Category, request.Explanation, request.Price, request.Stock);
         var updatedProduct = await _productRepository.UpdateAsync(updatingProduct);

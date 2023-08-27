@@ -9,7 +9,6 @@ internal abstract class TenantEntityTypeConfiguration<T, TId> : EntityTypeConfig
 {
     public sealed override void EntityBuilder(EntityTypeBuilder<T> builder)
     {
-        builder.HasKey(x => new { x.TenantCode, x.Id });
 
         builder.Property(x => x.TenantCode)
             .HasColumnOrder(1)

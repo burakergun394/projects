@@ -2,6 +2,7 @@
 using Domain.Products;
 using Domain.Shared;
 using Domain.Shared.Entities;
+using Domain.Users;
 using Microsoft.EntityFrameworkCore;
 
 namespace Persistence.EntityFrameworkCore;
@@ -15,11 +16,15 @@ internal class ApplicationDbContext : DbContext, IUnitOfWork
         _contextService = contextService;
     }
     public DbSet<Product> Products { get; set; }
+    public DbSet<User> Users { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasDefaultSchema(EntityFrameworkCoreConstants.DefaultSchemaName);
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+
+        modelBuilder.Entity<Product>().HasQueryFilter(x => x.TenantCode == GetTenantCode());
+        modelBuilder.Entity<User>().HasQueryFilter(x => x.TenantCode == GetTenantCode());
     }
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
@@ -28,34 +33,17 @@ internal class ApplicationDbContext : DbContext, IUnitOfWork
 
         foreach (var entry in entries)
         {
-            var context = _contextService.GetContext();
-            string tenantCode = "DEFAULT";
-            string userCode = "DEFAULT";
-
-            if (context is not null)
-            {
-                if (!string.IsNullOrWhiteSpace(context.TenantCode))
-                    tenantCode = context.TenantCode;
-
-                if (!string.IsNullOrWhiteSpace(context.UserCode))
-                    userCode = context.UserCode;
-            }
-
             if (entry.Entity is TenantEntity<Guid> tenantGuidEntity)
-            {
-                tenantGuidEntity.TenantCode = tenantCode;
-            }
+                tenantGuidEntity.TenantCode = GetTenantCode();
 
             if (entry.Entity is TenantEntity<int> tenantIdEntity)
-            {
-                tenantIdEntity.TenantCode = tenantCode;
-            }
+                tenantIdEntity.TenantCode = GetTenantCode();
 
             if (entry.Entity is IAuditableEntity auditableEntity)
             {
                 if (entry.State is EntityState.Added)
                 {
-                    auditableEntity.CreatedBy = userCode;
+                    auditableEntity.CreatedBy = GetUserCode();
                     auditableEntity.CreatedAt = DateTime.UtcNow;
                     auditableEntity.LastUpdatedBy = "";
                     auditableEntity.LastUpdatedAt = default;
@@ -63,12 +51,30 @@ internal class ApplicationDbContext : DbContext, IUnitOfWork
 
                 if (entry.State is EntityState.Modified)
                 {
-                    auditableEntity.LastUpdatedBy = userCode;
+                    auditableEntity.LastUpdatedBy = GetUserCode();
                     auditableEntity.LastUpdatedAt = DateTime.UtcNow;
                 }
             }
         }
 
         return base.SaveChangesAsync(cancellationToken);
+    }
+
+    private string GetTenantCode()
+    {
+        var context = _contextService.GetContext();
+        string tenantCode = "DEFAULT";
+        if (context is not null && !string.IsNullOrWhiteSpace(context.TenantCode))
+            tenantCode = context.TenantCode;
+        return tenantCode;
+    }
+
+    private string GetUserCode()
+    {
+        var context = _contextService.GetContext();
+        string userCode = "DEFAULT";
+        if (context is not null && !string.IsNullOrWhiteSpace(context.UserCode))
+            userCode = context.UserCode;
+        return userCode;
     }
 }
