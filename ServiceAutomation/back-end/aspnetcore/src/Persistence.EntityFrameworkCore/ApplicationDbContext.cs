@@ -66,7 +66,7 @@ internal class ApplicationDbContext : DbContext, IUnitOfWork
         return base.SaveChangesAsync(cancellationToken);
     }
 
-    private string GetTenantCode()
+    internal string GetTenantCode()
     {
         var context = _contextService.GetContext();
         string tenantCode = "DEFAULT";
@@ -75,7 +75,7 @@ internal class ApplicationDbContext : DbContext, IUnitOfWork
         return tenantCode;
     }
 
-    private string GetUserCode()
+    internal string GetUserCode()
     {
         var context = _contextService.GetContext();
         string userCode = "DEFAULT";

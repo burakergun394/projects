@@ -1,4 +1,5 @@
 using Application.Extensions;
+using Infrastructure.Auth.Microsoft.Extensions;
 using Persistence.EntityFrameworkCore.Extensions;
 using Presentation.Web.API.Controller.Extensions;
 
@@ -14,8 +15,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddApplicationServices();
 builder.Services.AddEntityFrameworkCoreServices(builder.Configuration);
-
-
+builder.Services.AddAuthMicrosoftServices(builder.Configuration);
 var app = builder.Build();
 
 
@@ -29,7 +29,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
+app.UseAuthMicrosoft();
 
 app.MapControllers();
 

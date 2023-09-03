@@ -1,7 +1,7 @@
-﻿using Application.Roles.Commands.Create;
-using Application.Roles.Queries.GetById;
-using Application.RolesClaims.Commands.Create;
-using Application.RolesClaims.Queries.GetById;
+﻿using Application.Features.Roles.Commands.Create;
+using Application.Features.Roles.Queries.GetById;
+using Application.Features.RolesClaims.Commands.Create;
+using Application.Features.RolesClaims.Queries.GetById;
 using Domain.Responses;
 using Domain.Roles;
 using Domain.RolesClaims;

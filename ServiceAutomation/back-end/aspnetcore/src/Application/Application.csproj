@@ -14,12 +14,9 @@
 		<PackageReference Include="MediatR" Version="12.1.1" />
 		<PackageReference Include="MediatR.Extensions.FluentValidation.AspNetCore" Version="4.0.0" />
 		<PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
+		<PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
 		<PackageReference Include="Ardalis.GuardClauses" Version="4.0.1" />
-	</ItemGroup>
-	<ItemGroup>
-	  <Folder Include="Claims\Commands\Update\" />
-	  <Folder Include="RolesClaims\Commands\Update\" />
-	  <Folder Include="Roles\Commands\Update\" />
 	</ItemGroup>
 </Project>

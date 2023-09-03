@@ -1,7 +1,7 @@
-﻿using Application.Products.Commands.Create;
-using Application.Products.Commands.Update;
-using Application.Products.Queries.GetById;
-using Application.Products.Queries.Search;
+﻿using Application.Features.Products.Commands.Create;
+using Application.Features.Products.Commands.Update;
+using Application.Features.Products.Queries.GetById;
+using Application.Features.Products.Queries.Search;
 using Domain.Paginations;
 using Domain.Products;
 using MediatR;

@@ -1,5 +1,5 @@
-﻿using Application.Roles.Commands.Create;
-using Application.Roles.Queries.GetById;
+﻿using Application.Features.Claims.Commands.Create;
+using Application.Features.Claims.Queries.GetById;
 using Domain.Claims;
 using Domain.Responses;
 using MediatR;
