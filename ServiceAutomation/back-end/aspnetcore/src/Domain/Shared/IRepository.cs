@@ -13,3 +13,12 @@ public interface IRepository<TEntity, TId> : IDisposable where TEntity : Entity<
     Task<TEntity> GetByIdAsync(TId id, CancellationToken cancellationToken = default);
     Task<TEntity> GetAsNoTrackingByIdAsync(TId id, CancellationToken cancellationToken = default);
 }
+
+public interface IRepository<TEntity> : IDisposable where TEntity : Entity
+{
+    IUnitOfWork UnitOfWork { get; }
+    Task<TEntity> CreateAsync(TEntity entity, CancellationToken cancellationToken = default);
+    Task<TEntity> UpdateAsync(TEntity entity);
+    Task<TEntity> DeleteAsync(TEntity entity);
+    Task<List<TEntity>> GetListAsync();
+}

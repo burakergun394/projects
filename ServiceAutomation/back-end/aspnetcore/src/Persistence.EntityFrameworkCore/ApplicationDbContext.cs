@@ -1,5 +1,8 @@
-﻿using Domain.Contexts;
+﻿using Domain.Claims;
+using Domain.Contexts;
 using Domain.Products;
+using Domain.Roles;
+using Domain.RolesClaims;
 using Domain.Shared;
 using Domain.Shared.Entities;
 using Domain.Users;
@@ -17,6 +20,9 @@ internal class ApplicationDbContext : DbContext, IUnitOfWork
     }
     public DbSet<Product> Products { get; set; }
     public DbSet<User> Users { get; set; }
+    public DbSet<Role> Roles { get; set; }
+    public DbSet<Claim> Claims { get; set; }
+    public DbSet<RoleClaim> RolesClaims { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

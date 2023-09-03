@@ -21,3 +21,19 @@ internal abstract class EntityTypeConfiguration<T, TId> : IEntityTypeConfigurati
 
     public abstract void EntityBuilder(EntityTypeBuilder<T> builder);
 }
+
+internal abstract class EntityTypeConfiguration<T> : IEntityTypeConfiguration<T>
+    where T : Entity, new()
+{
+    public void Configure(EntityTypeBuilder<T> builder)
+    {
+        builder.Property(x => x.Status)
+            .HasColumnName("Status")
+            .HasColumnType("varchar(10)")
+            .HasConversion<string>();
+
+        EntityBuilder(builder);
+    }
+
+    public abstract void EntityBuilder(EntityTypeBuilder<T> builder);
+}

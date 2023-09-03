@@ -21,7 +21,7 @@ public class UsersController : ApiController
 
     [HttpGet]
     [Route("{id}")]
-    public async Task<ActionResult<Response<User>>> CreateAsync(Guid id)
+    public async Task<ActionResult<Response<User>>> GetAsync(Guid id)
     {
         var response = await _sender.Send(new UserGetByIdQuery(id));
         return response;

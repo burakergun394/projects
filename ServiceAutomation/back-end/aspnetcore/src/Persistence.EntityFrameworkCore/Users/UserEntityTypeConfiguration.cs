@@ -1,5 +1,4 @@
-﻿using Domain.Products;
-using Domain.Users;
+﻿using Domain.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Persistence.EntityFrameworkCore.Shared.EntityTypeConfiguratinos;
@@ -10,12 +9,21 @@ internal class UserEntityTypeConfiguration : TenantAuditableEntityTypeConfigurat
 {
     public override void TenantAuditableEntityBuilder(EntityTypeBuilder<User> builder)
     {
-        builder.ToTable("USER", EntityFrameworkCoreConstants.DefaultSchemaName);
+        builder.ToTable("USERS", EntityFrameworkCoreConstants.DefaultSchemaName);
 
-        builder.Property(x => x.Code)
-            .HasColumnName("Code")
+        builder.Property(x => x.Username)
+            .HasColumnName("Username")
             .HasColumnType("varchar(50)")
             .IsRequired();
+
+        builder.Property(x => x.NormalizedUsername)
+            .HasColumnName("NormalizedUsername")
+            .HasColumnType("varchar(50)")
+            .IsRequired();
+
+        builder.Property(x => x.RoleId)
+           .HasColumnName("RoleId")
+           .IsRequired();
 
         builder.Property(x => x.Name)
             .HasColumnName("Name")

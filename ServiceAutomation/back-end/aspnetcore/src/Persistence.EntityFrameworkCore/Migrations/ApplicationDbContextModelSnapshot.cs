@@ -23,13 +23,50 @@ namespace Persistence.EntityFrameworkCore.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Domain.Claims.Claim", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2(7)");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<DateTime>("LastUpdatedAt")
+                        .HasColumnType("datetime2(7)");
+
+                    b.Property<string>("LastUpdatedBy")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("Name");
+
+                    b.Property<string>("NormalizedName")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("NormalizedName");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("varchar(10)")
+                        .HasColumnName("Status");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CLAIMS", "DBO");
+                });
+
             modelBuilder.Entity("Domain.Products.Product", b =>
                 {
-                    b.Property<string>("TenantCode")
-                        .HasColumnType("varchar(50)")
-                        .HasColumnOrder(1);
-
                     b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Category")
@@ -79,18 +116,22 @@ namespace Persistence.EntityFrameworkCore.Migrations
                         .HasColumnType("int")
                         .HasColumnName("Stock");
 
-                    b.HasKey("TenantCode", "Id");
+                    b.Property<string>("TenantCode")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasColumnOrder(1);
 
-                    b.ToTable("PRODUCT", "DBO");
+                    b.HasKey("Id");
+
+                    b.ToTable("PRODUCTS", "DBO");
 
                     b.HasData(
                         new
                         {
-                            TenantCode = "DEFAULT",
-                            Id = new Guid("5d079186-0c72-4368-b7e1-d2e9ac75202f"),
+                            Id = new Guid("51372f8d-b5d7-453b-8f18-30b88ee4b5b2"),
                             Category = "Category1",
                             Code = "Code1",
-                            CreatedAt = new DateTime(2023, 8, 27, 15, 21, 28, 533, DateTimeKind.Utc).AddTicks(5558),
+                            CreatedAt = new DateTime(2023, 9, 3, 10, 54, 40, 177, DateTimeKind.Utc).AddTicks(2758),
                             CreatedBy = "DEFAULT",
                             Explanation = "Explanation1",
                             LastUpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -98,15 +139,15 @@ namespace Persistence.EntityFrameworkCore.Migrations
                             Name = "Name1",
                             Price = 1m,
                             Status = "Active",
-                            Stock = 1
+                            Stock = 1,
+                            TenantCode = "DEFAULT"
                         },
                         new
                         {
-                            TenantCode = "DEFAULT",
-                            Id = new Guid("672076ca-3e9b-4a26-b851-730227d7102f"),
+                            Id = new Guid("4816af20-640f-49bc-9601-ca85634344eb"),
                             Category = "Category2",
                             Code = "Code2",
-                            CreatedAt = new DateTime(2023, 8, 27, 15, 21, 28, 533, DateTimeKind.Utc).AddTicks(5582),
+                            CreatedAt = new DateTime(2023, 9, 3, 10, 54, 40, 177, DateTimeKind.Utc).AddTicks(2789),
                             CreatedBy = "DEFAULT",
                             Explanation = "Explanation2",
                             LastUpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -114,15 +155,15 @@ namespace Persistence.EntityFrameworkCore.Migrations
                             Name = "Name2",
                             Price = 2m,
                             Status = "Active",
-                            Stock = 2
+                            Stock = 2,
+                            TenantCode = "DEFAULT"
                         },
                         new
                         {
-                            TenantCode = "DEFAULT",
-                            Id = new Guid("0d1312f1-8a9c-4eff-b816-bc92164d5e79"),
+                            Id = new Guid("c5c5fd3d-43bd-46a1-91bb-09d30a22b752"),
                             Category = "Category3",
                             Code = "Code3",
-                            CreatedAt = new DateTime(2023, 8, 27, 15, 21, 28, 533, DateTimeKind.Utc).AddTicks(5591),
+                            CreatedAt = new DateTime(2023, 9, 3, 10, 54, 40, 177, DateTimeKind.Utc).AddTicks(2800),
                             CreatedBy = "DEFAULT",
                             Explanation = "Explanation3",
                             LastUpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -130,15 +171,15 @@ namespace Persistence.EntityFrameworkCore.Migrations
                             Name = "Name3",
                             Price = 3m,
                             Status = "Active",
-                            Stock = 3
+                            Stock = 3,
+                            TenantCode = "DEFAULT"
                         },
                         new
                         {
-                            TenantCode = "DEFAULT",
-                            Id = new Guid("cdd66bac-8e92-4d4d-ba10-53cbb227ae8e"),
+                            Id = new Guid("89f9b507-b9f2-4c2b-bfb6-2a5f9589c597"),
                             Category = "Category4",
                             Code = "Code4",
-                            CreatedAt = new DateTime(2023, 8, 27, 15, 21, 28, 533, DateTimeKind.Utc).AddTicks(5601),
+                            CreatedAt = new DateTime(2023, 9, 3, 10, 54, 40, 177, DateTimeKind.Utc).AddTicks(2810),
                             CreatedBy = "DEFAULT",
                             Explanation = "Explanation4",
                             LastUpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -146,15 +187,15 @@ namespace Persistence.EntityFrameworkCore.Migrations
                             Name = "Name4",
                             Price = 4m,
                             Status = "Active",
-                            Stock = 4
+                            Stock = 4,
+                            TenantCode = "DEFAULT"
                         },
                         new
                         {
-                            TenantCode = "DEFAULT",
-                            Id = new Guid("446dff11-a0af-4886-b18b-b665db1fc8bc"),
+                            Id = new Guid("d5fe22ac-d442-4522-a3a1-33d7aac1a37e"),
                             Category = "Category5",
                             Code = "Code5",
-                            CreatedAt = new DateTime(2023, 8, 27, 15, 21, 28, 533, DateTimeKind.Utc).AddTicks(5610),
+                            CreatedAt = new DateTime(2023, 9, 3, 10, 54, 40, 177, DateTimeKind.Utc).AddTicks(2819),
                             CreatedBy = "DEFAULT",
                             Explanation = "Explanation5",
                             LastUpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -162,15 +203,15 @@ namespace Persistence.EntityFrameworkCore.Migrations
                             Name = "Name5",
                             Price = 5m,
                             Status = "Active",
-                            Stock = 5
+                            Stock = 5,
+                            TenantCode = "DEFAULT"
                         },
                         new
                         {
-                            TenantCode = "DEFAULT",
-                            Id = new Guid("0edfcbff-bc66-4af5-927e-1fb549b04781"),
+                            Id = new Guid("bcc91754-8a41-43c7-b592-152b27695877"),
                             Category = "Category6",
                             Code = "Code6",
-                            CreatedAt = new DateTime(2023, 8, 27, 15, 21, 28, 533, DateTimeKind.Utc).AddTicks(5623),
+                            CreatedAt = new DateTime(2023, 9, 3, 10, 54, 40, 177, DateTimeKind.Utc).AddTicks(2834),
                             CreatedBy = "DEFAULT",
                             Explanation = "Explanation6",
                             LastUpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -178,15 +219,15 @@ namespace Persistence.EntityFrameworkCore.Migrations
                             Name = "Name6",
                             Price = 6m,
                             Status = "Active",
-                            Stock = 6
+                            Stock = 6,
+                            TenantCode = "DEFAULT"
                         },
                         new
                         {
-                            TenantCode = "DEFAULT",
-                            Id = new Guid("4d0f2405-a410-40d3-ae8d-d40f915c0826"),
+                            Id = new Guid("0de042a5-d7a3-40fd-a808-e3631b176e24"),
                             Category = "Category7",
                             Code = "Code7",
-                            CreatedAt = new DateTime(2023, 8, 27, 15, 21, 28, 533, DateTimeKind.Utc).AddTicks(5632),
+                            CreatedAt = new DateTime(2023, 9, 3, 10, 54, 40, 177, DateTimeKind.Utc).AddTicks(2844),
                             CreatedBy = "DEFAULT",
                             Explanation = "Explanation7",
                             LastUpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -194,15 +235,15 @@ namespace Persistence.EntityFrameworkCore.Migrations
                             Name = "Name7",
                             Price = 7m,
                             Status = "Active",
-                            Stock = 7
+                            Stock = 7,
+                            TenantCode = "DEFAULT"
                         },
                         new
                         {
-                            TenantCode = "DEFAULT",
-                            Id = new Guid("91f0e24f-beba-4325-8616-227cdb991e5e"),
+                            Id = new Guid("0d42cccf-9bd2-43ed-b4d3-ade9644148ef"),
                             Category = "Category8",
                             Code = "Code8",
-                            CreatedAt = new DateTime(2023, 8, 27, 15, 21, 28, 533, DateTimeKind.Utc).AddTicks(5639),
+                            CreatedAt = new DateTime(2023, 9, 3, 10, 54, 40, 177, DateTimeKind.Utc).AddTicks(2854),
                             CreatedBy = "DEFAULT",
                             Explanation = "Explanation8",
                             LastUpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -210,15 +251,15 @@ namespace Persistence.EntityFrameworkCore.Migrations
                             Name = "Name8",
                             Price = 8m,
                             Status = "Active",
-                            Stock = 8
+                            Stock = 8,
+                            TenantCode = "DEFAULT"
                         },
                         new
                         {
-                            TenantCode = "DEFAULT",
-                            Id = new Guid("f1f62ade-f10b-42dc-8e62-a6697324c9be"),
+                            Id = new Guid("fa292c5c-2e50-4332-968c-bddc26fb360f"),
                             Category = "Category9",
                             Code = "Code9",
-                            CreatedAt = new DateTime(2023, 8, 27, 15, 21, 28, 533, DateTimeKind.Utc).AddTicks(5652),
+                            CreatedAt = new DateTime(2023, 9, 3, 10, 54, 40, 177, DateTimeKind.Utc).AddTicks(2869),
                             CreatedBy = "DEFAULT",
                             Explanation = "Explanation9",
                             LastUpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -226,15 +267,15 @@ namespace Persistence.EntityFrameworkCore.Migrations
                             Name = "Name9",
                             Price = 9m,
                             Status = "Active",
-                            Stock = 9
+                            Stock = 9,
+                            TenantCode = "DEFAULT"
                         },
                         new
                         {
-                            TenantCode = "DEFAULT",
-                            Id = new Guid("959564a1-dd7c-483e-a2e8-4a455748d04c"),
+                            Id = new Guid("4675f71e-9e14-49f0-9a90-3433892d98c3"),
                             Category = "Category10",
                             Code = "Code10",
-                            CreatedAt = new DateTime(2023, 8, 27, 15, 21, 28, 533, DateTimeKind.Utc).AddTicks(5665),
+                            CreatedAt = new DateTime(2023, 9, 3, 10, 54, 40, 177, DateTimeKind.Utc).AddTicks(2884),
                             CreatedBy = "DEFAULT",
                             Explanation = "Explanation10",
                             LastUpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -242,23 +283,95 @@ namespace Persistence.EntityFrameworkCore.Migrations
                             Name = "Name10",
                             Price = 10m,
                             Status = "Active",
-                            Stock = 10
+                            Stock = 10,
+                            TenantCode = "DEFAULT"
                         });
+                });
+
+            modelBuilder.Entity("Domain.Roles.Role", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2(7)");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<DateTime>("LastUpdatedAt")
+                        .HasColumnType("datetime2(7)");
+
+                    b.Property<string>("LastUpdatedBy")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("Name");
+
+                    b.Property<string>("NormalizedName")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("NormalizedName");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("varchar(10)")
+                        .HasColumnName("Status");
+
+                    b.Property<string>("TenantCode")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasColumnOrder(1);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ROLES", "DBO");
+                });
+
+            modelBuilder.Entity("Domain.RolesClaims.RoleClaim", b =>
+                {
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("RoleId");
+
+                    b.Property<Guid>("ClaimId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("ClaimId");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2(7)");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<DateTime>("LastUpdatedAt")
+                        .HasColumnType("datetime2(7)");
+
+                    b.Property<string>("LastUpdatedBy")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("varchar(10)")
+                        .HasColumnName("Status");
+
+                    b.HasKey("RoleId", "ClaimId");
+
+                    b.ToTable("ROLES_CLAIMS", "DBO");
                 });
 
             modelBuilder.Entity("Domain.Users.User", b =>
                 {
-                    b.Property<string>("TenantCode")
-                        .HasColumnType("varchar(50)")
-                        .HasColumnOrder(1);
-
                     b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("Code");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2(7)");
@@ -289,6 +402,11 @@ namespace Persistence.EntityFrameworkCore.Migrations
                         .HasColumnType("varchar(50)")
                         .HasColumnName("Name");
 
+                    b.Property<string>("NormalizedUsername")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("NormalizedUsername");
+
                     b.Property<byte[]>("PasswordHash")
                         .IsRequired()
                         .HasColumnType("varbinary(1000)")
@@ -298,6 +416,10 @@ namespace Persistence.EntityFrameworkCore.Migrations
                         .IsRequired()
                         .HasColumnType("varbinary(100)")
                         .HasColumnName("PasswordSalt");
+
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("RoleId");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -309,9 +431,19 @@ namespace Persistence.EntityFrameworkCore.Migrations
                         .HasColumnType("varchar(50)")
                         .HasColumnName("Surname");
 
-                    b.HasKey("TenantCode", "Id");
+                    b.Property<string>("TenantCode")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasColumnOrder(1);
 
-                    b.ToTable("USER", "DBO");
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("Username");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("USERS", "DBO");
                 });
 #pragma warning restore 612, 618
         }

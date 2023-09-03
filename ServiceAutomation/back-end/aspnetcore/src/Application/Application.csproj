@@ -17,4 +17,9 @@
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
 		<PackageReference Include="Ardalis.GuardClauses" Version="4.0.1" />
 	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Claims\Commands\Update\" />
+	  <Folder Include="RolesClaims\Commands\Update\" />
+	  <Folder Include="Roles\Commands\Update\" />
+	</ItemGroup>
 </Project>

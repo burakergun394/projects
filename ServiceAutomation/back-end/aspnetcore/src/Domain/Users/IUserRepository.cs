@@ -4,5 +4,5 @@ namespace Domain.Users;
 
 public interface IUserRepository : IRepository<User, Guid>
 {
-    Task<User> GetByCodeAsync(string code, CancellationToken cancellationToken = default);
+    Task<User> GetByCodeAsync(string username, CancellationToken cancellationToken = default);
 }

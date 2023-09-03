@@ -9,7 +9,7 @@ internal class ProductEntityTypeConfiguration : TenantAuditableEntityTypeConfigu
 {
     public override void TenantAuditableEntityBuilder(EntityTypeBuilder<Product> builder)
     {
-        builder.ToTable("PRODUCT", EntityFrameworkCoreConstants.DefaultSchemaName);
+        builder.ToTable("PRODUCTS", EntityFrameworkCoreConstants.DefaultSchemaName);
 
         builder.Property(x => x.Code)
             .HasColumnName("Code")

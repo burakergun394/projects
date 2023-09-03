@@ -9,7 +9,6 @@ internal abstract class TenantEntityTypeConfiguration<T, TId> : EntityTypeConfig
 {
     public sealed override void EntityBuilder(EntityTypeBuilder<T> builder)
     {
-
         builder.Property(x => x.TenantCode)
             .HasColumnOrder(1)
             .HasColumnType("varchar(50)")

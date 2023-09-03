@@ -10,5 +10,5 @@ internal class EfCoreUserRepository : EfCoreRepository<User, Guid, ApplicationDb
          
     }
 
-    public async Task<User> GetByCodeAsync(string code, CancellationToken cancellationToken = default) => await GetByPredicateAsync(x => x.Code == code, cancellationToken);
+    public async Task<User> GetByCodeAsync(string username, CancellationToken cancellationToken = default) => await GetByPredicateAsync(x => x.Username == username, cancellationToken);
 }

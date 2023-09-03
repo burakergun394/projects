@@ -5,7 +5,9 @@ namespace Domain.Users;
 
 public class User: TenantAuditableEntity<Guid>
 {
-    public string Code { get; private set; }
+    public string Username { get; private set; }
+    public string NormalizedUsername { get; private set; } 
+    public Guid RoleId { get; private set; } 
     public string Name { get; private set; }
     public string Surname { get; private set; }
     public string Email { get; private set; }
@@ -17,9 +19,20 @@ public class User: TenantAuditableEntity<Guid>
     {
     }
 
-    public User(Guid id, Status status, string code, string name, string surname, string email, byte[] passwordHash, byte[] passwordSalt, Language language) : base(id, status)
+    public User(Guid id,
+                Status status,
+                string userName,
+                Guid roleId,
+                string name,
+                string surname,
+                string email,
+                byte[] passwordHash,
+                byte[] passwordSalt,
+                Language language) : base(id, status)
     {
-        Code = code;
+        Username = userName;
+        NormalizedUsername = Username.ToUpperInvariant();
+        RoleId = roleId;
         Name = name;
         Surname = surname;
         Email = email;
@@ -28,7 +41,8 @@ public class User: TenantAuditableEntity<Guid>
         Language = language;
     }
 
-    public static User Create(string code,
+    public static User Create(string userName,
+                              Guid roleId,
                               string name,
                               string surname,
                               string email,
@@ -36,15 +50,7 @@ public class User: TenantAuditableEntity<Guid>
                               byte[] passwordSalt,
                               Language language)
     {
-        var user = new User(Guid.NewGuid(), Status.Active, code, name, surname, email, passwordHash, passwordSalt, language)
-        {
-            TenantCode = "",
-            CreatedBy = "",
-            CreatedAt = default,
-            LastUpdatedBy = "",
-            LastUpdatedAt = default
-        };
-
+        var user = new User(Guid.NewGuid(), Status.Active, userName, roleId, name, surname, email, passwordHash, passwordSalt, language);
         return user;
     }
 
