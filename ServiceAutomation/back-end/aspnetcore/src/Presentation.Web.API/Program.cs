@@ -2,6 +2,7 @@ using Application.Extensions;
 using Infrastructure.Auth.Microsoft.Extensions;
 using Persistence.EntityFrameworkCore.Extensions;
 using Presentation.Web.API.Controller.Extensions;
+using Infrastructure.Localization.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,8 +17,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddApplicationServices();
 builder.Services.AddEntityFrameworkCoreServices(builder.Configuration);
 builder.Services.AddAuthMicrosoftServices(builder.Configuration);
-var app = builder.Build();
+builder.Services.AddLocalizationServices(builder.Configuration);
 
+var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
