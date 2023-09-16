@@ -1,4 +1,4 @@
-﻿using Application.Features.Tokens;
+﻿using Application.Abstractions.Auth;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -25,6 +25,7 @@ internal class JwtTokenService : ITokenService
         var claims = new List<Claim>
         {
             new Claim("userName", request.Username),
+            new Claim("tenantCode", request.TenantCode)
         };
 
         if (request.Claims is not null && request.Claims.Any())

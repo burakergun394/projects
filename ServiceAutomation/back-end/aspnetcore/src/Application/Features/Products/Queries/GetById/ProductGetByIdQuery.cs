@@ -1,9 +1,13 @@
-﻿using Domain.Products;
+﻿using Application.Behaviors.Authorization;
+using Domain.Products;
 using MediatR;
 
 namespace Application.Features.Products.Queries.GetById;
 
-public record ProductGetByIdQuery(Guid Id) : IRequest<Product>;
+public record ProductGetByIdQuery(Guid Id) : IRequest<Product>, IAuthorizationClaimRequest
+{
+    public string Claim { get; } = "product.get";
+};
 
 public class ProductGetByIdQueryHandler : IRequestHandler<ProductGetByIdQuery, Product>
 {

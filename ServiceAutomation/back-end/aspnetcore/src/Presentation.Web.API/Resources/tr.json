@@ -1,4 +1,17 @@
 {
-  "Greeting":  "Merhaba Dünya!",
-  "Greeting1":  "Merhaba {0}!"
+  "UserAlreadyExist:{0}": "{0} kullanıcısı zaten mevcut!",
+  "UserCreated:{0}": "{0} kullanıcısı oluşturuldu!",
+  "Required:{0}": "{0} gereklidir!",
+  "MinimumLength:{0}{1}": "{0}, en az {1} karakterli olmalıdır!",
+  "RoleAlreadyExist:{0}": "{0} rolü zaten mevcut!",
+  "RoleCreated:{0}": "{0} rolü oluşturuldu!",
+  "UserNotFound": "Kullanıcı bulunamadı!",
+  "RoleNotFound": "Rol bulunamadı!",
+  "ClaimAlreadyExist:{0}": "{0} claimi zaten mevcut!",
+  "ClaimCreated:{0}": "{0} claimi oluşturuldu!",
+  "ClaimNotFound": "Claim bulunamadı!",
+  "RoleClaimAlreadyExist:{0}": "{0} rol claimi zaten mevcut!",
+  "RoleClaimCreated:{0}": "{0} rol claimi oluşturuldu!",
+  "RoleClaimNotFound": "Rol claimi bulunamadı!",
+  "TenantsNotFound": "Tenantlar bulunamadı!"
 }

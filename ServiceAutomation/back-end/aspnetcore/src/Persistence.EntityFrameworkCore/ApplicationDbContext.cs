@@ -1,20 +1,20 @@
-﻿using Domain.Claims;
-using Domain.Contexts;
+﻿using Domain.Identity.Claims;
+using Domain.Identity.Roles;
+using Domain.Identity.RolesClaims;
+using Domain.Identity.Users;
 using Domain.Products;
-using Domain.Roles;
-using Domain.RolesClaims;
 using Domain.Shared;
+using Domain.Shared.Contexts;
 using Domain.Shared.Entities;
-using Domain.Users;
 using Microsoft.EntityFrameworkCore;
 
 namespace Persistence.EntityFrameworkCore;
 
 internal class ApplicationDbContext : DbContext, IUnitOfWork
 {
-    private readonly IContextService _contextService;
+    private readonly IExternalContextService _contextService;
 
-    public ApplicationDbContext(DbContextOptions options, IContextService contextService) : base(options)
+    public ApplicationDbContext(DbContextOptions options, IExternalContextService contextService) : base(options)
     {
         _contextService = contextService;
     }
@@ -40,10 +40,31 @@ internal class ApplicationDbContext : DbContext, IUnitOfWork
         foreach (var entry in entries)
         {
             if (entry.Entity is TenantEntity<Guid> tenantGuidEntity)
-                tenantGuidEntity.TenantCode = GetTenantCode();
+            {
+                if (entry.State is EntityState.Added && string.IsNullOrWhiteSpace(tenantGuidEntity.TenantCode))
+                {
+                    tenantGuidEntity.TenantCode = GetTenantCode();
+                }
+
+                if (entry.State is EntityState.Modified)
+                {
+                    tenantGuidEntity.TenantCode = GetTenantCode();
+                }
+            }
+
 
             if (entry.Entity is TenantEntity<int> tenantIdEntity)
-                tenantIdEntity.TenantCode = GetTenantCode();
+            {
+                if (entry.State is EntityState.Added && string.IsNullOrWhiteSpace(tenantIdEntity.TenantCode))
+                {
+                    tenantIdEntity.TenantCode = GetTenantCode();
+                }
+
+                if (entry.State is EntityState.Modified)
+                {
+                    tenantIdEntity.TenantCode = GetTenantCode();
+                }
+            }
 
             if (entry.Entity is IAuditableEntity auditableEntity)
             {
@@ -69,7 +90,7 @@ internal class ApplicationDbContext : DbContext, IUnitOfWork
     internal string GetTenantCode()
     {
         var context = _contextService.GetContext();
-        string tenantCode = "DEFAULT";
+        string tenantCode = "SYSTEM";
         if (context is not null && !string.IsNullOrWhiteSpace(context.TenantCode))
             tenantCode = context.TenantCode;
         return tenantCode;
@@ -78,9 +99,9 @@ internal class ApplicationDbContext : DbContext, IUnitOfWork
     internal string GetUserCode()
     {
         var context = _contextService.GetContext();
-        string userCode = "DEFAULT";
-        if (context is not null && !string.IsNullOrWhiteSpace(context.UserCode))
-            userCode = context.UserCode;
+        string userCode = "SYSTEM";
+        if (context is not null && !string.IsNullOrWhiteSpace(context.Username))
+            userCode = context.Username;
         return userCode;
     }
 }

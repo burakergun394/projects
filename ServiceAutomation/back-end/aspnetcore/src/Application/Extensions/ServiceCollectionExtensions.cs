@@ -1,9 +1,10 @@
 ﻿using Application.Behaviors.Authorization;
 using Application.Behaviors.Validations;
-using Application.Features.Contexts;
-using Domain.Contexts;
+using Application.Contexts;
+using Domain.Shared.Contexts;
 using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
@@ -19,7 +20,8 @@ public static class ServiceCollectionExtensions
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationPipelineBehavior<,>));
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(AuthorizationClaimPipelineBehavior<,>));
 
-        services.AddTransient<IContextService, ContextService>();
+        services.AddTransient<IExternalContextService, ExternalContextService>();
+        services.AddTransient<ExternalContextLanguageMiddleware>();
 
         return services;
     }

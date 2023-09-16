@@ -1,6 +1,6 @@
 ﻿using Application.Behaviors.Authorization;
-using Domain.Paginations;
 using Domain.Products;
+using Domain.Shared.Paginations;
 using MediatR;
 
 namespace Application.Features.Products.Queries.Search;

@@ -1,9 +1,13 @@
-﻿using Domain.Products;
+﻿using Application.Behaviors.Authorization;
+using Domain.Products;
 using MediatR;
 
 namespace Application.Features.Products.Commands.Create;
 
-public record ProductCreateCommand(string Code, string Name, string Category, string Explanation, decimal Price, int Stock) : IRequest<Product>;
+public record ProductCreateCommand(string Code, string Name, string Category, string Explanation, decimal Price, int Stock) : IRequest<Product>, IAuthorizationClaimRequest
+{
+    public string Claim { get; } = "product.create";
+};
 
 public class ProductCreateCommandHandler : IRequestHandler<ProductCreateCommand, Product>
 {

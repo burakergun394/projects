@@ -1,5 +1,5 @@
-﻿using Domain.Paginations;
-using Domain.Shared;
+﻿using Domain.Shared;
+using Domain.Shared.Paginations;
 
 namespace Domain.Products;
 

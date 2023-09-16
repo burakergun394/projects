@@ -1,16 +1,18 @@
-﻿using Domain.Claims;
+﻿using Domain.Identity.Claims;
+using Domain.Identity.Roles;
+using Domain.Identity.RolesClaims;
+using Domain.Identity.Tenants;
+using Domain.Identity.Users;
 using Domain.Products;
-using Domain.Roles;
-using Domain.RolesClaims;
-using Domain.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Persistence.EntityFrameworkCore.Claims;
+using Persistence.EntityFrameworkCore.Identity.Claims;
+using Persistence.EntityFrameworkCore.Identity.Roles;
+using Persistence.EntityFrameworkCore.Identity.RolesClaims;
+using Persistence.EntityFrameworkCore.Identity.Tenants;
+using Persistence.EntityFrameworkCore.Identity.Users;
 using Persistence.EntityFrameworkCore.Products;
-using Persistence.EntityFrameworkCore.Roles;
-using Persistence.EntityFrameworkCore.RolesClaims;
-using Persistence.EntityFrameworkCore.Users;
 
 namespace Persistence.EntityFrameworkCore.Extensions;
 
@@ -28,6 +30,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IRoleRepository, EfCoreRoleRepository>();
         services.AddScoped<IClaimRepository, EfCoreClaimRepository>();
         services.AddScoped<IRoleClaimRepository, EfCoreRoleClaimRepository>();
+        services.AddScoped<ITenantRepository, EfCoreTenantRepository>();
 
         return services;
     }

@@ -1,4 +1,4 @@
-﻿using Domain.Paginations;
+﻿using Domain.Shared.Paginations;
 
 namespace Domain.Products;
 

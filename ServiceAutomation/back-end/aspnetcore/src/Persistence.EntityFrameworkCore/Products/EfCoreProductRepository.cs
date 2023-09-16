@@ -1,8 +1,8 @@
 ﻿using Ardalis.GuardClauses;
-using Domain.Paginations;
 using Domain.Products;
-using Persistence.EntityFrameworkCore.Helpers;
+using Domain.Shared.Paginations;
 using Persistence.EntityFrameworkCore.Shared;
+using Persistence.EntityFrameworkCore.Shared.Helpers;
 
 namespace Persistence.EntityFrameworkCore.Products;
 

@@ -1,11 +1,15 @@
-﻿using Application.Exceptions;
+﻿using Application.Behaviors.Authorization;
+using Application.Exceptions;
 using Domain.Products;
 using Domain.Shared.Enums;
 using MediatR;
 
 namespace Application.Features.Products.Commands.Update;
 
-public record ProductUpdateCommand(Guid Id, Status Status, string Code, string Name, string Category, string Explanation, decimal Price, int Stock) : IRequest<Product>;
+public record ProductUpdateCommand(Guid Id, Status Status, string Code, string Name, string Category, string Explanation, decimal Price, int Stock) : IRequest<Product>, IAuthorizationClaimRequest
+{
+    public string Claim { get; } = "product.update";
+};
 
 public class ProductUpdateCommandHandler : IRequestHandler<ProductUpdateCommand, Product>
 {

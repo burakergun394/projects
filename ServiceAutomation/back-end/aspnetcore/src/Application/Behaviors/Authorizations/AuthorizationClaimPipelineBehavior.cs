@@ -1,5 +1,5 @@
-﻿using Application.Exceptions;
-using Application.Features.Authorizations;
+﻿using Application.Abstractions.Auth;
+using Application.Exceptions;
 using MediatR;
 
 namespace Application.Behaviors.Authorization;

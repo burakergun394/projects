@@ -1,5 +1,5 @@
 ﻿using Application.Abstractions.Localizations;
-using Domain.Contexts;
+using Domain.Shared.Contexts;
 using Domain.Shared.Enums;
 using Newtonsoft.Json;
 using System.Text;
@@ -8,23 +8,26 @@ namespace Infrastructure.Localization.Services;
 
 internal class LocalizationService : ILocalizationService
 {
-    private readonly IContextService contextService;
+    private readonly IExternalContextService contextService;
     private readonly JsonSerializer _serializer = new();
     private readonly Dictionary<Language, Dictionary<string, string>> localizations = new();
 
-    public LocalizationService(IContextService contextService)
+    public LocalizationService(IExternalContextService contextService)
     {
         this.contextService = contextService;
         InitializeLocalizations();
     }
 
     public string this[string name] => GetString(name);
+
     public string this[string name, params object[] args] => GetString(name, args);
 
-    private string GetString(string name, params object[] args)
+    public string this[Language language, string name] => GetString(language, name);
+
+    public string this[Language language, string name, params object[] args] => GetString(language, name, args);
+
+    private string GetString(Language language, string name, params object[] args)
     {
-        var context = contextService.GetContext();
-        var language = context?.Language ?? Language.Turkish;
         var dictionary = localizations[language];
 
         if (!dictionary.ContainsKey(name))
@@ -36,6 +39,12 @@ internal class LocalizationService : ILocalizationService
             return name;
 
         return string.Format(value, args);
+    }
+
+    private string GetString(string name, params object[] args)
+    {
+        var language = contextService.GetLanguage();
+        return GetString(language, name, args);
     }
 
     private void InitializeLocalizations()

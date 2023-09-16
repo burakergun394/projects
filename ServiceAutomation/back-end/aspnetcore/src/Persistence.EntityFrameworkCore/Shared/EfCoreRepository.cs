@@ -70,53 +70,100 @@ internal class EfCoreRepository<TEntity, TId, TContext> : IRepository<TEntity, T
         return await GetAsNoTrackingByPredicateAsync(x => x.Id.Equals(id), cancellationToken);
     }
 
-    protected async Task<List<TEntity>> GetListByPredicateAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
+    protected async Task<List<TEntity>> GetListByPredicateAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default, bool ignoreQueryFilter = false)
     {
-        return await DbSet
-            .Where(predicate)
-            .ToListAsync(cancellationToken);
+        return ignoreQueryFilter
+            ? await DbSet
+                .IgnoreQueryFilters()
+                .Where(predicate)
+                .ToListAsync(cancellationToken)
+            : await DbSet
+                .Where(predicate)
+                .ToListAsync(cancellationToken);
     }
 
-    protected async Task<TEntity> GetByPredicateAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
+    protected async Task<TEntity> GetByPredicateAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default, bool ignoreQueryFilter = false)
     {
-        return await DbSet
+        return ignoreQueryFilter
+            ? await DbSet
+                .IgnoreQueryFilters()
+                .FirstOrDefaultAsync(predicate, cancellationToken)
+            : await DbSet
             .FirstOrDefaultAsync(predicate, cancellationToken);
     }
 
-    protected async Task<TEntity> GetAsNoTrackingByPredicateAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
+    protected async Task<TEntity> GetAsNoTrackingByPredicateAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default, bool ignoreQueryFilter = false)
     {
-        return await DbSet
-            .AsNoTracking()
-            .FirstOrDefaultAsync(predicate, cancellationToken);
+        return ignoreQueryFilter
+            ? await DbSet
+                .AsNoTracking()
+                .IgnoreQueryFilters()
+                .FirstOrDefaultAsync(predicate, cancellationToken)
+            : await DbSet
+                .AsNoTracking()
+                .FirstOrDefaultAsync(predicate, cancellationToken);
     }
 
-    protected async Task<List<TType>> GetListOfSelectedColumnsByPredicateAsync<TType>(Expression<Func<TEntity, bool>> predicate, Expression<Func<TEntity, TType>> select, CancellationToken cancellationToken = default)
+    protected async Task<List<TType>> GetListOfSelectedColumnsByPredicateAsync<TType>(Expression<Func<TEntity, bool>> predicate, Expression<Func<TEntity, TType>> select, CancellationToken cancellationToken = default, bool ignoreQueryFilter = false)
         where TType : class
     {
-        return await DbSet
-            .Where(predicate)
-            .Select(select)
-            .ToListAsync(cancellationToken); ;
+        return ignoreQueryFilter
+            ? await DbSet
+                .IgnoreQueryFilters()
+                .Where(predicate)
+                .Select(select)
+                .ToListAsync(cancellationToken)
+            : await DbSet
+                .Where(predicate)
+                .Select(select)
+                .ToListAsync(cancellationToken);
     }
 
-    protected async Task<TType> GetOfSelectedColumnsByPredicateAsync<TType>(Expression<Func<TEntity, bool>> predicate, Expression<Func<TEntity, TType>> select, CancellationToken cancellationToken = default)
+    protected async Task<List<TType>> GetListOfSelectedColumnsAsync<TType>(Expression<Func<TEntity, TType>> select, CancellationToken cancellationToken = default, bool ignoreQueryFilter = false)
+     where TType : class
     {
-        return await DbSet
-            .Where(predicate)
-            .Select(select)
-            .FirstOrDefaultAsync(cancellationToken);
+        return ignoreQueryFilter
+            ? await DbSet
+                .IgnoreQueryFilters()
+                .Select(select)
+                .ToListAsync(cancellationToken)
+            : await DbSet
+                .Select(select)
+                .ToListAsync(cancellationToken);
     }
 
-    protected async Task<bool> AnyAsync(CancellationToken cancellationToken = default)
+    protected async Task<TType> GetOfSelectedColumnsByPredicateAsync<TType>(Expression<Func<TEntity, bool>> predicate, Expression<Func<TEntity, TType>> select, CancellationToken cancellationToken = default, bool ignoreQueryFilter = false)
     {
-        return await DbSet
-            .AnyAsync(cancellationToken);
+        return ignoreQueryFilter
+            ? await DbSet
+                .IgnoreQueryFilters()
+                .Where(predicate)
+                .Select(select)
+                .FirstOrDefaultAsync(cancellationToken)
+            : await DbSet
+                .Where(predicate)
+                .Select(select)
+                .FirstOrDefaultAsync(cancellationToken);
     }
 
-    protected async Task<bool> AnyByPredicateAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
+    protected async Task<bool> AnyAsync(CancellationToken cancellationToken = default, bool ignoreQueryFilter = false)
     {
-        return await DbSet
-            .AnyAsync(predicate);
+        return ignoreQueryFilter
+            ? await DbSet
+                 .IgnoreQueryFilters()
+                 .AnyAsync(cancellationToken)
+            : await DbSet
+                 .AnyAsync(cancellationToken);
+    }
+
+    protected async Task<bool> AnyByPredicateAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default, bool ignoreQueryFilter = false)
+    {
+        return ignoreQueryFilter
+            ? await DbSet
+                .IgnoreQueryFilters()
+                .AnyAsync(predicate)
+            : await DbSet
+                .AnyAsync(predicate);
     }
 
     public void Dispose()
@@ -180,53 +227,100 @@ internal class EfCoreRepository<TEntity, TContext> : IRepository<TEntity>
             .ToListAsync();
     }
 
-    protected async Task<List<TEntity>> GetListByPredicateAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
+    protected async Task<List<TEntity>> GetListByPredicateAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default, bool ignoreQueryFilter = false)
     {
-        return await DbSet
-            .Where(predicate)
-            .ToListAsync(cancellationToken);
+        return ignoreQueryFilter
+            ? await DbSet
+                .IgnoreQueryFilters()
+                .Where(predicate)
+                .ToListAsync(cancellationToken)
+            : await DbSet
+                .Where(predicate)
+                .ToListAsync(cancellationToken);
     }
 
-    protected async Task<TEntity> GetByPredicateAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
+    protected async Task<TEntity> GetByPredicateAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default, bool ignoreQueryFilter = false)
     {
-        return await DbSet
+        return ignoreQueryFilter
+            ? await DbSet
+                .IgnoreQueryFilters()
+                .FirstOrDefaultAsync(predicate, cancellationToken)
+            : await DbSet
             .FirstOrDefaultAsync(predicate, cancellationToken);
     }
 
-    protected async Task<TEntity> GetAsNoTrackingByPredicateAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
+    protected async Task<TEntity> GetAsNoTrackingByPredicateAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default, bool ignoreQueryFilter = false)
     {
-        return await DbSet
-            .AsNoTracking()
-            .FirstOrDefaultAsync(predicate, cancellationToken);
+        return ignoreQueryFilter
+            ? await DbSet
+                .AsNoTracking()
+                .IgnoreQueryFilters()
+                .FirstOrDefaultAsync(predicate, cancellationToken)
+            : await DbSet
+                .AsNoTracking()
+                .FirstOrDefaultAsync(predicate, cancellationToken);
     }
 
-    protected async Task<List<TType>> GetListOfSelectedColumnsByPredicateAsync<TType>(Expression<Func<TEntity, bool>> predicate, Expression<Func<TEntity, TType>> select, CancellationToken cancellationToken = default)
+    protected async Task<List<TType>> GetListOfSelectedColumnsByPredicateAsync<TType>(Expression<Func<TEntity, bool>> predicate, Expression<Func<TEntity, TType>> select, CancellationToken cancellationToken = default, bool ignoreQueryFilter = false)
         where TType : class
     {
-        return await DbSet
-            .Where(predicate)
-            .Select(select)
-            .ToListAsync(cancellationToken); ;
+        return ignoreQueryFilter
+            ? await DbSet
+                .IgnoreQueryFilters()
+                .Where(predicate)
+                .Select(select)
+                .ToListAsync(cancellationToken)
+            : await DbSet
+                .Where(predicate)
+                .Select(select)
+                .ToListAsync(cancellationToken);
     }
 
-    protected async Task<TType> GetOfSelectedColumnsByPredicateAsync<TType>(Expression<Func<TEntity, bool>> predicate, Expression<Func<TEntity, TType>> select, CancellationToken cancellationToken = default)
+    protected async Task<List<TType>> GetListOfSelectedColumnsAsync<TType>(Expression<Func<TEntity, TType>> select, CancellationToken cancellationToken = default, bool ignoreQueryFilter = false)
+        where TType : class
     {
-        return await DbSet
-            .Where(predicate)
-            .Select(select)
-            .FirstOrDefaultAsync(cancellationToken);
+        return ignoreQueryFilter
+            ? await DbSet
+                .IgnoreQueryFilters()
+                .Select(select)
+                .ToListAsync(cancellationToken)
+            : await DbSet
+                .Select(select)
+                .ToListAsync(cancellationToken);
     }
 
-    protected async Task<bool> AnyAsync(CancellationToken cancellationToken = default)
+    protected async Task<TType> GetOfSelectedColumnsByPredicateAsync<TType>(Expression<Func<TEntity, bool>> predicate, Expression<Func<TEntity, TType>> select, CancellationToken cancellationToken = default, bool ignoreQueryFilter = false)
     {
-        return await DbSet
-            .AnyAsync(cancellationToken);
+        return ignoreQueryFilter
+            ? await DbSet
+                .IgnoreQueryFilters()
+                .Where(predicate)
+                .Select(select)
+                .FirstOrDefaultAsync(cancellationToken)
+            : await DbSet
+                .Where(predicate)
+                .Select(select)
+                .FirstOrDefaultAsync(cancellationToken);
     }
 
-    protected async Task<bool> AnyByPredicateAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
+    protected async Task<bool> AnyAsync(CancellationToken cancellationToken = default, bool ignoreQueryFilter = false)
     {
-        return await DbSet
-            .AnyAsync(predicate);
+        return ignoreQueryFilter
+            ? await DbSet
+                 .IgnoreQueryFilters()
+                 .AnyAsync(cancellationToken)
+            : await DbSet
+                 .AnyAsync(cancellationToken);
+    }
+
+    protected async Task<bool> AnyByPredicateAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default, bool ignoreQueryFilter = false)
+    {
+        return ignoreQueryFilter
+            ? await DbSet
+                .IgnoreQueryFilters()
+                .AnyAsync(predicate)
+            : await DbSet
+                .AnyAsync(predicate);
     }
 
     public void Dispose()

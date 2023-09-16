@@ -1,4 +1,17 @@
 {
-  "Greeting": "Hello, World!",
-  "Greeting1": "Hello {0}!"
+  "UserAlreadyExist:{0}": "User of {0} already exist!",
+  "UserCreated:{0}": "User of {0} has been created!",
+  "Required:{0}": "{0} is required!",
+  "MinimumLength:{0}{1}": "{0} must have a minimum of {1} characters!",
+  "RoleAlreadyExist:{0}": "Role of {0} already exist!",
+  "RoleCreated:{0}": "Role of {0} has been created!",
+  "UserNotFound:{0}": "User of {0} not found!",
+  "RoleNotFound:{0}": "Role of {0} not found!",
+  "ClaimAlreadyExist:{0}": "Claim of {0} already exist!",
+  "ClaimCreated:{0}": "Claim of {0} has been created!",
+  "ClaimNotFound:{0}": "Claim of {0} not found!",
+  "RoleClaimAlreadyExist:{0}": "Role claim of {0} already exist!",
+  "RoleClaimCreated:{0}": "Role claim of {0} has been created!",
+  "RoleClaimNotFound": "Role claim of {0} not found!",
+  "TenantsNotFound": "Tenants not found!"
 }

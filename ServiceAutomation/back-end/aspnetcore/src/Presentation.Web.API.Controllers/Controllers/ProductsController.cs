@@ -2,8 +2,8 @@
 using Application.Features.Products.Commands.Update;
 using Application.Features.Products.Queries.GetById;
 using Application.Features.Products.Queries.Search;
-using Domain.Paginations;
 using Domain.Products;
+using Domain.Shared.Paginations;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

@@ -1,5 +1,4 @@
-﻿using Application.Features.Authorizations;
-using Application.Features.Tokens;
+﻿using Application.Abstractions.Auth;
 using Infrastructure.Auth.Microsoft.Authorizations;
 using Infrastructure.Auth.Microsoft.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
