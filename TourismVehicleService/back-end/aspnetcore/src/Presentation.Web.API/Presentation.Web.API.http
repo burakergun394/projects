@@ -1,0 +1,6 @@
+@Presentation.Web.API_HostAddress = http://localhost:5111
+
+GET {{Presentation.Web.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
