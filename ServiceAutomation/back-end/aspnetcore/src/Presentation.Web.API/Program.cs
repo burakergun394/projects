@@ -19,6 +19,16 @@ builder.Services.AddEntityFrameworkCoreServices(builder.Configuration);
 builder.Services.AddAuthMicrosoftServices(builder.Configuration);
 builder.Services.AddLocalizationServices(builder.Configuration);
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(builder =>
+    {
+        builder.WithOrigins("http://localhost:3000");
+        builder.AllowAnyMethod();
+        builder.AllowAnyHeader();
+    });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -30,6 +40,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors();
 
 app.UseApplication();
 
