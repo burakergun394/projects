@@ -1,0 +1,118 @@
+<svg id="modern-logo" width="240" height="240" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">
+            <!-- Gölge efekti için daha koyu arka plan -->
+            <circle cx="122" cy="122" r="90" fill="rgba(0,0,0,0.2)" opacity="0.6"/>
+            
+            <!-- Beyaz glow efekti -->
+            <circle cx="120" cy="120" r="88" fill="none" stroke="rgba(255,255,255,0.8)" stroke-width="2" opacity="0.9"/>
+            
+            <!-- Ana daire - Çok daha belirgin -->
+            <circle cx="120" cy="120" r="85" fill="url(#strongMainGradient)" stroke="rgba(255,255,255,0.9)" stroke-width="3"/>
+            
+            <!-- İç daire - Parlak merkez -->
+            <circle cx="120" cy="120" r="28" fill="url(#brightCenterGradient)" stroke="rgba(255,255,255,0.7)" stroke-width="2"/>
+            
+            <!-- Dinamik dallar - Çok daha belirgin -->
+            <g transform="translate(120,120)">
+                <!-- Ana dal 1 - Kalın ve belirgin -->
+                <path d="M 0,-65 Q -22,-42 -28,-12 Q -32,22 -42,50" fill="none" stroke="url(#strongBranchGradient1)" stroke-width="8" stroke-linecap="round" opacity="1"/>
+                
+                <!-- Ana dal 2 - Kalın ve belirgin -->
+                <path d="M 0,-65 Q 22,-42 28,-12 Q 32,22 42,50" fill="none" stroke="url(#strongBranchGradient2)" stroke-width="8" stroke-linecap="round" opacity="1"/>
+                
+                <!-- Ana dal 3 -->
+                <path d="M 0,-65 Q 0,-32 -12,0 Q -18,32 -8,58" fill="none" stroke="url(#strongBranchGradient3)" stroke-width="7" stroke-linecap="round" opacity="1"/>
+                
+                <!-- Ana dal 4 -->
+                <path d="M 0,-65 Q 0,-32 12,0 Q 18,32 8,58" fill="none" stroke="url(#strongBranchGradient4)" stroke-width="7" stroke-linecap="round" opacity="1"/>
+                
+                <!-- Yan dallar - Daha kalın -->
+                <path d="M -28,-12 Q -45,-7 -55,8" fill="none" stroke="url(#strongLeafGradient)" stroke-width="5" stroke-linecap="round" opacity="1"/>
+                      
+                <path d="M 28,-12 Q 45,-7 55,8" fill="none" stroke="url(#strongLeafGradient)" stroke-width="5" stroke-linecap="round" opacity="1"/>
+                
+                <!-- Yapraklar - Yeni eklemeler -->
+                <circle cx="-42" cy="45" r="6" fill="url(#leafCircle1)" opacity="0.9"/>
+                <circle cx="42" cy="45" r="6" fill="url(#leafCircle2)" opacity="0.9"/>
+                <circle cx="-8" cy="55" r="5" fill="url(#leafCircle3)" opacity="0.9"/>
+                <circle cx="8" cy="55" r="5" fill="url(#leafCircle4)" opacity="0.9"/>
+            </g>
+            
+            <!-- Parlak modern noktalar -->
+            <circle cx="75" cy="75" r="6" fill="#ffffff" opacity="1">
+                <animate attributeName="opacity" values="0.8;1;0.8" dur="2s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="165" cy="75" r="6" fill="#ffffff" opacity="1">
+                <animate attributeName="opacity" values="0.8;1;0.8" dur="2.5s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="120" cy="45" r="5" fill="#ffffff" opacity="1">
+                <animate attributeName="opacity" values="0.8;1;0.8" dur="3s" repeatCount="indefinite"/>
+            </circle>
+            
+            <!-- Gradientler - Çok daha belirgin ve kontrastlı -->
+            <defs>
+                <!-- Güçlü ana gradient -->
+                <linearGradient id="strongMainGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#059669;stop-opacity:1"/>
+                    <stop offset="50%" style="stop-color:#06b6d4;stop-opacity:1"/>
+                    <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:1"/>
+                </linearGradient>
+                
+                <!-- Parlak merkez gradient -->
+                <radialGradient id="brightCenterGradient" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1"/>
+                    <stop offset="50%" style="stop-color:#06b6d4;stop-opacity:1"/>
+                    <stop offset="100%" style="stop-color:#059669;stop-opacity:1"/>
+                </radialGradient>
+                
+                <!-- Güçlü dal gradientleri -->
+                <linearGradient id="strongBranchGradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1"/>
+                    <stop offset="50%" style="stop-color:#059669;stop-opacity:1"/>
+                    <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:1"/>
+                </linearGradient>
+                
+                <linearGradient id="strongBranchGradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1"/>
+                    <stop offset="50%" style="stop-color:#06b6d4;stop-opacity:1"/>
+                    <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:1"/>
+                </linearGradient>
+                
+                <linearGradient id="strongBranchGradient3" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1"/>
+                    <stop offset="50%" style="stop-color:#059669;stop-opacity:1"/>
+                    <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:1"/>
+                </linearGradient>
+                
+                <linearGradient id="strongBranchGradient4" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1"/>
+                    <stop offset="50%" style="stop-color:#06b6d4;stop-opacity:1"/>
+                    <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:1"/>
+                </linearGradient>
+                
+                <linearGradient id="strongLeafGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1"/>
+                    <stop offset="100%" style="stop-color:#059669;stop-opacity:1"/>
+                </linearGradient>
+                
+                <!-- Yaprak daireleri için gradientler -->
+                <radialGradient id="leafCircle1">
+                    <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1"/>
+                    <stop offset="100%" style="stop-color:#059669;stop-opacity:1"/>
+                </radialGradient>
+                
+                <radialGradient id="leafCircle2">
+                    <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1"/>
+                    <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:1"/>
+                </radialGradient>
+                
+                <radialGradient id="leafCircle3">
+                    <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1"/>
+                    <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:1"/>
+                </radialGradient>
+                
+                <radialGradient id="leafCircle4">
+                    <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1"/>
+                    <stop offset="100%" style="stop-color:#059669;stop-opacity:1"/>
+                </radialGradient>
+            </defs>
+        </svg>
