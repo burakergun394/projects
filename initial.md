@@ -20,8 +20,8 @@ npm install @expo/vector-icons
 npm install zustand
 
 # Styling
-npm install nativewind tailwindcss
-npx tailwindcss init
+npm install @tamagui/core @tamagui/config @tamagui/animations-react-native @tamagui/font-inter @tamagui/theme-base @tamagui/lucide-icons react-native-svg
+npm install --save-dev @tamagui/babel-plugin
 
 # Additional utilities
 npx expo install expo-screen-orientation expo-keep-awake
@@ -35,11 +35,11 @@ Update the following files and create the required folder structure.
 ### Core Technologies
 - **Framework:** Expo (React Native) - ✅ Already created
 - **Language:** TypeScript - ✅ Already configured
-- **Styling:** NativeWind (Tailwind CSS for React Native)
+- **Styling:** Tamagui (Modern React Native UI System)
 - **State Management:** Zustand
 - **Local Storage:** Expo SecureStore
 - **Navigation:** Expo Router (file-based routing)
-- **Icons:** @expo/vector-icons
+- **Icons:** @tamagui/lucide-icons
 
 ### Data Source
 - **NO API Integration** - Use provided local JSON file for Surah data
@@ -124,47 +124,48 @@ constants/
 }
 ```
 
-### 2. tailwind.config.js
-```javascript
-/** @type {import('tailwindcss').Config} */
-module.exports = {
-  content: ["./app/**/*.{js,jsx,ts,tsx}", "./components/**/*.{js,jsx,ts,tsx}"],
-  theme: {
-    extend: {
-      colors: {
-        primary: {
-          50: '#ecfdf5',
-          500: '#059669',
-          600: '#047857',
-          700: '#065f46',
-          800: '#064e3b',
-          900: '#022c22',
-        },
-      },
-      fontFamily: {
-        arabic: ['System'], // Will be updated with proper Arabic fonts later
-      },
+### 2. tamagui.config.ts
+```typescript
+import { config } from '@tamagui/config/v3'
+import { createTamagui } from '@tamagui/core'
+
+const appConfig = createTamagui({
+  ...config,
+  themes: {
+    ...config.themes,
+    light: {
+      ...config.themes.light,
+      primary: '#059669',
+      primaryLight: '#ecfdf5',
+      primaryDark: '#047857',
+      background: '#ffffff',
+      backgroundSoft: '#f9fafb',
+      color: '#111827',
+      colorPress: '#374151',
+    },
+    dark: {
+      ...config.themes.dark,
+      primary: '#10b981',
+      primaryLight: '#022c22',
+      primaryDark: '#047857',
+      background: '#111827',
+      backgroundSoft: '#1f2937',
+      color: '#f9fafb',
+      colorPress: '#d1d5db',
     },
   },
-  plugins: [],
-}
+})
+
+export default appConfig
 ```
 
 ### 3. metro.config.js
 ```javascript
 const { getDefaultConfig } = require('expo/metro-config');
-const { withNativeWind } = require('nativewind/metro');
 
 const config = getDefaultConfig(__dirname);
 
-module.exports = withNativeWind(config, { input: './global.css' });
-```
-
-### 4. global.css (Create new file)
-```css
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+module.exports = config;
 ```
 
 ## Data Structure (Using Provided surah.json)
@@ -430,7 +431,7 @@ export default function TabLayout() {
 - About page with app info
 - Reset favorites option
 
-## NativeWind Styling Guidelines
+## Tamagui Styling Guidelines
 
 ```typescript
 // constants/Colors.ts
@@ -453,15 +454,28 @@ export const Colors = {
   },
 };
 
-// Common styles for consistency
-export const commonStyles = {
-  container: "flex-1 bg-white dark:bg-gray-900",
-  arabicText: "text-right font-arabic leading-loose text-gray-800 dark:text-gray-100",
-  card: "bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 mb-3 mx-4",
-  button: "bg-primary-600 hover:bg-primary-700 px-6 py-3 rounded-lg",
-  buttonText: "text-white font-semibold text-center",
-  searchInput: "bg-gray-100 dark:bg-gray-700 rounded-lg px-4 py-3 text-gray-900 dark:text-gray-100",
-};
+// Common Tamagui components and styling patterns
+import { YStack, XStack, Text, Button } from '@tamagui/core';
+
+// Container patterns
+<YStack flex={1} backgroundColor="$background">
+  // Content
+</YStack>
+
+// Card patterns
+<YStack backgroundColor="$backgroundSoft" borderRadius="$4" padding="$4" marginBottom="$3">
+  // Card content
+</YStack>
+
+// Button patterns
+<Button backgroundColor="$primary" color="white" borderRadius="$4">
+  Button Text
+</Button>
+
+// Text patterns
+<Text fontSize="$6" fontWeight="600" color="$color" textAlign="right">
+  Arabic Text
+</Text>
 ```
 
 ## Development Priority (Phase 1)
@@ -798,19 +812,21 @@ npx create-expo-app RahmetKapisi --template blank-typescript
 
 # Install dependencies
 npx expo install expo-router expo-secure-store
-npm install zustand nativewind tailwindcss
+npm install zustand
+npm install @tamagui/core @tamagui/config @tamagui/animations-react-native @tamagui/font-inter @tamagui/theme-base @tamagui/lucide-icons react-native-svg
+npm install --save-dev @tamagui/babel-plugin
 npm install @expo/vector-icons
 npx expo install expo-screen-orientation expo-keep-awake
 
-# NativeWind setup
-npx tailwindcss init
+# Tamagui setup
+# Create tamagui.config.ts with theme configuration
 ```
 
 ## Development Priority (Phase 1)
 
 1. **Project Setup & Navigation** 
    - Setup Expo Router with proper TypeScript config
-   - Configure NativeWind and basic theming
+   - Configure Tamagui with custom theme and typography
 
 2. **Data Integration**
    - Import provided surah.json file
@@ -818,9 +834,9 @@ npx tailwindcss init
    - Setup Zustand store to load and manage surah data
 
 3. **Core UI Components**
-   - SurahCard component with beautiful design
-   - SearchBar component with multi-language search
-   - Loading states and error handling
+   - SurahCard component with Tamagui styling and animations
+   - SearchBar component with Tamagui inputs and icons
+   - Loading states and error handling with Tamagui components
 
 4. **Surah List Page** 
    - Main feature: Beautiful, searchable list of all 114 surahs
