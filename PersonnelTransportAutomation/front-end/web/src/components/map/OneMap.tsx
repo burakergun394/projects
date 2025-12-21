@@ -168,23 +168,6 @@ export default function OneMap({ personnel = [], routes = [], destination, selec
                     }}
                 />
              );
-        } else {
-            // Fallback: Straight Lines (while loading or on error)
-            const path = route.personnel.map((p) => p.location);
-            if (destination) path.push(destination.location);
-
-            elements.push(
-                 <Polyline
-                    key={`fallback-${route.id}`}
-                    path={path}
-                    options={{
-                        strokeColor: color,
-                        strokeOpacity: opacity * 0.5, // Faint
-                        strokeWeight: 2,
-                        geodesic: true,
-                    }}
-                />
-            );
         }
 
         // B. Personnel Markers (Always Render)
