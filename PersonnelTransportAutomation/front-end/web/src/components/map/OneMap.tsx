@@ -78,9 +78,32 @@ export default function OneMap({ personnel = [], routes = [], destination, selec
 
         const path = route.personnel.map((p) => p.location);
 
+
         // Add line to destination if exists (Visual cue)
-        if (destination) {
-            // Optional: Draw dashed line from last stop to destination
+        if (destination && route.personnel.length > 0) {
+            const lastStop = route.personnel[route.personnel.length - 1].location;
+            const destPath = [lastStop, destination.location];
+            
+            elements.push(
+                <Polyline
+                    key={`route-dest-${route.id}`}
+                    path={destPath}
+                    options={{
+                        strokeColor: color,
+                        strokeOpacity: 0.8,
+                        strokeWeight: 2,
+                        geodesic: true,
+                        icons: [{
+                            icon: { path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW, scale: 3, strokeColor: color },
+                            offset: '100%',
+                        }, {
+                             icon: { path: 'M 0,-1 0,1', strokeOpacity: 1, scale: 2 },
+                             offset: '0',
+                             repeat: '10px'
+                        }],
+                    }}
+                />
+            );
         }
 
         elements.push(
