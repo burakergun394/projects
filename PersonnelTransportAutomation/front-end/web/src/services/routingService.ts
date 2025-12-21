@@ -54,23 +54,39 @@ export const generateRoutes = (input: RoutingInput): RoutingResult => {
       typeof p.location.lng === 'number'
   );
 
-  // 2. Global Clustering: Sort by Latitude (North -> South)
-  // This ensures we group people who are geographically close in a 'band'.
-  // We prioritize North-South sweep as a simple clustering heuristic.
-  const sortedPersonnel = [...validPersonnel].sort((a, b) => {
-    const latDiff = b.location.lat - a.location.lat; // Descending
-    if (latDiff !== 0) return latDiff;
-    return a.id.localeCompare(b.id); // Tie-breaker
+  // 2. Metric Calculation (Angle & Distance)
+  const personnelWithMetrics = validPersonnel.map(p => {
+    // Calculate polar angle (0-360 degrees) relative to destination
+    // atan2 returns -PI to PI. We convert to 0-360.
+    const dy = p.location.lat - destination.location.lat;
+    const dx = p.location.lng - destination.location.lng;
+    let angle = Math.atan2(dy, dx) * (180 / Math.PI);
+    if (angle < 0) angle += 360;
+
+    const distance = calculateDistance(p.location, destination.location);
+    return { ...p, angle, distanceToDest: distance };
   });
 
-  // 3. Chunking & Local Optimization
+  // 3. Global Clustering: SWEEP (Sort by Angle)
+  // This creates "sectors" preventing cross-city routes
+  const sortedByAngle = [...personnelWithMetrics].sort((a, b) => a.angle - b.angle);
+
   const routes: Route[] = [];
   let routeCounter = 1;
 
-  for (let i = 0; i < sortedPersonnel.length; i += vehicleCapacity) {
-    const chunk = sortedPersonnel.slice(i, i + vehicleCapacity);
-    // Pass destination to optimization
-    const optimizedChunk = optimizeRouteChunk(chunk, destination);
+  // 4. Local Optimization
+  for (let i = 0; i < sortedByAngle.length; i += vehicleCapacity) {
+    // A. Create a Sector Chunk
+    const chunk = sortedByAngle.slice(i, i + vehicleCapacity);
+    
+    // B. Sort Chunk by Distance to Destination (Descending) -> "Furthest First"
+    // This ensures we start at the edge of the sector and move inwards
+    const chunkSortedByDist = chunk.sort((a, b) => b.distanceToDest - a.distanceToDest);
+
+    // C. Optimize Traversal
+    // We pass our pre-sorted sector chunk to the optimizer.
+    // The optimizer's "Furthest First" logic aligns perfectly with our distance sort.
+    const optimizedChunk = optimizeRouteChunk(chunkSortedByDist, destination);
 
     routes.push({
       id: `route-${routeCounter}`,
