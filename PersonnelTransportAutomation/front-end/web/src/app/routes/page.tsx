@@ -1,14 +1,22 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Layout, Button, Card, List, Typography, Badge, Space, Empty } from 'antd';
-import { EnvironmentOutlined, TeamOutlined, UserOutlined } from '@ant-design/icons';
+import { Layout, Button, Card, List, Typography, Badge, Space, Empty, Select, message } from 'antd';
+import { EnvironmentOutlined, TeamOutlined, UserOutlined, ShopOutlined } from '@ant-design/icons';
 import { generateRoutes, Personnel, Route } from '@/services/routingService';
-import OneMap from '@/components/map/OneMap';
 import { MOCK_PERSONNEL } from '@/data/mockPersonnel';
+import { Destination, MOCK_DESTINATIONS } from '@/data/mockDestinations';
+import dynamic from 'next/dynamic';
 
 const { Header, Sider, Content } = Layout;
 const { Title, Text } = Typography;
+const { Option } = Select;
+
+// Dynamically import Map to disable SSR (Google Maps is client-side only)
+const OneMap = dynamic(() => import('@/components/map/OneMap'), { 
+    ssr: false,
+    loading: () => <div className="h-full w-full bg-gray-100 flex items-center justify-center">Loading Map...</div>
+});
 
 /**
  * DASHBOARD PAGE
@@ -18,29 +26,63 @@ const { Title, Text } = Typography;
 export default function RoutesPage() {
   // State: Pure UI State
   const [personnel] = useState<Personnel[]>(MOCK_PERSONNEL);
+  const [destinations] = useState<Destination[]>(MOCK_DESTINATIONS);
+  const [selectedDestination, setSelectedDestination] = useState<Destination | null>(null);
+  
   const [routes, setRoutes] = useState<Route[]>([]);
   const [selectedRouteId, setSelectedRouteId] = useState<string | null>(null);
 
   // Handler: Trigger Service
   const handleGenerateRoutes = () => {
-    // 1. Call Service
+    if (!selectedDestination) {
+        message.error('Please select a destination first.');
+        return;
+    }
+
+    // 1. Call Service with Destination
     const result = generateRoutes({ 
         personnel, 
+        destination: selectedDestination,
         vehicleCapacity: 4 // Small capacity to show multiple routes for MVP
     });
     
     // 2. Update State
     setRoutes(result.routes);
     setSelectedRouteId(null); // Reset selection
+    message.success(`Generated ${result.totalRoutes} routes to ${selectedDestination.name}`);
+  };
+
+  const handleDestinationChange = (value: string) => {
+      const dest = destinations.find(d => d.id === value) || null;
+      setSelectedDestination(dest);
+      setRoutes([]); // Clear routes on destination change
   };
 
   return (
     <Layout style={{ height: '100vh' }}>
-      <Header style={{ display: 'flex', alignItems: 'center', background: '#001529', padding: '0 20px' }}>
-        <EnvironmentOutlined style={{ fontSize: '24px', color: '#1890ff', marginRight: '10px' }} />
-        <Title level={4} style={{ color: 'white', margin: 0 }}>
-          Personnel Transport Automation
-        </Title>
+      <Header style={{ display: 'flex', alignItems: 'center', background: '#001529', padding: '0 20px', justifyContent: 'space-between' }}>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+            <EnvironmentOutlined style={{ fontSize: '24px', color: '#1890ff', marginRight: '10px' }} />
+            <Title level={4} style={{ color: 'white', margin: 0 }}>
+            Personnel Transport Automation
+            </Title>
+        </div>
+        
+        {/* Destination Selector in Header */}
+        <div style={{ minWidth: 300 }}>
+             <Select 
+                style={{ width: '100%' }} 
+                placeholder="Select Target Destination"
+                onChange={handleDestinationChange}
+                size="large"
+             >
+                 {destinations.map(d => (
+                     <Option key={d.id} value={d.id}>
+                        <ShopOutlined /> {d.name}
+                     </Option>
+                 ))}
+             </Select>
+        </div>
       </Header>
       
       <Layout>
@@ -49,6 +91,7 @@ export default function RoutesPage() {
             <OneMap 
                 personnel={personnel} 
                 routes={routes} 
+                destination={selectedDestination}
                 selectedRouteId={selectedRouteId} 
             />
             
@@ -59,7 +102,7 @@ export default function RoutesPage() {
                     size="large" 
                     icon={<EnvironmentOutlined />}
                     onClick={handleGenerateRoutes}
-                    disabled={routes.length > 0}
+                    disabled={!selectedDestination}
                     style={{ boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}
                  >
                     {routes.length > 0 ? 'Routes Generated' : 'Generate Optimized Routes'}
@@ -75,7 +118,10 @@ export default function RoutesPage() {
                 </Title>
                 
                 {routes.length === 0 ? (
-                    <Empty description="No routes generated explicitly" />
+                    <Empty 
+                        description={selectedDestination ? "Ready to generate routes" : "Select a destination to start"} 
+                        image={Empty.PRESENTED_IMAGE_SIMPLE}
+                    />
                 ) : (
                     <Space direction="vertical" style={{ width: '100%' }}>
                         {routes.map((route) => (
@@ -109,7 +155,7 @@ export default function RoutesPage() {
                                                 title={<Text strong>{p.fullName}</Text>}
                                                 description={
                                                     <Space style={{ fontSize: '10px', color: '#888' }}>
-                                                        <EnvironmentOutlined /> {p.address} ({p.location.lat.toFixed(4)}, {p.location.lng.toFixed(4)})
+                                                        <EnvironmentOutlined /> {p.address}
                                                     </Space>
                                                 }
                                             />
