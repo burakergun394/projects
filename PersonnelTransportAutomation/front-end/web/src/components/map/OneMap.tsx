@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useMemo } from 'react';
-import { GoogleMap, Marker, Polyline, useJsApiLoader } from '@react-google-maps/api';
+import { GoogleMap, Marker, Polyline, useJsApiLoader, DirectionsRenderer } from '@react-google-maps/api';
 import { Personnel, Route } from '@/services/routingService';
 import { Destination } from '@/data/mockDestinations';
 
@@ -36,6 +36,80 @@ export default function OneMap({ personnel = [], routes = [], destination, selec
     id: 'google-map-script',
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || '', // Graceful fallback
   });
+
+  // State for Directions
+  const [directionsCache, setDirectionsCache] = React.useState<Record<string, google.maps.DirectionsResult>>({});
+
+  // Fetch Directions when routes change
+  // Fetch Directions when routes change (Sequentially to avoid OVER_QUERY_LIMIT)
+  // Fetch Directions when routes change (Sequentially to avoid OVER_QUERY_LIMIT)
+  React.useEffect(() => {
+    if (!isLoaded || !routes || routes.length === 0 || typeof google === 'undefined') return;
+
+    let ignore = false;
+
+    const fetchDirections = async () => {
+        const service = new google.maps.DirectionsService();
+
+        for (const route of routes) {
+            if (ignore) break;
+
+            // Skip if already cached (Check state via functional update not needed here if we trust stability, but strictly we can't read 'directionsCache' without dep.
+            // BETTER: Just fetch. If it's redundant, the cost is API quota, but 'routes' change should imply new data.
+            // OR: We can use a ref to track what we've fetched to avoid dep loops.
+            
+            // Simplest fix: Just run logic.
+            
+            // Origin: First person
+            const origin = route.personnel[0].location;
+            // Destination: Target Destination OR Last person
+            const dest = destination ? destination.location : route.personnel[route.personnel.length - 1].location;
+            
+            // Waypoints: All between start and end (excluding last person if dest is set)
+            const waypoints = destination 
+                ? route.personnel.slice(1).map(p => ({ location: p.location, stopover: true }))
+                : route.personnel.slice(1, -1).map(p => ({ location: p.location, stopover: true }));
+
+            try {
+                // Wrap in Promise for sequential execution
+                const result = await new Promise<google.maps.DirectionsResult>((resolve, reject) => {
+                    service.route({
+                        origin: origin,
+                        destination: dest,
+                        waypoints: waypoints,
+                        travelMode: google.maps.TravelMode.DRIVING,
+                    }, (response, status) => {
+                        if (status === google.maps.DirectionsStatus.OK && response) {
+                            resolve(response);
+                        } else {
+                            reject(status);
+                        }
+                    });
+                });
+                
+                if (!ignore) {
+                     setDirectionsCache(prev => ({ ...prev, [route.id]: result }));
+                }
+                
+                // Throttle: Wait 300ms before next request
+                await new Promise(r => setTimeout(r, 300));
+
+            } catch (error) {
+                console.error(`Directions request failed for ${route.id}:`, error);
+                if (error === google.maps.DirectionsStatus.OVER_QUERY_LIMIT) {
+                     break; 
+                }
+            }
+        }
+    };
+
+    fetchDirections();
+
+    return () => {
+        ignore = true;
+    };
+  }, [routes, isLoaded, destination]); // REMOVED directionsCache
+
 
   // Calculate Map Markers
   const mapElements = useMemo(() => {
@@ -74,56 +148,48 @@ export default function OneMap({ personnel = [], routes = [], destination, selec
       routes.forEach((route, index) => {
         const color = COLORS[index % COLORS.length];
         const isSelected = selectedRouteId === route.id;
-        const opacity = selectedRouteId && !isSelected ? 0.3 : 1;
+        const opacity = selectedRouteId && !isSelected ? 0.2 : 1; // Dimmer unselected
 
-        const path = route.personnel.map((p) => p.location);
+        // A. Render Directions Path (Roads)
+        const directions = directionsCache[route.id];
+        if (directions) {
+             elements.push(
+                <DirectionsRenderer
+                    key={`dir-${route.id}`}
+                    directions={directions}
+                    options={{
+                        suppressMarkers: true, // We use custom markers
+                        polylineOptions: {
+                            strokeColor: color,
+                            strokeOpacity: opacity,
+                            strokeWeight: 5,
+                        },
+                        preserveViewport: true, // Don't auto-zoom on every render
+                    }}
+                />
+             );
+        } else {
+            // Fallback: Straight Lines (while loading or on error)
+            const path = route.personnel.map((p) => p.location);
+            if (destination) path.push(destination.location);
 
-
-        // Add line to destination if exists (Visual cue)
-        if (destination && route.personnel.length > 0) {
-            const lastStop = route.personnel[route.personnel.length - 1].location;
-            const destPath = [lastStop, destination.location];
-            
             elements.push(
-                <Polyline
-                    key={`route-dest-${route.id}`}
-                    path={destPath}
+                 <Polyline
+                    key={`fallback-${route.id}`}
+                    path={path}
                     options={{
                         strokeColor: color,
-                        strokeOpacity: 0.8,
+                        strokeOpacity: opacity * 0.5, // Faint
                         strokeWeight: 2,
                         geodesic: true,
-                        icons: [{
-                            icon: { path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW, scale: 3, strokeColor: color },
-                            offset: '100%',
-                        }, {
-                             icon: { path: 'M 0,-1 0,1', strokeOpacity: 1, scale: 2 },
-                             offset: '0',
-                             repeat: '10px'
-                        }],
                     }}
                 />
             );
         }
 
-        elements.push(
-          <React.Fragment key={route.id}>
-            {/* Route Path */}
-            <Polyline
-              path={path}
-              options={{
-                strokeColor: color,
-                strokeOpacity: opacity,
-                strokeWeight: 4,
-                geodesic: true,
-                icons: [{
-                    icon: { path: 2, scale: 3, strokeOpacity: 1, strokeColor: color }, // Arrow
-                    offset: '100%',
-                }],
-              }}
-            />
-            {/* Personnel Markers */}
-            {route.personnel.map((p) => (
+        // B. Personnel Markers (Always Render)
+        route.personnel.forEach((p) => (
+            elements.push(
               <Marker
                 key={p.id}
                 position={p.location}
@@ -143,9 +209,8 @@ export default function OneMap({ personnel = [], routes = [], destination, selec
                 }}
                 title={`${p.fullName} (#${p.pickupOrder})`}
               />
-            ))}
-          </React.Fragment>
-        );
+            )
+        ));
       });
     } 
     // 3. Default Personnel (if no routes)
@@ -170,7 +235,7 @@ export default function OneMap({ personnel = [], routes = [], destination, selec
     }
 
     return elements;
-  }, [personnel, routes, destination, selectedRouteId, isLoaded]);
+  }, [personnel, routes, destination, selectedRouteId, isLoaded, directionsCache]);
 
   if (!isLoaded) return <div className="h-full w-full bg-gray-100 flex items-center justify-center">Loading Map...</div>;
 
