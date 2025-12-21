@@ -54,48 +54,81 @@ export const generateRoutes = (input: RoutingInput): RoutingResult => {
       typeof p.location.lng === 'number'
   );
 
+  if (validPersonnel.length === 0) return { totalRoutes: 0, routes: [] };
+
   // 2. Metric Calculation (Angle & Distance)
+  // Also find Max Distance for Zone Classification
+  let maxDistance = 0;
+
   const personnelWithMetrics = validPersonnel.map(p => {
     // Calculate polar angle (0-360 degrees) relative to destination
-    // atan2 returns -PI to PI. We convert to 0-360.
     const dy = p.location.lat - destination.location.lat;
     const dx = p.location.lng - destination.location.lng;
     let angle = Math.atan2(dy, dx) * (180 / Math.PI);
     if (angle < 0) angle += 360;
 
     const distance = calculateDistance(p.location, destination.location);
+    if (distance > maxDistance) maxDistance = distance;
+
     return { ...p, angle, distanceToDest: distance };
   });
 
-  // 3. Global Clustering: SWEEP (Sort by Angle)
-  // This creates "sectors" preventing cross-city routes
-  const sortedByAngle = [...personnelWithMetrics].sort((a, b) => a.angle - b.angle);
+  // 3. Zone Classification
+  // Zone 1 (Far): > 66% Max Dist
+  // Zone 2 (Mid): 33% - 66% Max Dist
+  // Zone 3 (Near): < 33% Max Dist
+  
+  const farZone: typeof personnelWithMetrics = [];
+  const midZone: typeof personnelWithMetrics = [];
+  const nearZone: typeof personnelWithMetrics = [];
+
+  const thresholdFar = maxDistance * 0.66;
+  const thresholdMid = maxDistance * 0.33;
+
+  personnelWithMetrics.forEach(p => {
+    if (p.distanceToDest > thresholdFar) {
+        farZone.push(p);
+    } else if (p.distanceToDest > thresholdMid) {
+        midZone.push(p);
+    } else {
+        nearZone.push(p);
+    }
+  });
 
   const routes: Route[] = [];
   let routeCounter = 1;
 
-  // 4. Local Optimization
-  for (let i = 0; i < sortedByAngle.length; i += vehicleCapacity) {
-    // A. Create a Sector Chunk
-    const chunk = sortedByAngle.slice(i, i + vehicleCapacity);
-    
-    // B. Sort Chunk by Distance to Destination (Descending) -> "Furthest First"
-    // This ensures we start at the edge of the sector and move inwards
-    const chunkSortedByDist = chunk.sort((a, b) => b.distanceToDest - a.distanceToDest);
+  // 4. Per-Zone Routing Function
+  const processZone = (zonePersonnel: typeof personnelWithMetrics, zoneName: string) => {
+    // A. Sweep Sort (Angle)
+    const sortedByAngle = [...zonePersonnel].sort((a, b) => a.angle - b.angle);
 
-    // C. Optimize Traversal
-    // We pass our pre-sorted sector chunk to the optimizer.
-    // The optimizer's "Furthest First" logic aligns perfectly with our distance sort.
-    const optimizedChunk = optimizeRouteChunk(chunkSortedByDist, destination);
+    for (let i = 0; i < sortedByAngle.length; i += vehicleCapacity) {
+        // B. Chunk
+        const chunk = sortedByAngle.slice(i, i + vehicleCapacity);
+        
+        // C. Sort by Distance (Descending - Furthest First)
+        // Strictly start from the edge of the zone/sector and move inwards
+        const chunkSortedByDist = chunk.sort((a, b) => b.distanceToDest - a.distanceToDest);
 
-    routes.push({
-      id: `route-${routeCounter}`,
-      name: `Route ${routeCounter}`,
-      destination: destination,
-      personnel: optimizedChunk,
-    });
-    routeCounter++;
-  }
+        // D. Optimize
+        const optimizedChunk = optimizeRouteChunk(chunkSortedByDist, destination);
+
+        routes.push({
+          id: `route-${routeCounter}`,
+          name: `Route ${routeCounter} (${zoneName})`, // Labeling for clarity
+          destination: destination,
+          personnel: optimizedChunk,
+        });
+        routeCounter++;
+    }
+  };
+
+  // Process Zones in Order: FAR -> MID -> NEAR
+  // This ensures logical layering, though they are independent sets now.
+  if (farZone.length > 0) processZone(farZone, 'Far');
+  if (midZone.length > 0) processZone(midZone, 'Mid');
+  if (nearZone.length > 0) processZone(nearZone, 'Near');
 
   return {
     totalRoutes: routes.length,
