@@ -1,9 +1,0 @@
-﻿using PersonnelTransportAutomation.EntityFrameworkCore;
-using Xunit;
-
-namespace PersonnelTransportAutomation.EntityFrameworkCore;
-
-public class PersonnelTransportAutomationEntityFrameworkCoreCollectionFixtureBase : ICollectionFixture<PersonnelTransportAutomationEntityFrameworkCoreFixture>
-{
-
-}
