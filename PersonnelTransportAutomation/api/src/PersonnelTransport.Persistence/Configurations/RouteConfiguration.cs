@@ -4,7 +4,6 @@ using PersonnelTransport.Domain.Routes;
 
 namespace PersonnelTransport.Persistence.Configurations;
 
-
 public class RouteConfiguration : IEntityTypeConfiguration<Route>
 {
     public void Configure(EntityTypeBuilder<Route> builder)
@@ -25,7 +24,6 @@ public class RouteConfiguration : IEntityTypeConfiguration<Route>
                 loc.Property(l => l.Longitude).HasColumnName("Longitude");
             });
 
-            // Storing GUID list as comma-separated string for MVP simplicity (PostgreSQL array could also be used but this is more portable for now)
             stop.Property(x => x.PickupEmployeeIds)
                 .HasConversion(
                     v => string.Join(',', v),
