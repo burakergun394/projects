@@ -1,8 +1,8 @@
-namespace PersonnelTransport.Domain.Personnel;
-
 using PersonnelTransport.Domain.Common;
 
-public class Personnel : Entity
+namespace PersonnelTransport.Domain.Employees;
+
+public class Employee : Entity
 {
     public string FirstName { get; private set; } = default!;
     public string LastName { get; private set; } = default!;
@@ -11,7 +11,7 @@ public class Personnel : Entity
     public Guid? AssignedRouteId { get; private set; }
     public List<string> SpecialNeeds { get; private set; } = [];
 
-    public Personnel(Guid id, string firstName, string lastName, Location homeLocation, Shift shift) : base(id)
+    public Employee(Guid id, string firstName, string lastName, Location homeLocation, Shift shift) : base(id)
     {
         FirstName = firstName;
         LastName = lastName;
@@ -19,7 +19,7 @@ public class Personnel : Entity
         Shift = shift;
     }
 
-    private Personnel() { } // EF Core
+    private Employee() { } // EF Core
 
     public void MoveTo(Location newLocation)
     {

@@ -1,12 +1,12 @@
-namespace PersonnelTransport.Persistence.Configurations;
-
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using PersonnelTransport.Domain.Personnel;
+using PersonnelTransport.Domain.Employees;
 
-public class PersonnelConfiguration : IEntityTypeConfiguration<Personnel>
+namespace PersonnelTransport.Persistence.Configurations;
+
+public class EmployeeConfiguration : IEntityTypeConfiguration<Employee>
 {
-    public void Configure(EntityTypeBuilder<Personnel> builder)
+    public void Configure(EntityTypeBuilder<Employee> builder)
     {
         builder.HasKey(x => x.Id);
 
