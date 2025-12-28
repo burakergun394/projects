@@ -1,9 +1,0 @@
-﻿using Xunit;
-
-namespace PersonelTransportAutomation.EntityFrameworkCore;
-
-[CollectionDefinition(PersonelTransportAutomationTestConsts.CollectionDefinitionName)]
-public class PersonelTransportAutomationEntityFrameworkCoreCollection : ICollectionFixture<PersonelTransportAutomationEntityFrameworkCoreFixture>
-{
-
-}

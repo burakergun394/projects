@@ -1,0 +1,8 @@
+﻿using Volo.Abp;
+
+namespace PersonnelTransportAutomation.EntityFrameworkCore;
+
+public abstract class PersonnelTransportAutomationEntityFrameworkCoreTestBase : PersonnelTransportAutomationTestBase<PersonnelTransportAutomationEntityFrameworkCoreTestModule>
+{
+
+}

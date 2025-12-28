@@ -251,15 +251,15 @@ paket-files/
 .idea/
 *.sln.iml
 
-# PersonelTransportAutomation
-src/PersonelTransportAutomation.Web/Logs/*
-src/PersonelTransportAutomation.Web.Host/Logs/*
-src/PersonelTransportAutomation.AuthServer/Logs/*
-src/PersonelTransportAutomation.HttpApi.Host/Logs/*
-src/PersonelTransportAutomation.HttpApi.HostWithIds/Logs/*
-src/PersonelTransportAutomation.DbMigrator/Logs/*
-src/PersonelTransportAutomation.Blazor.Server/Logs/*
-src/PersonelTransportAutomation.Blazor.Server.Tiered/Logs/*
+# PersonnelTransportAutomation
+src/PersonnelTransportAutomation.Web/Logs/*
+src/PersonnelTransportAutomation.Web.Host/Logs/*
+src/PersonnelTransportAutomation.AuthServer/Logs/*
+src/PersonnelTransportAutomation.HttpApi.Host/Logs/*
+src/PersonnelTransportAutomation.HttpApi.HostWithIds/Logs/*
+src/PersonnelTransportAutomation.DbMigrator/Logs/*
+src/PersonnelTransportAutomation.Blazor.Server/Logs/*
+src/PersonnelTransportAutomation.Blazor.Server.Tiered/Logs/*
 
 # Use abp install-libs to restore.
 **/wwwroot/libs/*
