@@ -16,3 +16,7 @@
 
 # Agent
 !**/.agent/
+
+# Sensitive configuration
+appsettings.Development.json
+**/appsettings.Development.json
