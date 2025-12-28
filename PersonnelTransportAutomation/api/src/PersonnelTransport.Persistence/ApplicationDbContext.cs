@@ -1,9 +1,9 @@
-namespace PersonnelTransport.Persistence;
-
 using Microsoft.EntityFrameworkCore;
 using PersonnelTransport.Domain.Employees;
 using PersonnelTransport.Domain.Routes;
 using PersonnelTransport.Domain.Vehicles;
+
+namespace PersonnelTransport.Persistence;
 
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
 {

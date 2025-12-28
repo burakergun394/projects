@@ -1,7 +1,7 @@
-namespace PersonnelTransport.Persistence.Repositories;
-
 using Microsoft.EntityFrameworkCore;
 using PersonnelTransport.Domain.Routes;
+
+namespace PersonnelTransport.Persistence.Repositories;
 
 public class RouteRepository(ApplicationDbContext context) : IRouteRepository
 {

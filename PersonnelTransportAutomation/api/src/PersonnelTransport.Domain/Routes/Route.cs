@@ -1,6 +1,6 @@
-namespace PersonnelTransport.Domain.Routes;
-
 using PersonnelTransport.Domain.Common;
+
+namespace PersonnelTransport.Domain.Routes;
 
 public class Route : Entity
 {

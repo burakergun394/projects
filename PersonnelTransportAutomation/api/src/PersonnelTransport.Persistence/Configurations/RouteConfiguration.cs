@@ -1,8 +1,9 @@
-namespace PersonnelTransport.Persistence.Configurations;
-
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PersonnelTransport.Domain.Routes;
+
+namespace PersonnelTransport.Persistence.Configurations;
+
 
 public class RouteConfiguration : IEntityTypeConfiguration<Route>
 {
@@ -25,7 +26,7 @@ public class RouteConfiguration : IEntityTypeConfiguration<Route>
             });
 
             // Storing GUID list as comma-separated string for MVP simplicity (PostgreSQL array could also be used but this is more portable for now)
-            stop.Property(x => x.PickupPersonnelIds)
+            stop.Property(x => x.PickupEmployeeIds)
                 .HasConversion(
                     v => string.Join(',', v),
                     v => v.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(Guid.Parse).ToList()

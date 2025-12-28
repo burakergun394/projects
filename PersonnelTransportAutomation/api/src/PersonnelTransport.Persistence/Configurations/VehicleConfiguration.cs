@@ -1,8 +1,8 @@
-namespace PersonnelTransport.Persistence.Configurations;
-
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PersonnelTransport.Domain.Vehicles;
+
+namespace PersonnelTransport.Persistence.Configurations;
 
 public class VehicleConfiguration : IEntityTypeConfiguration<Vehicle>
 {

@@ -2,7 +2,7 @@ using PersonnelTransport.Domain.Employees;
 using Space.Abstraction.Attributes;
 using Space.Abstraction.Context;
 
-namespace PersonnelTransport.Application.Employees.Queries.GetPersonnelById;
+namespace PersonnelTransport.Application.Employees.Queries.GetEmployeeById;
 
 public class GetEmployeeByIdHandler(IEmployeeRepository repository)
 {
@@ -12,7 +12,7 @@ public class GetEmployeeByIdHandler(IEmployeeRepository repository)
         var request = ctx.Request;
         var entity = await repository.GetByIdAsync(request.Id);
 
-        if (entity == null) 
+        if (entity == null)
             return null;
 
         return new EmployeeDto(

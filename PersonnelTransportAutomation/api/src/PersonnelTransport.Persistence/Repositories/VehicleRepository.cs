@@ -1,7 +1,8 @@
-namespace PersonnelTransport.Persistence.Repositories;
-
 using Microsoft.EntityFrameworkCore;
 using PersonnelTransport.Domain.Vehicles;
+
+namespace PersonnelTransport.Persistence.Repositories;
+
 
 public class VehicleRepository(ApplicationDbContext context) : IVehicleRepository
 {

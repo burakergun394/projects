@@ -1,6 +1,6 @@
-namespace PersonnelTransport.Domain.Vehicles;
-
 using PersonnelTransport.Domain.Common;
+
+namespace PersonnelTransport.Domain.Vehicles;
 
 public class Vehicle : Entity
 {
