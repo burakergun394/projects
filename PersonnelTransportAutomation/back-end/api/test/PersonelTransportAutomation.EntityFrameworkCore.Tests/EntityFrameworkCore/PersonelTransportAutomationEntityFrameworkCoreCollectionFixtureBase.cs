@@ -1,0 +1,9 @@
+﻿using PersonelTransportAutomation.EntityFrameworkCore;
+using Xunit;
+
+namespace PersonelTransportAutomation.EntityFrameworkCore;
+
+public class PersonelTransportAutomationEntityFrameworkCoreCollectionFixtureBase : ICollectionFixture<PersonelTransportAutomationEntityFrameworkCoreFixture>
+{
+
+}

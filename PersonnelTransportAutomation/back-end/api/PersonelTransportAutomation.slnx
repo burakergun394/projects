@@ -1,0 +1,35 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/PersonelTransportAutomation.Application.Contracts/PersonelTransportAutomation.Application.Contracts.csproj" />
+    <Project Path="src/PersonelTransportAutomation.Application/PersonelTransportAutomation.Application.csproj" />
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <Project Path="src/PersonelTransportAutomation.DbMigrator/PersonelTransportAutomation.DbMigrator.csproj" />
+    <Project Path="src/PersonelTransportAutomation.Domain.Shared/PersonelTransportAutomation.Domain.Shared.csproj" />
+    <Project Path="src/PersonelTransportAutomation.Domain/PersonelTransportAutomation.Domain.csproj" />
+    <Project Path="src/PersonelTransportAutomation.EntityFrameworkCore/PersonelTransportAutomation.EntityFrameworkCore.csproj" />
+    <Project Path="src/PersonelTransportAutomation.HttpApi.Client/PersonelTransportAutomation.HttpApi.Client.csproj" />
+    
+    
+    <Project Path="src/PersonelTransportAutomation.HttpApi/PersonelTransportAutomation.HttpApi.csproj" />
+    
+    
+    <Project Path="src/PersonelTransportAutomation.Web/PersonelTransportAutomation.Web.csproj" />
+  </Folder>
+  <Folder Name="/test/">
+    <Project Path="test/PersonelTransportAutomation.Application.Tests/PersonelTransportAutomation.Application.Tests.csproj" />
+    <Project Path="test/PersonelTransportAutomation.Domain.Tests/PersonelTransportAutomation.Domain.Tests.csproj" />
+    <Project Path="test/PersonelTransportAutomation.EntityFrameworkCore.Tests/PersonelTransportAutomation.EntityFrameworkCore.Tests.csproj" />
+    <Project Path="test/PersonelTransportAutomation.HttpApi.Client.ConsoleTestApp/PersonelTransportAutomation.HttpApi.Client.ConsoleTestApp.csproj" />
+    
+    <Project Path="test/PersonelTransportAutomation.TestBase/PersonelTransportAutomation.TestBase.csproj" />
+    <Project Path="test/PersonelTransportAutomation.Web.Tests/PersonelTransportAutomation.Web.Tests.csproj" />
+  </Folder>
+</Solution>

@@ -1,0 +1,10 @@
+using PersonelTransportAutomation.Samples;
+using Xunit;
+
+namespace PersonelTransportAutomation.EntityFrameworkCore.Applications;
+
+[Collection(PersonelTransportAutomationTestConsts.CollectionDefinitionName)]
+public class EfCoreSampleAppServiceTests : SampleAppServiceTests<PersonelTransportAutomationEntityFrameworkCoreTestModule>
+{
+
+}
