@@ -4,5 +4,5 @@ public interface ITwitterService
 {
     Task<long> UploadImageAsync(byte[] imageBytes);
 
-    Task<string?> PublishTweetAsync(string text, long mediaId);
+    Task<string?> PublishTweetAsync(string text, long? mediaId = null);
 }

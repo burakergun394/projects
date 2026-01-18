@@ -1,5 +1,6 @@
 using System.Reflection;
 using FollowCatcher.Domain.Data;
+using FollowCatcher.Domain.Instagram;
 using FollowCatcher.Domain.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -13,6 +14,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     private IDbContextTransaction? _currentTransaction;
 
     // Add DbSet properties for your entities here
+    public DbSet<MonitoredAccount> MonitoredAccounts => Set<MonitoredAccount>();
+    IQueryable<MonitoredAccount> IApplicationDbContext.MonitoredAccounts => MonitoredAccounts;
     // Example: public DbSet<Employee> Employees => Set<Employee>();
 
 

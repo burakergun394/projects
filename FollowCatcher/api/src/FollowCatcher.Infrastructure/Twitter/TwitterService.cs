@@ -41,19 +41,18 @@ public class TwitterService(
         }
     }
 
-    public async Task<string?> PublishTweetAsync(string text, long mediaId)
+    public async Task<string?> PublishTweetAsync(string text, long? mediaId = null)
     {
         try
         {
-            logger.LogInformation("Publishing tweet (V2): {Text} with Media ID: {MediaId}", text, mediaId);
+            logger.LogInformation("Publishing tweet (V2): {Text} with Media ID: {MediaId}", text, mediaId?.ToString() ?? "None");
 
             var tweetRequest = new TweetV2Request
             {
                 Text = text,
-                Media = new TweetV2Media 
-                { 
-                    MediaIds = [mediaId.ToString()] 
-                }
+                Media = mediaId.HasValue 
+                    ? new TweetV2Media { MediaIds = [mediaId.Value.ToString()] }
+                    : null
             };
 
             var jsonBody = client.Json.Serialize(tweetRequest);

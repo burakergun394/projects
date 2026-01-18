@@ -26,6 +26,9 @@ public static class DependencyInjection
         // Register Twitter service
         services.AddSingleton<ITwitterService, FollowCatcher.Infrastructure.Twitter.TwitterService>();
 
+        // Register Monitoring Worker
+        services.AddHostedService<FollowCatcher.Infrastructure.Instagram.Monitoring.InstagramMonitoringWorker>();
+
         return services;
     }
 }

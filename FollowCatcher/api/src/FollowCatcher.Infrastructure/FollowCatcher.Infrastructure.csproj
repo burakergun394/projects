@@ -8,11 +8,13 @@
     <PackageReference Include="InstagramApiSharp" Version="1.8.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="10.0.2" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.2" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.2" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="10.0.2" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="10.0.2" />
     <PackageReference Include="SkiaSharp" Version="3.119.1" />
     <PackageReference Include="TweetinviAPI" Version="5.0.4" />
+	<PackageReference Include="MediatR" Version="14.0.0" />
   </ItemGroup>
 
   <PropertyGroup>

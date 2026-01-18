@@ -3,6 +3,8 @@ using FollowCatcher.Domain.Data;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using FollowCatcher.Domain.Repositories;
+using FollowCatcher.Persistence.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace FollowCatcher.Persistence;
@@ -43,7 +45,7 @@ public static class DependencyInjection
             provider.GetRequiredService<ApplicationDbContext>());
 
         // Register repositories here
-        // Example: services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+        services.AddScoped<IMonitoredAccountRepository, MonitoredAccountRepository>();
 
 
 

@@ -1,5 +1,6 @@
 using FollowCatcher.Domain.Instagram;
 using FollowCatcher.Domain.Data;
+using InstagramApiSharp;
 using InstagramApiSharp.API;
 using InstagramApiSharp.API.Builder;
 using InstagramApiSharp.Classes;
@@ -184,6 +185,7 @@ public class InstagramService(
             var userInfo = userInfoResult.Value;
 
             var profileInfo = new InstagramProfileInfo(
+                Id: userInfo.Pk,
                 Username: userInfo.Username,
                 FullName: userInfo.FullName,
                 FollowerCount: userInfo.FollowerCount,
@@ -204,6 +206,50 @@ public class InstagramService(
         catch (Exception ex)
         {
             logger.LogError(ex, "Error fetching Instagram profile for {Username}", username);
+            return null;
+        }
+    }
+
+    public async Task<List<InstagramProfileInfo>?> GetUserFollowingAsync(
+        string username,
+        CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            logger.LogInformation("Fetching following list for: {Username}", username);
+
+            var api = await GetInstaApiAsync();
+
+            var pagination = PaginationParameters.MaxPagesToLoad(1); // Start with 1 page for now
+            var result = await api.UserProcessor.GetUserFollowingAsync(username, pagination);
+
+            if (!result.Succeeded)
+            {
+                 logger.LogWarning(
+                    "Failed to fetch following for {Username}. Error: {Error}",
+                    username,
+                    result.Info.Message);
+                return null;
+            }
+
+            var following = result.Value
+                .Select(u => new InstagramProfileInfo(
+                    Id: u.Pk,
+                    Username: u.UserName,
+                    FullName: u.FullName,
+                    FollowerCount: 0, // Not available in simple list
+                    FollowingCount: 0,
+                    ProfilePictureUrl: u.ProfilePicture,
+                    PostCount: 0
+                ))
+                .ToList();
+
+            logger.LogInformation("Fetched {Count} following users for {Username}", following.Count, username);
+            return following;
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Error fetching following list for {Username}", username);
             return null;
         }
     }
