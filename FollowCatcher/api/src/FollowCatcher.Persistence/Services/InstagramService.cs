@@ -11,6 +11,23 @@ namespace FollowCatcher.Persistence.Services;
 
 /// <summary>
 /// Service for Instagram operations using InstagramApiSharp with best practices.
+///
+/// <para><b>Lifecycle: Singleton</b></para>
+/// <para>
+/// This service is registered as a singleton because:
+/// - Session state is shared via file system (instagram_state.bin)
+/// - Thread-safe initialization using SemaphoreSlim with double-check locking
+/// - Better performance: avoids creating new instances per request
+/// - Proper cleanup on application shutdown via IDisposable
+/// </para>
+///
+/// <para><b>Thread Safety:</b></para>
+/// <para>
+/// All operations are thread-safe for concurrent requests:
+/// - GetInstaApiAsync() uses SemaphoreSlim for initialization synchronization
+/// - IInstaApi operations are thread-safe per InstagramApiSharp documentation
+/// - Session state file I/O is synchronized through API instance
+/// </para>
 /// </summary>
 public class InstagramService(
     ILogger<InstagramService> logger,

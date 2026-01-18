@@ -56,8 +56,8 @@ public static class DependencyInjection
         var instagramSection = configuration.GetSection(InstagramSettings.SectionName);
         services.Configure<InstagramSettings>(instagramSection);
 
-        // Register Instagram service as scoped (one per request, proper disposal)
-        services.AddScoped<IInstagramService, InstagramService>();
+        // Register Instagram service as singleton (shared session, thread-safe, disposed on shutdown)
+        services.AddSingleton<IInstagramService, InstagramService>();
 
         return services;
     }
