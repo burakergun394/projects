@@ -1,6 +1,7 @@
 using FollowCatcher.Domain.Instagram;
-using FollowCatcher.Domain.Data;
 using FollowCatcher.Infrastructure.Instagram;
+using FollowCatcher.Infrastructure.Twitter;
+using FollowCatcher.Domain.Twitter;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -17,6 +18,13 @@ public static class DependencyInjection
         // Register Instagram service
         services.AddSingleton<IInstagramService, InstagramService>();
         services.AddScoped<IInstagramProfileCardGenerator, SkiaInstagramProfileCardGenerator>();
+
+        // Configure Twitter settings
+        var twitterSection = configuration.GetSection(TwitterSettings.SectionName);
+        services.Configure<TwitterSettings>(twitterSection);
+
+        // Register Twitter service
+        services.AddSingleton<ITwitterService, FollowCatcher.Infrastructure.Twitter.TwitterService>();
 
         return services;
     }
