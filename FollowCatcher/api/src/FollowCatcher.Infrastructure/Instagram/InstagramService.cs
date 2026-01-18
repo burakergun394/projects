@@ -185,6 +185,7 @@ public class InstagramService(
 
             var profileInfo = new InstagramProfileInfo(
                 Username: userInfo.Username,
+                FullName: userInfo.FullName,
                 FollowerCount: userInfo.FollowerCount,
                 FollowingCount: userInfo.FollowingCount,
                 ProfilePictureUrl: userInfo.ProfilePicUrl,

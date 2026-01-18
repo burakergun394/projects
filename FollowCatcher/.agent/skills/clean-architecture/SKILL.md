@@ -27,6 +27,8 @@ This project follows Clean Architecture with the following layers:
   - Domain Events
   - Domain Exceptions
   - Repository Interfaces
+  - Feature Folders (e.g., `Domain/Instagram`)
+  - Data Interfaces (`Domain/Data`)
 
 ### 2. Application Layer (`{ProjectName}.Application`)
 - **Purpose**: Use cases, business workflows, CQRS handlers
@@ -40,7 +42,7 @@ This project follows Clean Architecture with the following layers:
 
 ### 3. Persistence Layer (`{ProjectName}.Persistence`)
 - **Purpose**: Database access, repositories, and data persistence
-- **Dependencies**: Domain and Application layers
+- **Dependencies**: Domain layer
 - **Contains**:
   - DbContext
   - Entity Configurations (EF Core)
@@ -49,7 +51,7 @@ This project follows Clean Architecture with the following layers:
 
 ### 4. Infrastructure Layer (`{ProjectName}.Infrastructure`)
 - **Purpose**: External services, file system, non-database infrastructure
-- **Dependencies**: Application layer
+- **Dependencies**: Domain layer
 - **Contains**:
   - External Service Implementations (e.g., Email, Instagram)
   - File System Adapters
@@ -249,7 +251,7 @@ The Unit of Work pattern maintains a list of objects affected by a business tran
 ### IUnitOfWork Interface
 
 ```csharp
-// Location: Application/Common/Interfaces/IUnitOfWork.cs
+// Location: Domain/Data/IUnitOfWork.cs
 public interface IUnitOfWork
 {
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
@@ -641,9 +643,15 @@ src/
 │   │   └── Employee.cs
 │   ├── Vehicles/
 │   │   └── Vehicle.cs
-│   └── Routes/
-│       ├── Route.cs
-│       └── RouteStop.cs
+│   ├── Routes/
+│   │       ├── Route.cs
+│   │       └── RouteStop.cs
+│   ├── Data/
+│   │   ├── IUnitOfWork.cs
+│   │   └── IApplicationDbContext.cs
+│   ├── Instagram/
+│   │   ├── IInstagramService.cs
+│   │   └── InstagramSettings.cs
 │
 ├── {ProjectName}.Application/
 │   ├── Employees/
@@ -653,12 +661,19 @@ src/
 │   │   │       └── CreateEmployeeHandler.cs
 │   │   └── Queries/
 │   │       └── GetEmployeeById/
-│   │           ├── GetEmployeeByIdQuery.cs
-│   │           └── GetEmployeeByIdHandler.cs
-│   └── [Feature]/
-│       ├── Commands/
-│       ├── Queries/
-│       └── [Feature]Dto.cs
+│   ├── Employees/
+│   │   │   ├── Commands/
+│   │   │   │   └── CreateEmployee/
+│   │   │   │       ├── CreateEmployeeCommand.cs
+│   │   │   │       └── CreateEmployeeHandler.cs
+│   │   │   └── Queries/
+│   │   │       └── GetEmployeeById/
+│   │   │           ├── GetEmployeeByIdQuery.cs
+│   │   │           └── GetEmployeeByIdHandler.cs
+│   │   └── Instagram/
+│   │       ├── Commands/
+│   │       ├── Queries/
+│   │       └── InstagramProfileDto.cs
 │
 ├── {ProjectName}.Persistence/
 │   ├── Configurations/
@@ -666,6 +681,11 @@ src/
 │   ├── Repositories/
 │   │   └── EmployeeRepository.cs
 │   └── ApplicationDbContext.cs
+│
+├── {ProjectName}.Infrastructure/
+│   ├── Instagram/
+│   │   └── InstagramService.cs
+│   └── DependencyInjection.cs
 │
 └── {ProjectName}.Api/
     └── Controllers/

@@ -25,5 +25,5 @@
 
 
 ## Architecture Guidelines
-- **Clean Architecture**: Follow the dependency rule (Domain <- Application <- Infrastructure <- API).
+- **Clean Architecture**: Follow the dependency rule (Domain <- [Persistence, Infrastructure, Application] <- API).
 - **CQRS**: Use MediatR for all Application logic (Commands/Queries).

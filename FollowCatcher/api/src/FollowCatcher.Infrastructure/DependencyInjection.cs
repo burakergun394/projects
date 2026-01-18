@@ -16,6 +16,7 @@ public static class DependencyInjection
 
         // Register Instagram service
         services.AddSingleton<IInstagramService, InstagramService>();
+        services.AddScoped<IInstagramProfileCardGenerator, SkiaInstagramProfileCardGenerator>();
 
         return services;
     }
