@@ -13,7 +13,8 @@
       "Bash(dotnet add package:*)",
       "Bash(dotnet build:*)",
       "Bash(tree:*)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Skill(sc:load)"
     ]
   }
 }
