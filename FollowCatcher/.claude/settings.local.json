@@ -4,7 +4,14 @@
       "Bash(git ls-tree:*)",
       "Bash(git checkout:*)",
       "Bash(dir /s /b \"c:\\\\Users\\\\Burak\\\\Documents\\\\MY\\\\GITHUB\\\\BURAKERGUN394\\\\projects\\\\FollowCatcher\\\\.claude\\\\skills\\\\*.md\")",
-      "Bash(dir \"c:\\\\Users\\\\Burak\\\\Documents\\\\MY\\\\GITHUB\\\\BURAKERGUN394\\\\projects\\\\FollowCatcher\\\\.claude\\\\skills\\\\testing\")"
+      "Bash(dir \"c:\\\\Users\\\\Burak\\\\Documents\\\\MY\\\\GITHUB\\\\BURAKERGUN394\\\\projects\\\\FollowCatcher\\\\.claude\\\\skills\\\\testing\")",
+      "Bash(dotnet --version:*)",
+      "Bash(dotnet new:*)",
+      "Bash(dotnet sln:*)",
+      "Bash(dotnet add reference:*)",
+      "Bash(dotnet add:*)",
+      "Bash(dotnet add package:*)",
+      "Bash(dotnet build:*)"
     ]
   }
 }

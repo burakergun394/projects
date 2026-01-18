@@ -1,0 +1,55 @@
+using FollowCatcher.Application;
+using FollowCatcher.Persistence;
+
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container
+builder.Services.AddControllers();
+
+// Add Application layer services
+builder.Services.AddApplication();
+
+// Add Persistence layer services
+builder.Services.AddPersistence(builder.Configuration);
+
+// Add API documentation
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new() { Title = "FollowCatcher API", Version = "v1" });
+});
+
+// Add CORS if needed
+// builder.Services.AddCors(options =>
+// {
+//     options.AddDefaultPolicy(policy =>
+//     {
+//         policy.AllowAnyOrigin()
+//               .AllowAnyMethod()
+//               .AllowAnyHeader();
+//     });
+// });
+
+var app = builder.Build();
+
+// Configure the HTTP request pipeline
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "FollowCatcher API v1");
+        options.RoutePrefix = "swagger";
+    });
+}
+
+app.UseHttpsRedirection();
+
+// Enable CORS if configured
+// app.UseCors();
+
+app.UseAuthorization();
+
+app.MapControllers();
+
+app.Run();
