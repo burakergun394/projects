@@ -1,4 +1,5 @@
 using FollowCatcher.Application.Common.Interfaces;
+using FollowCatcher.Persistence.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -49,6 +50,9 @@ public static class DependencyInjection
 
         // Register repositories here
         // Example: services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+
+        // Register services
+        services.AddScoped<IInstagramService, InstagramService>();
 
         return services;
     }

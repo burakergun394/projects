@@ -1,0 +1,29 @@
+using FollowCatcher.Application.Common.Interfaces;
+using MediatR;
+
+namespace FollowCatcher.Application.Instagram.Queries.GetInstagramProfile;
+
+/// <summary>
+/// Handler for getting Instagram profile information.
+/// </summary>
+public class GetInstagramProfileHandler(IInstagramService instagramService)
+    : IRequestHandler<GetInstagramProfileQuery, InstagramProfileDto?>
+{
+    public async Task<InstagramProfileDto?> Handle(GetInstagramProfileQuery request, CancellationToken cancellationToken)
+    {
+        var profileInfo = await instagramService.GetProfileInfoAsync(request.Username, cancellationToken);
+
+        if (profileInfo is null)
+        {
+            return null;
+        }
+
+        return new InstagramProfileDto(
+            profileInfo.Username,
+            profileInfo.FollowerCount,
+            profileInfo.FollowingCount,
+            profileInfo.ProfilePictureUrl,
+            profileInfo.PostCount
+        );
+    }
+}
