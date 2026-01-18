@@ -3,6 +3,9 @@ using FollowCatcher.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Load local configuration (for secrets, not committed to git)
+builder.Configuration.AddJsonFile("appsettings.Local.json", optional: true, reloadOnChange: true);
+
 // Add services to the container
 builder.Services.AddControllers();
 

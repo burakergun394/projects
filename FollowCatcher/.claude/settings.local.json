@@ -12,7 +12,8 @@
       "Bash(dotnet add:*)",
       "Bash(dotnet add package:*)",
       "Bash(dotnet build:*)",
-      "Bash(tree:*)"
+      "Bash(tree:*)",
+      "Bash(curl:*)"
     ]
   }
 }

@@ -1,3 +1,4 @@
+using FollowCatcher.Application.Common.Configuration;
 using FollowCatcher.Application.Common.Interfaces;
 using FollowCatcher.Persistence.Services;
 using Microsoft.EntityFrameworkCore;
@@ -51,7 +52,11 @@ public static class DependencyInjection
         // Register repositories here
         // Example: services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 
-        // Register services
+        // Configure Instagram settings from appsettings.json
+        var instagramSection = configuration.GetSection(InstagramSettings.SectionName);
+        services.Configure<InstagramSettings>(instagramSection);
+
+        // Register Instagram service as scoped (one per request, proper disposal)
         services.AddScoped<IInstagramService, InstagramService>();
 
         return services;

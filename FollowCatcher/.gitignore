@@ -410,6 +410,9 @@ FodyWeavers.xsd
 # !appsettings.json
 # !appsettings.Development.json
 
+# Local configuration with secrets (never commit)
+appsettings.Local.json
+
 # Environment files
 .env
 .env.local
@@ -425,3 +428,6 @@ FodyWeavers.xsd
 # Claude Code
 .claude/projects/
 .claude/plans/
+
+# Instagram session state files (contain sensitive session tokens)
+*.bin
