@@ -7,7 +7,7 @@ using PersonnelTransport.Domain.Common;
 namespace PersonnelTransport.Infrastructure.GoogleMaps;
 
 /// <summary>
-/// Google Maps API implementation of IRoutingService.
+/// Google Maps API implementation of IRoutingService using HttpClient.
 /// </summary>
 public class GoogleMapsRoutingService(
     HttpClient httpClient,
