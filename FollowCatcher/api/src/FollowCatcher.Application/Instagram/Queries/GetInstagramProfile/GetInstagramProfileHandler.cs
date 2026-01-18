@@ -3,9 +3,7 @@ using MediatR;
 
 namespace FollowCatcher.Application.Instagram.Queries.GetInstagramProfile;
 
-/// <summary>
-/// Handler for getting Instagram profile information.
-/// </summary>
+
 public class GetInstagramProfileHandler(IInstagramService instagramService)
     : IRequestHandler<GetInstagramProfileQuery, InstagramProfileDto?>
 {

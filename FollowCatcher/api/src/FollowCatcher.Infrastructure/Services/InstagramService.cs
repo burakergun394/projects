@@ -7,28 +7,9 @@ using InstagramApiSharp.Logger;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace FollowCatcher.Persistence.Services;
+namespace FollowCatcher.Infrastructure.Services;
 
-/// <summary>
-/// Service for Instagram operations using InstagramApiSharp with best practices.
-///
-/// <para><b>Lifecycle: Singleton</b></para>
-/// <para>
-/// This service is registered as a singleton because:
-/// - Session state is shared via file system (instagram_state.bin)
-/// - Thread-safe initialization using SemaphoreSlim with double-check locking
-/// - Better performance: avoids creating new instances per request
-/// - Proper cleanup on application shutdown via IDisposable
-/// </para>
-///
-/// <para><b>Thread Safety:</b></para>
-/// <para>
-/// All operations are thread-safe for concurrent requests:
-/// - GetInstaApiAsync() uses SemaphoreSlim for initialization synchronization
-/// - IInstaApi operations are thread-safe per InstagramApiSharp documentation
-/// - Session state file I/O is synchronized through API instance
-/// </para>
-/// </summary>
+
 public class InstagramService(
     ILogger<InstagramService> logger,
     IOptions<InstagramSettings> options) : IInstagramService, IDisposable
@@ -48,7 +29,6 @@ public class InstagramService(
         await initializationSemaphore.WaitAsync();
         try
         {
-            // Double-check locking pattern
             if (instaApi is not null)
             {
                 return instaApi;
@@ -63,33 +43,28 @@ public class InstagramService(
         }
     }
 
-    /// <summary>
-    /// Initializes the Instagram API client with best practices configuration.
-    /// </summary>
     private async Task<IInstaApi> InitializeInstaApiAsync()
     {
         logger.LogInformation("Initializing Instagram API client");
 
-        // Configure user session data
+
         var userSession = settings.UseAuthentication
             ? new UserSessionData
             {
                 UserName = settings.Username!,
                 Password = settings.Password!
             }
-            : new UserSessionData(); // Empty for unauthenticated access
+            : new UserSessionData();
 
-        // Configure request delay for rate limiting (recommended: 2 seconds)
         var delay = RequestDelay.FromSeconds(
             settings.RequestDelaySeconds,
             settings.RequestDelaySeconds);
 
-        // Build API client with configuration
+
         var apiBuilder = InstaApiBuilder.CreateBuilder()
             .SetUser(userSession)
             .SetRequestDelay(delay);
 
-        // Enable debug logging in development
         if (settings.EnableDebugLogging)
         {
             apiBuilder.UseLogger(new DebugLogger(InstagramApiSharp.Logger.LogLevel.Info));
@@ -98,10 +73,9 @@ public class InstagramService(
 
         var api = apiBuilder.Build();
 
-        // Try to load existing session state
         LoadSessionState(api);
 
-        // Authenticate if credentials provided
+
         if (settings.UseAuthentication && !api.IsUserAuthenticated)
         {
             await AuthenticateAsync(api, delay);
@@ -110,9 +84,6 @@ public class InstagramService(
         return api;
     }
 
-    /// <summary>
-    /// Loads session state from persistent storage.
-    /// </summary>
     private void LoadSessionState(IInstaApi api)
     {
         try
@@ -139,9 +110,6 @@ public class InstagramService(
         }
     }
 
-    /// <summary>
-    /// Saves session state to persistent storage.
-    /// </summary>
     private void SaveSessionState(IInstaApi api)
     {
         try
@@ -163,21 +131,15 @@ public class InstagramService(
         }
     }
 
-    /// <summary>
-    /// Authenticates with Instagram using configured credentials.
-    /// </summary>
     private async Task AuthenticateAsync(IInstaApi api, IRequestDelay delay)
     {
         try
         {
             logger.LogInformation("Authenticating with Instagram as {Username}", settings.Username);
 
-            // Disable delay during authentication for faster login
             delay.Disable();
 
             var loginResult = await api.LoginAsync();
-
-            // Re-enable delay after authentication
             delay.Enable();
 
             if (!loginResult.Succeeded)
@@ -188,19 +150,16 @@ public class InstagramService(
 
             logger.LogInformation("Instagram authentication successful");
 
-            // Save authenticated session state
+
             SaveSessionState(api);
         }
         catch (Exception ex)
         {
             logger.LogError(ex, "Error during Instagram authentication");
-            delay.Enable(); // Ensure delay is re-enabled even on error
+            delay.Enable();
         }
     }
 
-    /// <summary>
-    /// Gets Instagram profile information for a given username.
-    /// </summary>
     public async Task<InstagramProfileInfo?> GetProfileInfoAsync(
         string username,
         CancellationToken cancellationToken = default)
@@ -211,7 +170,6 @@ public class InstagramService(
 
             var api = await GetInstaApiAsync();
 
-            // Get full user information with stats
             var userInfoResult = await api.UserProcessor.GetUserInfoByUsernameAsync(username);
 
             if (!userInfoResult.Succeeded)
@@ -235,7 +193,6 @@ public class InstagramService(
 
             logger.LogInformation("Successfully fetched Instagram profile for {Username}", username);
 
-            // Save session state after successful operation
             if (settings.UseAuthentication && api.IsUserAuthenticated)
             {
                 SaveSessionState(api);
@@ -250,9 +207,6 @@ public class InstagramService(
         }
     }
 
-    /// <summary>
-    /// Disposes the Instagram API client and releases resources.
-    /// </summary>
     public void Dispose()
     {
         if (disposed)
@@ -262,7 +216,6 @@ public class InstagramService(
 
         if (instaApi is not null)
         {
-            // Save final session state before disposal
             if (settings.UseAuthentication && instaApi.IsUserAuthenticated)
             {
                 SaveSessionState(instaApi);

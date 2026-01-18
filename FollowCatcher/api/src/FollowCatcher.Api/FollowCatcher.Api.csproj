@@ -15,6 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="..\FollowCatcher.Application\FollowCatcher.Application.csproj" />
     <ProjectReference Include="..\FollowCatcher.Persistence\FollowCatcher.Persistence.csproj" />
+    <ProjectReference Include="..\FollowCatcher.Infrastructure\FollowCatcher.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

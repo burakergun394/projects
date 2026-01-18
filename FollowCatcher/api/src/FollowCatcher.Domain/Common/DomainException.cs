@@ -1,9 +1,6 @@
 namespace FollowCatcher.Domain.Common;
 
-/// <summary>
-/// Base class for domain exceptions.
-/// Domain exceptions represent violations of business rules or invariants.
-/// </summary>
+
 public abstract class DomainException : Exception
 {
     protected DomainException(string message) : base(message)
@@ -16,9 +13,7 @@ public abstract class DomainException : Exception
     }
 }
 
-/// <summary>
-/// Exception thrown when a requested entity is not found.
-/// </summary>
+
 public class NotFoundException : DomainException
 {
     public NotFoundException(string message) : base(message)
@@ -31,9 +26,7 @@ public class NotFoundException : DomainException
     }
 }
 
-/// <summary>
-/// Exception thrown when a business rule validation fails.
-/// </summary>
+
 public class BusinessRuleValidationException : DomainException
 {
     public BusinessRuleValidationException(string message) : base(message)
@@ -41,9 +34,7 @@ public class BusinessRuleValidationException : DomainException
     }
 }
 
-/// <summary>
-/// Exception thrown when an entity already exists.
-/// </summary>
+
 public class DuplicateException : DomainException
 {
     public DuplicateException(string message) : base(message)

@@ -60,6 +60,7 @@ When reviewing code, analyze the following aspects systematically:
 - [ ] DRY (Don't Repeat Yourself)
 - [ ] Appropriate comments for complex logic
 - [ ] Consistent code style
+- [ ] Prefer Primary Constructors
 
 ### 5. Architecture Compliance
 - [ ] Follows project layer structure

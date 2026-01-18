@@ -1,14 +1,9 @@
 namespace FollowCatcher.Domain.Common;
 
-/// <summary>
-/// Base class for value objects following DDD principles.
-/// Value objects are immutable and compared by their values rather than identity.
-/// </summary>
+
 public abstract class ValueObject : IEquatable<ValueObject>
 {
-    /// <summary>
-    /// Gets the atomic values that make up this value object for comparison.
-    /// </summary>
+
     protected abstract IEnumerable<object?> GetEqualityComponents();
 
     public override bool Equals(object? obj)

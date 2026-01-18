@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FollowCatcher.Persistence",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FollowCatcher.Api", "src\FollowCatcher.Api\FollowCatcher.Api.csproj", "{67023F4A-7799-4C26-82C6-A90BE9328486}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FollowCatcher.Infrastructure", "src\FollowCatcher.Infrastructure\FollowCatcher.Infrastructure.csproj", "{2F571424-F9EC-4089-BCF8-6F6AE89900DF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -71,6 +73,18 @@ Global
 		{67023F4A-7799-4C26-82C6-A90BE9328486}.Release|x64.Build.0 = Release|Any CPU
 		{67023F4A-7799-4C26-82C6-A90BE9328486}.Release|x86.ActiveCfg = Release|Any CPU
 		{67023F4A-7799-4C26-82C6-A90BE9328486}.Release|x86.Build.0 = Release|Any CPU
+		{2F571424-F9EC-4089-BCF8-6F6AE89900DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F571424-F9EC-4089-BCF8-6F6AE89900DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F571424-F9EC-4089-BCF8-6F6AE89900DF}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{2F571424-F9EC-4089-BCF8-6F6AE89900DF}.Debug|x64.Build.0 = Debug|Any CPU
+		{2F571424-F9EC-4089-BCF8-6F6AE89900DF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2F571424-F9EC-4089-BCF8-6F6AE89900DF}.Debug|x86.Build.0 = Debug|Any CPU
+		{2F571424-F9EC-4089-BCF8-6F6AE89900DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F571424-F9EC-4089-BCF8-6F6AE89900DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F571424-F9EC-4089-BCF8-6F6AE89900DF}.Release|x64.ActiveCfg = Release|Any CPU
+		{2F571424-F9EC-4089-BCF8-6F6AE89900DF}.Release|x64.Build.0 = Release|Any CPU
+		{2F571424-F9EC-4089-BCF8-6F6AE89900DF}.Release|x86.ActiveCfg = Release|Any CPU
+		{2F571424-F9EC-4089-BCF8-6F6AE89900DF}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -80,5 +94,6 @@ Global
 		{FA1C104E-7FB1-47BF-BBE5-BBDA4E2FDFB1} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{FCFA7404-AD22-4E64-847B-5F02F2DE1083} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{67023F4A-7799-4C26-82C6-A90BE9328486} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
+		{2F571424-F9EC-4089-BCF8-6F6AE89900DF} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 	EndGlobalSection
 EndGlobal

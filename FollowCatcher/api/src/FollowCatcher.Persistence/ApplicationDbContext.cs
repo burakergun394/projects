@@ -6,10 +6,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 
 namespace FollowCatcher.Persistence;
 
-/// <summary>
-/// Application database context implementing both IApplicationDbContext and IUnitOfWork.
-/// This class is responsible for database access and transaction management.
-/// </summary>
+
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
     : DbContext(options), IApplicationDbContext, IUnitOfWork
 {
@@ -18,10 +15,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     // Add DbSet properties for your entities here
     // Example: public DbSet<Employee> Employees => Set<Employee>();
 
-    /// <summary>
-    /// Configures the model that was discovered by convention from the entity types.
-    /// Applies all entity configurations from the assembly.
-    /// </summary>
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         // Apply all entity configurations from the assembly
@@ -30,10 +24,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         base.OnModelCreating(modelBuilder);
     }
 
-    /// <summary>
-    /// Saves all changes made in this context to the database.
-    /// Publishes domain events before saving.
-    /// </summary>
+
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         // Update timestamps for tracked entities
@@ -45,9 +36,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         return await base.SaveChangesAsync(cancellationToken);
     }
 
-    /// <summary>
-    /// Begins a new database transaction.
-    /// </summary>
+
     public async Task BeginTransactionAsync(CancellationToken cancellationToken = default)
     {
         if (_currentTransaction != null)
@@ -58,9 +47,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         _currentTransaction = await Database.BeginTransactionAsync(cancellationToken);
     }
 
-    /// <summary>
-    /// Commits the current database transaction.
-    /// </summary>
+
     public async Task CommitTransactionAsync(CancellationToken cancellationToken = default)
     {
         if (_currentTransaction == null)
@@ -85,9 +72,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         }
     }
 
-    /// <summary>
-    /// Rolls back the current database transaction.
-    /// </summary>
+
     public async Task RollbackTransactionAsync()
     {
         if (_currentTransaction == null)
@@ -106,9 +91,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         }
     }
 
-    /// <summary>
-    /// Updates CreatedAt and UpdatedAt timestamps for tracked entities.
-    /// </summary>
+
     private void UpdateTimestamps()
     {
         var entries = ChangeTracker.Entries<Entity>();
@@ -129,9 +112,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         }
     }
 
-    /// <summary>
-    /// Publishes domain events from tracked entities.
-    /// </summary>
+
     private async Task PublishDomainEventsAsync(CancellationToken cancellationToken)
     {
         var domainEvents = ChangeTracker.Entries<Entity>()

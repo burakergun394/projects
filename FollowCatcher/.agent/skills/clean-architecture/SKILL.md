@@ -38,16 +38,24 @@ This project follows Clean Architecture with the following layers:
   - Validators (FluentValidation)
   - Application Interfaces
 
-### 3. Infrastructure/Persistence Layer (`{ProjectName}.Persistence`)
-- **Purpose**: External concerns, database access, external services
+### 3. Persistence Layer (`{ProjectName}.Persistence`)
+- **Purpose**: Database access, repositories, and data persistence
 - **Dependencies**: Domain and Application layers
 - **Contains**:
   - DbContext
   - Entity Configurations (EF Core)
   - Repository Implementations
-  - External Service Implementations
+  - Migrations
 
-### 4. API Layer (`{ProjectName}.Api`)
+### 4. Infrastructure Layer (`{ProjectName}.Infrastructure`)
+- **Purpose**: External services, file system, non-database infrastructure
+- **Dependencies**: Application layer
+- **Contains**:
+  - External Service Implementations (e.g., Email, Instagram)
+  - File System Adapters
+  - System Clock
+
+### 5. API Layer (`{ProjectName}.Api`)
 - **Purpose**: HTTP endpoints, request/response handling
 - **Dependencies**: All layers (composition root)
 - **Contains**:
@@ -673,3 +681,4 @@ src/
 5. **DTOs**: Never expose domain entities to API layer
 6. **Validation**: Use FluentValidation for input validation
 7. **Naming**: Use consistent naming (e.g., `Create[Entity]Command`)
+8. **Constructors**: Always prefer Primary Constructors

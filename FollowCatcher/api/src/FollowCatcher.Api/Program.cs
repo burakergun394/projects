@@ -1,5 +1,6 @@
 using FollowCatcher.Application;
 using FollowCatcher.Persistence;
+using FollowCatcher.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,9 @@ builder.Services.AddApplication();
 
 // Add Persistence layer services
 builder.Services.AddPersistence(builder.Configuration);
+
+// Add Infrastructure layer services
+builder.Services.AddInfrastructure(builder.Configuration);
 
 // Add API documentation
 builder.Services.AddEndpointsApiExplorer();
