@@ -1,5 +1,5 @@
-using FollowCatcher.Application.Common.Configuration;
-using FollowCatcher.Application.Common.Interfaces;
+using FollowCatcher.Domain.Instagram;
+using FollowCatcher.Domain.Data;
 using InstagramApiSharp.API;
 using InstagramApiSharp.API.Builder;
 using InstagramApiSharp.Classes;
@@ -7,7 +7,7 @@ using InstagramApiSharp.Logger;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace FollowCatcher.Infrastructure.Services;
+namespace FollowCatcher.Infrastructure.Instagram;
 
 
 public class InstagramService(

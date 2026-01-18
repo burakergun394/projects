@@ -1,4 +1,5 @@
-using FollowCatcher.Application.Common.Interfaces;
+using FollowCatcher.Domain.Data;
+using FollowCatcher.Domain.Instagram;
 using MediatR;
 
 namespace FollowCatcher.Application.Instagram.Queries.GetInstagramProfile;

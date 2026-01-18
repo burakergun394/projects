@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\FollowCatcher.Application\FollowCatcher.Application.csproj" />
+    <ProjectReference Include="..\FollowCatcher.Domain\FollowCatcher.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>

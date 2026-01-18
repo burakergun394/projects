@@ -1,6 +1,6 @@
-using FollowCatcher.Application.Common.Configuration;
-using FollowCatcher.Application.Common.Interfaces;
-using FollowCatcher.Infrastructure.Services;
+using FollowCatcher.Domain.Instagram;
+using FollowCatcher.Domain.Data;
+using FollowCatcher.Infrastructure.Instagram;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 

@@ -1,5 +1,5 @@
-using FollowCatcher.Application.Common.Configuration;
-using FollowCatcher.Application.Common.Interfaces;
+using FollowCatcher.Domain.Instagram;
+using FollowCatcher.Domain.Data;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;

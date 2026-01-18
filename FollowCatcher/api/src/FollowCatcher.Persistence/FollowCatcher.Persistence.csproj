@@ -2,7 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FollowCatcher.Domain\FollowCatcher.Domain.csproj" />
-    <ProjectReference Include="..\FollowCatcher.Application\FollowCatcher.Application.csproj" />
+
   </ItemGroup>
 
   <ItemGroup>

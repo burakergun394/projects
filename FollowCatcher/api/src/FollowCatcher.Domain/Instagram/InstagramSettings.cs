@@ -1,5 +1,4 @@
-namespace FollowCatcher.Application.Common.Configuration;
-
+namespace FollowCatcher.Domain.Instagram;
 
 public class InstagramSettings
 {

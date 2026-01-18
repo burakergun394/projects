@@ -1,5 +1,5 @@
 using System.Reflection;
-using FollowCatcher.Application.Common.Interfaces;
+using FollowCatcher.Domain.Data;
 using FollowCatcher.Domain.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;

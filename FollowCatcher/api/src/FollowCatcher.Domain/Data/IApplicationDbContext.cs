@@ -1,4 +1,4 @@
-namespace FollowCatcher.Application.Common.Interfaces;
+namespace FollowCatcher.Domain.Data;
 
 
 public interface IApplicationDbContext
