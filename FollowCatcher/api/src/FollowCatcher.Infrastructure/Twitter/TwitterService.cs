@@ -2,10 +2,7 @@ using FollowCatcher.Domain.Twitter;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Text;
-using System.Net.Http;
 using Tweetinvi;
-using Tweetinvi.Models;
-using Tweetinvi.Core.Web;
 
 namespace FollowCatcher.Infrastructure.Twitter;
 
@@ -13,7 +10,6 @@ public class TwitterService(
     IOptions<TwitterSettings> options,
     ILogger<TwitterService> logger) : ITwitterService
 {
-    private readonly TwitterSettings settings = options.Value;
     private readonly TwitterClient client = new(
         options.Value.ApiKey,
         options.Value.ApiKeySecret,
@@ -49,45 +45,46 @@ public class TwitterService(
     {
         try
         {
-            logger.LogInformation("Publishing tweet (V2 Workaround): {Text} with Media ID: {MediaId}", text, mediaId);
+            logger.LogInformation("Publishing tweet (V2): {Text} with Media ID: {MediaId}", text, mediaId);
 
-            var result = await client.Execute.AdvanceRequestAsync((ITwitterRequest request) =>
+            var tweetRequest = new TweetV2Request
             {
-                var body = new
-                {
-                    text = text,
-                    media = new { media_ids = new[] { mediaId.ToString() } }
-                };
+                Text = text,
+                Media = new TweetV2Media 
+                { 
+                    MediaIds = [mediaId.ToString()] 
+                }
+            };
 
-                var jsonBody = System.Text.Json.JsonSerializer.Serialize(body);
-                var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
+            var jsonBody = client.Json.Serialize(tweetRequest);
 
+            var result = await client.Execute.AdvanceRequestAsync(request =>
+            {
                 request.Query.Url = "https://api.twitter.com/2/tweets";
                 request.Query.HttpMethod = Tweetinvi.Models.HttpMethod.POST;
-                request.Query.HttpContent = content;
+                request.Query.HttpContent = new StringContent(jsonBody, Encoding.UTF8, "application/json");
             });
 
-            if (result.Response.IsSuccessStatusCode == false)
+            if (!result.Response.IsSuccessStatusCode)
             {
-                logger.LogError("Twitter publish (V2 Workaround) failed. Code: {Code}, Content: {Content}", result.Response.StatusCode, result.Content);
+                logger.LogError("Twitter publish failed. Code: {Code}, Content: {Content}", result.Response.StatusCode, result.Content);
                 return null;
             }
 
-            var json = System.Text.Json.JsonDocument.Parse(result.Content);
-            if (json.RootElement.TryGetProperty("data", out var data) && 
-                data.TryGetProperty("id", out var idElement))
+            var response = client.Json.Deserialize<TweetV2Response>(result.Content);
+            
+            if (!string.IsNullOrEmpty(response?.Data?.Id))
             {
-                var id = idElement.GetString();
-                logger.LogInformation("Tweet published successfully (V2). Tweet ID: {TweetId}", id);
-                return id;
+                logger.LogInformation("Tweet published successfully. ID: {TweetId}", response.Data.Id);
+                return response.Data.Id;
             }
 
-            logger.LogError("Twitter response (V2) did not contain tweet ID. Content: {Content}", result.Content);
+            logger.LogError("Twitter response missing ID. Content: {Content}", result.Content);
             return null;
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Error publishing tweet (V2 Workaround).");
+            logger.LogError(ex, "Error publishing tweet.");
             throw;
         }
     }
