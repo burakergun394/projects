@@ -46,8 +46,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(options =>
     {
         options.SwaggerEndpoint("/swagger/v1/swagger.json", "FollowCatcher API v1");
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "FollowCatcher API v1");
         options.RoutePrefix = "swagger";
     });
+
+    using (var scope = app.Services.CreateScope())
+    {
+        var seeder = scope.ServiceProvider.GetRequiredService<DatabaseSeeder>();
+        await seeder.SeedAsync();
+    }
 }
 
 app.UseHttpsRedirection();

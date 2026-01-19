@@ -1,8 +1,7 @@
-using FollowCatcher.Domain.Common;
 using FollowCatcher.Domain.Twitter;
-using Space.Abstraction.Contracts;
 using Space.Abstraction.Attributes;
 using Space.Abstraction.Context;
+using Space.Abstraction.Contracts;
 
 namespace FollowCatcher.Application.Twitter.Commands.SendTweet;
 

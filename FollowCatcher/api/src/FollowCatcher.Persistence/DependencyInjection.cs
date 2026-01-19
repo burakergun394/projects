@@ -44,8 +44,9 @@ public static class DependencyInjection
 
         // Register repositories here
         services.AddScoped<IInstagramTrackedAccountRepository, InstagramTrackedAccountRepository>();
-
         // Register Database Seeder
+        services.AddScoped<DatabaseSeeder>();
+
 
         return services;
     }
