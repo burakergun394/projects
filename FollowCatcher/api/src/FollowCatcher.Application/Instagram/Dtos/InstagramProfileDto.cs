@@ -1,5 +1,4 @@
-namespace FollowCatcher.Application.Instagram.Queries;
-
+namespace FollowCatcher.Application.Instagram.Dtos;
 
 public record InstagramProfileDto(
     string Username,

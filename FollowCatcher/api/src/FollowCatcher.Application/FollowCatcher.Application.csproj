@@ -1,6 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <Compile Remove="Instagram\BackgroundWorkers\**" />
+    <EmbeddedResource Remove="Instagram\BackgroundWorkers\**" />
+    <None Remove="Instagram\BackgroundWorkers\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\FollowCatcher.Domain\FollowCatcher.Domain.csproj" />
   </ItemGroup>
 

@@ -1,4 +1,5 @@
 using FluentValidation;
+using FollowCatcher.Application.Instagram.BackgroundServices;
 using Microsoft.Extensions.DependencyInjection;
 using Space.Abstraction;
 using Space.DependencyInjection;
@@ -23,6 +24,9 @@ public static class DependencyInjection
 
         // Register FluentValidation validators
         services.AddValidatorsFromAssembly(assembly);
+
+        // Register Background Services
+        services.AddHostedService<InstagramTrackedAccountWorker>();
 
         return services;
     }

@@ -1,5 +1,4 @@
 using FollowCatcher.Domain.Instagram;
-using FollowCatcher.Domain.Data;
 using InstagramApiSharp;
 using InstagramApiSharp.API;
 using InstagramApiSharp.API.Builder;
@@ -210,7 +209,7 @@ public class InstagramService(
         }
     }
 
-    public async Task<List<InstagramProfileInfo>?> GetUserFollowingAsync(
+    public async Task<List<string>?> GetUserFollowingAsync(
         string username,
         CancellationToken cancellationToken = default)
     {
@@ -220,28 +219,20 @@ public class InstagramService(
 
             var api = await GetInstaApiAsync();
 
-            var pagination = PaginationParameters.MaxPagesToLoad(1); // Start with 1 page for now
+            var pagination = PaginationParameters.Empty;
             var result = await api.UserProcessor.GetUserFollowingAsync(username, pagination);
 
             if (!result.Succeeded)
             {
-                 logger.LogWarning(
-                    "Failed to fetch following for {Username}. Error: {Error}",
-                    username,
-                    result.Info.Message);
+                logger.LogWarning(
+                   "Failed to fetch following for {Username}. Error: {Error}",
+                   username,
+                   result.Info.Message);
                 return null;
             }
 
             var following = result.Value
-                .Select(u => new InstagramProfileInfo(
-                    Id: u.Pk,
-                    Username: u.UserName,
-                    FullName: u.FullName,
-                    FollowerCount: 0, // Not available in simple list
-                    FollowingCount: 0,
-                    ProfilePictureUrl: u.ProfilePicture,
-                    PostCount: 0
-                ))
+                .Select(u => u.UserName)
                 .ToList();
 
             logger.LogInformation("Fetched {Count} following users for {Username}", following.Count, username);

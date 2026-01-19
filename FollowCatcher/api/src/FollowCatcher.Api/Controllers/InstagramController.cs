@@ -1,4 +1,4 @@
-using FollowCatcher.Application.Instagram.Queries;
+using FollowCatcher.Application.Instagram.Dtos;
 using FollowCatcher.Application.Instagram.Queries.GetInstagramProfile;
 using Microsoft.AspNetCore.Mvc;
 using Space.Abstraction;
@@ -20,7 +20,7 @@ public class InstagramController(ISpace space) : ControllerBase
         [FromQuery] bool includeProfileCard = false,
         CancellationToken cancellationToken = default)
     {
-        var result = await space.Send<InstagramProfileDto>(new GetInstagramProfileQuery(username, includeProfileCard), ct: cancellationToken);
+        var result = await space.Send(new GetInstagramProfileQuery(username, includeProfileCard), ct: cancellationToken);
         return Ok(result);
     }
 }

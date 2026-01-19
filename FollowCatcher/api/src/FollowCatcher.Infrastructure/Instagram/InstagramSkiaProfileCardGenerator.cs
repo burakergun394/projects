@@ -1,6 +1,6 @@
 using FollowCatcher.Domain.Instagram;
-using SkiaSharp;
 using Microsoft.Extensions.Logging;
+using SkiaSharp;
 
 namespace FollowCatcher.Infrastructure.Instagram;
 

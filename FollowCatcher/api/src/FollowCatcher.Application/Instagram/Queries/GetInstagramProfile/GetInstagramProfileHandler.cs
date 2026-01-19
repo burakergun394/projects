@@ -1,3 +1,4 @@
+using FollowCatcher.Application.Instagram.Dtos;
 using FollowCatcher.Domain.Instagram;
 using Space.Abstraction.Attributes;
 using Space.Abstraction.Context;

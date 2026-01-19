@@ -1,10 +1,8 @@
-using FollowCatcher.Domain.Instagram;
 using FollowCatcher.Domain.Data;
-
+using FollowCatcher.Domain.Instagram;
+using FollowCatcher.Persistence.Instagram;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using FollowCatcher.Domain.Repositories;
-using FollowCatcher.Persistence.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace FollowCatcher.Persistence;
@@ -45,9 +43,9 @@ public static class DependencyInjection
             provider.GetRequiredService<ApplicationDbContext>());
 
         // Register repositories here
-        services.AddScoped<IMonitoredAccountRepository, MonitoredAccountRepository>();
+        services.AddScoped<IInstagramTrackedAccountRepository, InstagramTrackedAccountRepository>();
 
-
+        // Register Database Seeder
 
         return services;
     }

@@ -1,3 +1,4 @@
+using FollowCatcher.Application.Instagram.Dtos;
 using Space.Abstraction.Contracts;
 
 namespace FollowCatcher.Application.Instagram.Queries.GetInstagramProfile;
