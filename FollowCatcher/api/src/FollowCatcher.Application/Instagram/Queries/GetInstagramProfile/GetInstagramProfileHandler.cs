@@ -1,20 +1,17 @@
 using FollowCatcher.Application.Instagram.Dtos;
 using FollowCatcher.Domain.Instagram;
-using Space.Abstraction.Attributes;
-using Space.Abstraction.Context;
+using MediatR;
 
 namespace FollowCatcher.Application.Instagram.Queries.GetInstagramProfile;
 
-
-public class GetInstagramProfileHandler(IInstagramService instagramService,
-                                        IInstagramProfileCardGenerator cardGenerator,
-                                        IHttpClientFactory httpClientFactory)
+public class GetInstagramProfileHandler(
+    IInstagramService instagramService,
+    IInstagramProfileCardGenerator cardGenerator,
+    IHttpClientFactory httpClientFactory) : IRequestHandler<GetInstagramProfileQuery, InstagramProfileDto>
 {
-    [Handle]
-    public async ValueTask<InstagramProfileDto> Handle(HandlerContext<GetInstagramProfileQuery> ctx)
+    public async Task<InstagramProfileDto> Handle(GetInstagramProfileQuery request, CancellationToken cancellationToken)
     {
-        var request = ctx.Request;
-        var profileInfo = await instagramService.GetProfileInfoAsync(request.Username, ctx.CancellationToken)
+        var profileInfo = await instagramService.GetProfileInfoAsync(request.Username, cancellationToken)
                           ?? throw new InvalidOperationException($"Profile not found for username: {request.Username}");
 
         if (request.IncludeProfileCard is false)
@@ -32,7 +29,7 @@ public class GetInstagramProfileHandler(IInstagramService instagramService,
         byte[] avatarBytes;
         using (var httpClient = httpClientFactory.CreateClient())
         {
-            avatarBytes = await httpClient.GetByteArrayAsync(profileInfo.ProfilePictureUrl, ctx.CancellationToken);
+            avatarBytes = await httpClient.GetByteArrayAsync(profileInfo.ProfilePictureUrl, cancellationToken);
         }
 
         var profileCardImage = await cardGenerator.GenerateCardAsync(profileInfo, avatarBytes);

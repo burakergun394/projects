@@ -2,29 +2,29 @@ using Newtonsoft.Json;
 
 namespace FollowCatcher.Infrastructure.Twitter;
 
-internal class TweetV2Request
+internal sealed class TweetV2Request
 {
     [JsonProperty("text")]
-    public string Text { get; set; } = string.Empty;
+    public required string Text { get; init; }
 
-    [JsonProperty("media")]
-    public TweetV2Media? Media { get; set; }
+    [JsonProperty("media", NullValueHandling = NullValueHandling.Ignore)]
+    public TweetV2Media? Media { get; init; }
 }
 
-internal class TweetV2Media
+internal sealed class TweetV2Media
 {
     [JsonProperty("media_ids")]
-    public string[] MediaIds { get; set; } = Array.Empty<string>();
+    public required string[] MediaIds { get; init; }
 }
 
-internal class TweetV2Response
+internal sealed class TweetV2Response
 {
     [JsonProperty("data")]
-    public TweetV2Data? Data { get; set; }
+    public TweetV2Data? Data { get; init; }
 }
 
-internal class TweetV2Data
+internal sealed class TweetV2Data
 {
     [JsonProperty("id")]
-    public string? Id { get; set; }
+    public string? Id { get; init; }
 }

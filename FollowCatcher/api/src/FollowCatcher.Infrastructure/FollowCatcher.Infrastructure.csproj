@@ -14,7 +14,7 @@
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="10.0.2" />
     <PackageReference Include="SkiaSharp" Version="3.119.1" />
     <PackageReference Include="TweetinviAPI" Version="5.0.4" />
-	<PackageReference Include="MediatR" Version="14.0.0" />
+	<PackageReference Include="MediatR" Version="12.4.1" />
   </ItemGroup>
 
   <PropertyGroup>

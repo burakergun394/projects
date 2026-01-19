@@ -1,23 +1,18 @@
 using FollowCatcher.Domain.Twitter;
-using Space.Abstraction.Attributes;
-using Space.Abstraction.Context;
-using Space.Abstraction.Contracts;
+using MediatR;
 
 namespace FollowCatcher.Application.Twitter.Commands.SendTweet;
 
 public record SendTweetCommand(string Text, byte[]? Image = null) : IRequest<string>;
 
-public class SendTweetHandler(ITwitterService twitterService)
+public class SendTweetHandler(ITwitterService twitterService) : IRequestHandler<SendTweetCommand, string>
 {
-    [Handle]
-    public async ValueTask<string> Handle(HandlerContext<SendTweetCommand> ctx)
+    public async Task<string> Handle(SendTweetCommand request, CancellationToken cancellationToken)
     {
-        var request = ctx.Request;
         long? mediaId = null;
         if (request.Image is { Length: > 0 })
-            mediaId = await twitterService.UploadImageAsync(request.Image);
+            mediaId = await twitterService.UploadImageAsync(request.Image, cancellationToken);
 
-        var tweetId = await twitterService.PublishTweetAsync(request.Text, mediaId);
-        return tweetId ?? string.Empty;
+        return await twitterService.PublishTweetAsync(request.Text, mediaId, cancellationToken);
     }
 }

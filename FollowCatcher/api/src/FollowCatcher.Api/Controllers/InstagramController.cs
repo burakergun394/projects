@@ -1,17 +1,15 @@
 using FollowCatcher.Application.Instagram.Dtos;
 using FollowCatcher.Application.Instagram.Queries.GetInstagramProfile;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Space.Abstraction;
 
 namespace FollowCatcher.Api.Controllers;
-
 
 [ApiController]
 [Route("api/[controller]")]
 [Produces("application/json")]
-public class InstagramController(ISpace space) : ControllerBase
+public class InstagramController(IMediator mediator) : ControllerBase
 {
-
     [HttpGet("{username}")]
     [ProducesResponseType(typeof(InstagramProfileDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -20,7 +18,7 @@ public class InstagramController(ISpace space) : ControllerBase
         [FromQuery] bool includeProfileCard = false,
         CancellationToken cancellationToken = default)
     {
-        var result = await space.Send(new GetInstagramProfileQuery(username, includeProfileCard), ct: cancellationToken);
+        var result = await mediator.Send(new GetInstagramProfileQuery(username, includeProfileCard), cancellationToken);
         return Ok(result);
     }
 }
