@@ -12,7 +12,7 @@ public class InstagramTrackedAccountWorker(
     IServiceProvider serviceProvider,
     ILogger<InstagramTrackedAccountWorker> logger) : BackgroundService
 {
-    private readonly TimeSpan _checkInterval = TimeSpan.FromMinutes(5); 
+    private readonly TimeSpan _checkInterval = TimeSpan.FromMinutes(5);
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
@@ -35,44 +35,64 @@ public class InstagramTrackedAccountWorker(
         logger.LogInformation("Instagram Monitoring Worker stopped");
     }
 
+    private const int MaxConcurrentTasks = 10;
+
     private async Task MonitorAccountsAsync(CancellationToken cancellationToken)
+    {
+        IEnumerable<InstagramTrackedAccount> monitoredAccounts;
+
+        using (var scope = serviceProvider.CreateScope())
+        {
+            var repository = scope.ServiceProvider.GetRequiredService<IInstagramTrackedAccountRepository>();
+            monitoredAccounts = await repository.GetAllAsync(cancellationToken);
+        }
+
+        var accountList = monitoredAccounts.ToList();
+        logger.LogInformation("Monitoring {Count} Instagram accounts with {MaxTasks} concurrent tasks",
+            accountList.Count, MaxConcurrentTasks);
+
+        var options = new ParallelOptions
+        {
+            MaxDegreeOfParallelism = MaxConcurrentTasks,
+            CancellationToken = cancellationToken
+        };
+
+        await Parallel.ForEachAsync(accountList, options, async (account, ct) =>
+        {
+            try
+            {
+                await MonitorSingleAccountWithScopeAsync(account, ct);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Error monitoring account {Username}", account.Username);
+            }
+        });
+    }
+
+    private async Task MonitorSingleAccountWithScopeAsync(
+        InstagramTrackedAccount account,
+        CancellationToken cancellationToken)
     {
         using var scope = serviceProvider.CreateScope();
 
-        var TrackedInstagramAccountRepository = scope.ServiceProvider.GetRequiredService<IInstagramTrackedAccountRepository>();
         var instagramService = scope.ServiceProvider.GetRequiredService<IInstagramService>();
         var cardGenerator = scope.ServiceProvider.GetRequiredService<IInstagramProfileCardGenerator>();
         var httpClientFactory = scope.ServiceProvider.GetRequiredService<IHttpClientFactory>();
         var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
         var space = scope.ServiceProvider.GetRequiredService<ISpace>();
 
-        var monitoredAccounts = await TrackedInstagramAccountRepository.GetAllAsync(cancellationToken);
-        logger.LogInformation("Monitoring {Count} Instagram accounts", monitoredAccounts.Count());
-        foreach (var account in monitoredAccounts)
-        {
-            try
-            {
-                await MonitorSingleAccountAsync(
-                    account,
-                    instagramService,
-                    cardGenerator,
-                    httpClientFactory,
-                    unitOfWork,
-                    space,
-                    cancellationToken);
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Error monitoring account {Username}", account.Username);
-            }
-        }
+        await MonitorSingleAccountAsync(
+            account,
+            instagramService,
+            unitOfWork,
+            space,
+            cancellationToken);
     }
 
     private async Task MonitorSingleAccountAsync(
         InstagramTrackedAccount account,
         IInstagramService instagramService,
-        IInstagramProfileCardGenerator cardGenerator,
-        IHttpClientFactory httpClientFactory,
         IUnitOfWork unitOfWork,
         ISpace space,
         CancellationToken cancellationToken)
