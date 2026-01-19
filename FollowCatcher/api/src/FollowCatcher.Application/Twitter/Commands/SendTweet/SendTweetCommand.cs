@@ -5,15 +5,19 @@ using Space.Abstraction.Contracts;
 
 namespace FollowCatcher.Application.Twitter.Commands.SendTweet;
 
-public record SendTweetCommand(string Text) : IRequest<bool>;
+public record SendTweetCommand(string Text, byte[] Image) : IRequest<string>;
 
 public class SendTweetHandler(ITwitterService twitterService)
 {
     [Handle]
-    public async ValueTask<bool> Handle(HandlerContext<SendTweetCommand> ctx)
+    public async ValueTask<string> Handle(HandlerContext<SendTweetCommand> ctx)
     {
         var request = ctx.Request;
-        var tweetId = await twitterService.PublishTweetAsync(request.Text);
-        return !string.IsNullOrEmpty(tweetId);
+        long? mediaId = null;
+        if (request.Image.Length > 0)
+            mediaId = await twitterService.UploadImageAsync(request.Image);
+
+        var tweetId = await twitterService.PublishTweetAsync(request.Text, mediaId);
+        return tweetId;
     }
 }
