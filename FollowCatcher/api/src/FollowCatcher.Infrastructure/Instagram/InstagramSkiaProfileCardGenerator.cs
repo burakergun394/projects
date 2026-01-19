@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 
 namespace FollowCatcher.Infrastructure.Instagram;
 
-public class SkiaInstagramProfileCardGenerator(ILogger<SkiaInstagramProfileCardGenerator> logger) : IInstagramProfileCardGenerator
+public class InstagramSkiaProfileCardGenerator(ILogger<InstagramSkiaProfileCardGenerator> logger) : IInstagramProfileCardGenerator
 {
     public Task<byte[]> GenerateCardAsync(InstagramProfileInfo profile, byte[] avatarBytes)
     {

@@ -17,7 +17,7 @@ public static class DependencyInjection
 
         // Register Instagram service
         services.AddSingleton<IInstagramService, InstagramService>();
-        services.AddScoped<IInstagramProfileCardGenerator, SkiaInstagramProfileCardGenerator>();
+        services.AddScoped<IInstagramProfileCardGenerator, InstagramSkiaProfileCardGenerator>();
 
         // Configure Twitter settings
         var twitterSection = configuration.GetSection(TwitterSettings.SectionName);
@@ -25,9 +25,6 @@ public static class DependencyInjection
 
         // Register Twitter service
         services.AddSingleton<ITwitterService, FollowCatcher.Infrastructure.Twitter.TwitterService>();
-
-        // Register Monitoring Worker
-        services.AddHostedService<FollowCatcher.Infrastructure.Instagram.Monitoring.InstagramMonitoringWorker>();
 
         return services;
     }

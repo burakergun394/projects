@@ -76,17 +76,23 @@ Commands modify state and typically return identifiers or success indicators.
 
 ```csharp
 // Command definition
+using Space.Abstraction.Contracts;
+
 public record CreateEmployeeCommand(string Name, string Email) : IRequest<Guid>;
 
 // Simple handler - basic create operation
+using Space.Abstraction.Attributes;
+using Space.Abstraction.Context;
+
 public class CreateEmployeeHandler(IApplicationDbContext context)
-    : IRequestHandler<CreateEmployeeCommand, Guid>
 {
-    public async Task<Guid> Handle(CreateEmployeeCommand request, CancellationToken ct)
+    [Handle]
+    public async ValueTask<Guid> Handle(HandlerContext<CreateEmployeeCommand> ctx)
     {
+        var request = ctx.Request;
         var employee = new Employee(request.Name, new Email(request.Email));
         context.Employees.Add(employee);
-        await context.SaveChangesAsync(ct);
+        await context.SaveChangesAsync(ctx.CancellationToken);
         return employee.Id;
     }
 }
@@ -95,15 +101,16 @@ public class CreateEmployeeHandler(IApplicationDbContext context)
 public class CreateEmployeeWithLoggingHandler(
     IApplicationDbContext context,
     ILogger<CreateEmployeeWithLoggingHandler> logger)
-    : IRequestHandler<CreateEmployeeCommand, Guid>
 {
-    public async Task<Guid> Handle(CreateEmployeeCommand request, CancellationToken ct)
+    [Handle]
+    public async ValueTask<Guid> Handle(HandlerContext<CreateEmployeeCommand> ctx)
     {
+        var request = ctx.Request;
         logger.LogInformation("Creating employee with name {Name}", request.Name);
 
         var employee = new Employee(request.Name, new Email(request.Email));
         context.Employees.Add(employee);
-        await context.SaveChangesAsync(ct);
+        await context.SaveChangesAsync(ctx.CancellationToken);
 
         logger.LogInformation("Employee created with ID {EmployeeId}", employee.Id);
         return employee.Id;
@@ -115,13 +122,14 @@ public class UpdateEmployeeHandler(
     IEmployeeRepository repository,
     IUnitOfWork unitOfWork,
     ILogger<UpdateEmployeeHandler> logger)
-    : IRequestHandler<UpdateEmployeeCommand>
 {
-    public async Task Handle(UpdateEmployeeCommand request, CancellationToken ct)
+    [Handle]
+    public async ValueTask Handle(HandlerContext<UpdateEmployeeCommand> ctx)
     {
+        var request = ctx.Request;
         logger.LogInformation("Updating employee {EmployeeId}", request.Id);
 
-        var employee = await repository.GetByIdAsync(request.Id, ct);
+        var employee = await repository.GetByIdAsync(request.Id, ctx.CancellationToken);
         if (employee == null)
         {
             logger.LogWarning("Employee {EmployeeId} not found", request.Id);
@@ -132,7 +140,7 @@ public class UpdateEmployeeHandler(
         employee.UpdateEmail(new Email(request.Email));
 
         repository.Update(employee);
-        await unitOfWork.SaveChangesAsync(ct);
+        await unitOfWork.SaveChangesAsync(ctx.CancellationToken);
 
         logger.LogInformation("Employee {EmployeeId} updated successfully", request.Id);
     }
@@ -145,21 +153,28 @@ Queries retrieve data without modifying state and should use `AsNoTracking()` fo
 
 ```csharp
 // Query definition
+using Space.Abstraction.Contracts;
+
 public record GetEmployeeByIdQuery(Guid Id) : IRequest<EmployeeDto>;
 
 // Simple query handler
+using Space.Abstraction.Attributes;
+using Space.Abstraction.Context;
+
 public class GetEmployeeByIdHandler(IApplicationDbContext context)
-    : IRequestHandler<GetEmployeeByIdQuery, EmployeeDto>
 {
-    public async Task<EmployeeDto> Handle(GetEmployeeByIdQuery request, CancellationToken ct)
+    [Handle]
+    public async ValueTask<EmployeeDto> Handle(HandlerContext<GetEmployeeByIdQuery> ctx)
     {
+        var request = ctx.Request;
         var employee = await context.Employees
             .AsNoTracking()  // Performance optimization for read-only queries
-            .FirstOrDefaultAsync(x => x.Id == request.Id, ct);
+            .FirstOrDefaultAsync(x => x.Id == request.Id, ctx.CancellationToken);
 
-        return employee is null
-            ? null
-            : new EmployeeDto(employee.Id, employee.Name, employee.Email.Value);
+        if (employee is null)
+            throw new NotFoundException($"Employee with ID {request.Id} not found");
+
+        return new EmployeeDto(employee.Id, employee.Name, employee.Email.Value);
     }
 }
 
@@ -167,10 +182,11 @@ public class GetEmployeeByIdHandler(IApplicationDbContext context)
 public class GetEmployeeDetailsHandler(
     IApplicationDbContext context,
     ILogger<GetEmployeeDetailsHandler> logger)
-    : IRequestHandler<GetEmployeeDetailsQuery, EmployeeDetailsDto>
 {
-    public async Task<EmployeeDetailsDto> Handle(GetEmployeeDetailsQuery request, CancellationToken ct)
+    [Handle]
+    public async ValueTask<EmployeeDetailsDto> Handle(HandlerContext<GetEmployeeDetailsQuery> ctx)
     {
+        var request = ctx.Request;
         logger.LogDebug("Fetching employee details for {EmployeeId}", request.Id);
 
         var employeeDto = await context.Employees
@@ -183,7 +199,7 @@ public class GetEmployeeDetailsHandler(
                 e.Location,
                 e.CreatedAt,
                 e.UpdatedAt))
-            .FirstOrDefaultAsync(ct);
+            .FirstOrDefaultAsync(ctx.CancellationToken);
 
         if (employeeDto == null)
         {
@@ -200,12 +216,12 @@ public class GetEmployeeDetailsHandler(
 public class GetEmployeesByLocationHandler(
     IApplicationDbContext context,
     ILogger<GetEmployeesByLocationHandler> logger)
-    : IRequestHandler<GetEmployeesByLocationQuery, IEnumerable<EmployeeDto>>
 {
-    public async Task<IEnumerable<EmployeeDto>> Handle(
-        GetEmployeesByLocationQuery request,
-        CancellationToken ct)
+    [Handle]
+    public async ValueTask<IEnumerable<EmployeeDto>> Handle(
+        HandlerContext<GetEmployeesByLocationQuery> ctx)
     {
+        var request = ctx.Request;
         logger.LogInformation("Fetching employees for location {Location}", request.Location);
 
         var employees = await context.Employees
@@ -213,7 +229,7 @@ public class GetEmployeesByLocationHandler(
             .Where(e => e.Location == request.Location)
             .OrderBy(e => e.Name)
             .Select(e => new EmployeeDto(e.Id, e.Name, e.Email.Value))
-            .ToListAsync(ct);
+            .ToListAsync(ctx.CancellationToken);
 
         logger.LogInformation("Found {Count} employees", employees.Count);
         return employees;

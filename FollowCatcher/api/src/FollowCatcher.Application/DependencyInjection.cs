@@ -1,6 +1,8 @@
-using System.Reflection;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
+using Space.Abstraction;
+using Space.DependencyInjection;
+using System.Reflection;
 
 namespace FollowCatcher.Application;
 
@@ -10,12 +12,13 @@ public static class DependencyInjection
 
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
+        services.AddHttpClient();
         var assembly = Assembly.GetExecutingAssembly();
 
-        // Register MediatR for CQRS pattern
-        services.AddMediatR(cfg =>
+        // Register Space for CQRS pattern
+        services.AddSpace(opt =>
         {
-            cfg.RegisterServicesFromAssembly(assembly);
+            opt.NotificationDispatchType = NotificationDispatchType.Parallel;
         });
 
         // Register FluentValidation validators

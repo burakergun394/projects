@@ -1,10 +1,6 @@
 namespace FollowCatcher.Domain.Common;
 
-
-using MediatR;
-
-public interface IDomainEvent : INotification
+public interface IDomainEvent
 {
-
     DateTime OccurredOn { get; }
 }

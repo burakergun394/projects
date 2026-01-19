@@ -6,5 +6,6 @@ public record InstagramProfileDto(
     long FollowerCount,
     long FollowingCount,
     string ProfilePictureUrl,
-    int PostCount
+    int PostCount,
+    byte[] ProfileCardImage
 );

@@ -1,8 +1,7 @@
 using FollowCatcher.Application.Instagram.Queries;
 using FollowCatcher.Application.Instagram.Queries.GetInstagramProfile;
-using FollowCatcher.Application.Instagram.Queries.GetProfileCard;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Space.Abstraction;
 
 namespace FollowCatcher.Api.Controllers;
 
@@ -10,7 +9,7 @@ namespace FollowCatcher.Api.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Produces("application/json")]
-public class InstagramController(IMediator mediator) : ControllerBase
+public class InstagramController(ISpace space) : ControllerBase
 {
 
     [HttpGet("{username}")]
@@ -18,28 +17,10 @@ public class InstagramController(IMediator mediator) : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<InstagramProfileDto>> GetProfile(
         string username,
+        [FromQuery] bool includeProfileCard = false,
         CancellationToken cancellationToken = default)
     {
-        var result = await mediator.Send(new GetInstagramProfileQuery(username), cancellationToken);
-
-        return result is null ? NotFound() : Ok(result);
-    }
-
-    [HttpGet("{username}/card")]
-    [Produces("image/png")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetProfileCard(
-        string username,
-        CancellationToken cancellationToken = default)
-    {
-        var imageBytes = await mediator.Send(new GetProfileCardQuery(username), cancellationToken);
-
-        if (imageBytes is null)
-        {
-            return NotFound();
-        }
-
-        return File(imageBytes, "image/png");
+        var result = await space.Send<InstagramProfileDto>(new GetInstagramProfileQuery(username, includeProfileCard), ct: cancellationToken);
+        return Ok(result);
     }
 }

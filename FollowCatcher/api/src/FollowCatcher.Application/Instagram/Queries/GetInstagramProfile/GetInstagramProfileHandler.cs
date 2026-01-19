@@ -1,28 +1,47 @@
-using FollowCatcher.Domain.Data;
 using FollowCatcher.Domain.Instagram;
-using MediatR;
+using Space.Abstraction.Attributes;
+using Space.Abstraction.Context;
 
 namespace FollowCatcher.Application.Instagram.Queries.GetInstagramProfile;
 
 
-public class GetInstagramProfileHandler(IInstagramService instagramService)
-    : IRequestHandler<GetInstagramProfileQuery, InstagramProfileDto?>
+public class GetInstagramProfileHandler(IInstagramService instagramService,
+                                        IInstagramProfileCardGenerator cardGenerator,
+                                        IHttpClientFactory httpClientFactory)
 {
-    public async Task<InstagramProfileDto?> Handle(GetInstagramProfileQuery request, CancellationToken cancellationToken)
+    [Handle]
+    public async ValueTask<InstagramProfileDto> Handle(HandlerContext<GetInstagramProfileQuery> ctx)
     {
-        var profileInfo = await instagramService.GetProfileInfoAsync(request.Username, cancellationToken);
+        var request = ctx.Request;
+        var profileInfo = await instagramService.GetProfileInfoAsync(request.Username, ctx.CancellationToken)
+                          ?? throw new InvalidOperationException($"Profile not found for username: {request.Username}");
 
-        if (profileInfo is null)
+        if (request.IncludeProfileCard is false)
         {
-            return null;
+            return new InstagramProfileDto(
+                profileInfo.Username,
+                profileInfo.FollowerCount,
+                profileInfo.FollowingCount,
+                profileInfo.ProfilePictureUrl,
+                profileInfo.PostCount,
+                []
+            );
         }
 
+        byte[] avatarBytes;
+        using (var httpClient = httpClientFactory.CreateClient())
+        {
+            avatarBytes = await httpClient.GetByteArrayAsync(profileInfo.ProfilePictureUrl, ctx.CancellationToken);
+        }
+
+        var profileCardImage = await cardGenerator.GenerateCardAsync(profileInfo, avatarBytes);
         return new InstagramProfileDto(
             profileInfo.Username,
             profileInfo.FollowerCount,
             profileInfo.FollowingCount,
             profileInfo.ProfilePictureUrl,
-            profileInfo.PostCount
+            profileInfo.PostCount,
+            profileCardImage
         );
     }
 }

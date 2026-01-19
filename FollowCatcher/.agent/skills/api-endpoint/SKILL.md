@@ -23,21 +23,27 @@ allowed-tools: Read, Grep, Glob, Write, Edit
 **For Write Operations (POST, PUT, DELETE):**
 ```csharp
 // Location: Application/{Feature}/Commands/{Action}/{Action}{Feature}Command.cs
+using Space.Abstraction.Contracts;
+
 public record Create{Feature}Command(
     string Property1,
     string Property2
 ) : IRequest<Guid>;
 
 // Location: Application/{Feature}/Commands/{Action}/{Action}{Feature}Handler.cs
+using Space.Abstraction.Attributes;
+using Space.Abstraction.Context;
+
 public class Create{Feature}Handler(IApplicationDbContext context)
-    : IRequestHandler<Create{Feature}Command, Guid>
 {
-    public async Task<Guid> Handle(Create{Feature}Command request, CancellationToken cancellationToken)
+    [Handle]
+    public async ValueTask<Guid> Handle(HandlerContext<Create{Feature}Command> ctx)
     {
+        var request = ctx.Request;
         var entity = new {Feature}(request.Property1, request.Property2);
 
         context.{Features}.Add(entity);
-        await context.SaveChangesAsync(cancellationToken);
+        await context.SaveChangesAsync(ctx.CancellationToken);
 
         return entity.Id;
     }
@@ -47,18 +53,27 @@ public class Create{Feature}Handler(IApplicationDbContext context)
 **For Read Operations (GET):**
 ```csharp
 // Location: Application/{Feature}/Queries/{Action}/{Action}Query.cs
+using Space.Abstraction.Contracts;
+
 public record Get{Feature}ByIdQuery(Guid Id) : IRequest<{Feature}Dto>;
 
 // Location: Application/{Feature}/Queries/{Action}/{Action}Handler.cs
-public class Get{Feature}ByIdHandler(IApplicationDbContext context)
-    : IRequestHandler<Get{Feature}ByIdQuery, {Feature}Dto>
-{
-    public async Task<{Feature}Dto> Handle(Get{Feature}ByIdQuery request, CancellationToken cancellationToken)
-    {
-        var entity = await context.{Features}
-            .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
+using Space.Abstraction.Attributes;
+using Space.Abstraction.Context;
 
-        return entity is null ? null : new {Feature}Dto(entity.Id, entity.Property1);
+public class Get{Feature}ByIdHandler(IApplicationDbContext context)
+{
+    [Handle]
+    public async ValueTask<{Feature}Dto> Handle(HandlerContext<Get{Feature}ByIdQuery> ctx)
+    {
+        var request = ctx.Request;
+        var entity = await context.{Features}
+            .FirstOrDefaultAsync(x => x.Id == request.Id, ctx.CancellationToken);
+
+        if (entity is null)
+            throw new NotFoundException($"{Feature} with ID {request.Id} not found");
+
+        return new {Feature}Dto(entity.Id, entity.Property1);
     }
 }
 ```
@@ -78,11 +93,13 @@ public record {Feature}Dto(
 
 ```csharp
 // Location: Api/Controllers/{Features}Controller.cs
+using Space.Abstraction;
+
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
 [Produces("application/json")]
-public class {Features}Controller(IMediator mediator) : ControllerBase
+public class {Features}Controller(ISpace space) : ControllerBase
 {
     [AllowAnonymous]
     [HttpGet]
@@ -92,7 +109,9 @@ public class {Features}Controller(IMediator mediator) : ControllerBase
         [FromQuery] int pageSize = 10,
         CancellationToken cancellationToken = default)
     {
-        return Ok(await mediator.Send(new GetAll{Features}Query(pageNumber, pageSize), cancellationToken));
+        var result = await space.Send<PagedResult<{Feature}Dto>>(
+            new GetAll{Features}Query(pageNumber, pageSize), ct: cancellationToken);
+        return Ok(result);
     }
 
     [AllowAnonymous]
@@ -103,8 +122,16 @@ public class {Features}Controller(IMediator mediator) : ControllerBase
         Guid id,
         CancellationToken cancellationToken = default)
     {
-        var result = await mediator.Send(new Get{Feature}ByIdQuery(id), cancellationToken);
-        return result is null ? NotFound() : Ok(result);
+        try
+        {
+            var result = await space.Send<{Feature}Dto>(
+                new Get{Feature}ByIdQuery(id), ct: cancellationToken);
+            return Ok(result);
+        }
+        catch (NotFoundException)
+        {
+            return NotFound();
+        }
     }
 
     [Authorize(Policy = "CanCreate{Features}")]
@@ -115,7 +142,7 @@ public class {Features}Controller(IMediator mediator) : ControllerBase
         [FromBody] Create{Feature}Command command,
         CancellationToken cancellationToken = default)
     {
-        var id = await mediator.Send(command, cancellationToken);
+        var id = await space.Send<Guid>(command, ct: cancellationToken);
         return CreatedAtAction(nameof(GetById), new { id }, id);
     }
 
@@ -140,7 +167,7 @@ public class {Features}Controller(IMediator mediator) : ControllerBase
             });
         }
 
-        await mediator.Send(command with { ETag = etag }, cancellationToken);
+        await space.Send<Unit>(command with { ETag = etag }, ct: cancellationToken);
         return NoContent();
     }
 
@@ -152,7 +179,7 @@ public class {Features}Controller(IMediator mediator) : ControllerBase
         Guid id,
         CancellationToken cancellationToken = default)
     {
-        await mediator.Send(new Delete{Feature}Command(id), cancellationToken);
+        await space.Send<Unit>(new Delete{Feature}Command(id), ct: cancellationToken);
         return NoContent();
     }
 }
