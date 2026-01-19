@@ -26,7 +26,7 @@ public static class DependencyInjection
         services.AddValidatorsFromAssembly(assembly);
 
         // Register Background Services
-        services.AddHostedService<InstagramTrackedAccountWorker>();
+        services.AddHostedService<InstagramTrackedAccountBackgroundService>();
 
         return services;
     }

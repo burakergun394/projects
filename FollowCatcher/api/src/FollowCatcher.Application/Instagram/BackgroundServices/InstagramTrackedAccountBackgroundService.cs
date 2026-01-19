@@ -8,9 +8,9 @@ using Space.Abstraction;
 
 namespace FollowCatcher.Application.Instagram.BackgroundServices;
 
-public class InstagramTrackedAccountWorker(
+public class InstagramTrackedAccountBackgroundService(
     IServiceProvider serviceProvider,
-    ILogger<InstagramTrackedAccountWorker> logger) : BackgroundService
+    ILogger<InstagramTrackedAccountBackgroundService> logger) : BackgroundService
 {
     private readonly TimeSpan _checkInterval = TimeSpan.FromMinutes(5);
 
@@ -39,15 +39,15 @@ public class InstagramTrackedAccountWorker(
 
     private async Task MonitorAccountsAsync(CancellationToken cancellationToken)
     {
-        IEnumerable<InstagramTrackedAccount> monitoredAccounts;
+        IEnumerable<InstagramTrackedAccount> trackedAccount;
 
         using (var scope = serviceProvider.CreateScope())
         {
             var repository = scope.ServiceProvider.GetRequiredService<IInstagramTrackedAccountRepository>();
-            monitoredAccounts = await repository.GetAllAsync(cancellationToken);
+            trackedAccount = await repository.GetAllAsync(cancellationToken);
         }
 
-        var accountList = monitoredAccounts.ToList();
+        var accountList = trackedAccount.ToList();
         logger.LogInformation("Monitoring {Count} Instagram accounts with {MaxTasks} concurrent tasks",
             accountList.Count, MaxConcurrentTasks);
 
