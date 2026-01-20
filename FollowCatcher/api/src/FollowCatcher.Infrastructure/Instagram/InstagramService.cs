@@ -57,8 +57,8 @@ public class InstagramService(
             : new UserSessionData();
 
         var delay = RequestDelay.FromSeconds(
-            settings.RequestDelaySeconds,
-            settings.RequestDelaySeconds);
+            settings.RequestDelayMinSeconds,
+            settings.RequestDelayMaxSeconds);
 
 
         var apiBuilder = InstaApiBuilder.CreateBuilder()

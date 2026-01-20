@@ -1,7 +1,10 @@
 using FollowCatcher.Application;
 using FollowCatcher.Persistence;
 using FollowCatcher.Infrastructure;
+using FollowCatcher.Api.Middleware;
+using FollowCatcher.Api.HealthChecks;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,7 +15,7 @@ builder.Configuration.AddJsonFile("appsettings.Local.json", optional: true, relo
 builder.Services.AddControllers();
 
 // Add Application layer services
-builder.Services.AddApplication();
+builder.Services.AddApplication(builder.Configuration);
 
 // Add Persistence layer services
 builder.Services.AddPersistence(builder.Configuration);
@@ -20,23 +23,33 @@ builder.Services.AddPersistence(builder.Configuration);
 // Add Infrastructure layer services
 builder.Services.AddInfrastructure(builder.Configuration);
 
+// Add Health Checks
+builder.Services.AddHealthChecks()
+    .AddCheck<DatabaseHealthCheck>("database");
+
+// Add Rate Limiting
+builder.Services.AddRateLimiter(options =>
+{
+    options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(context =>
+        RateLimitPartition.GetFixedWindowLimiter(
+            partitionKey: context.Connection.RemoteIpAddress?.ToString() ?? "anonymous",
+            factory: _ => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 100,
+                Window = TimeSpan.FromMinutes(1),
+                QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                QueueLimit = 10
+            }));
+
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+});
+
 // Add API documentation
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new() { Title = "FollowCatcher API", Version = "v1" });
 });
-
-// Add CORS if needed
-// builder.Services.AddCors(options =>
-// {
-//     options.AddDefaultPolicy(policy =>
-//     {
-//         policy.AllowAnyOrigin()
-//               .AllowAnyMethod()
-//               .AllowAnyHeader();
-//     });
-// });
 
 var app = builder.Build();
 
@@ -47,30 +60,26 @@ using (var scope = app.Services.CreateScope())
     await dbContext.Database.MigrateAsync();
 }
 
-// Configure the HTTP request pipeline
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI(options =>
-    {
-        options.SwaggerEndpoint("/swagger/v1/swagger.json", "FollowCatcher API v1");
-        options.SwaggerEndpoint("/swagger/v1/swagger.json", "FollowCatcher API v1");
-        options.RoutePrefix = "swagger";
-    });
+// Global Exception Handler (must be first in pipeline)
+app.UseGlobalExceptionHandler();
 
-    using (var scope = app.Services.CreateScope())
-    {
-        var seeder = scope.ServiceProvider.GetRequiredService<DatabaseSeeder>();
-        await seeder.SeedAsync();
-    }
-}
+// Configure Swagger (enabled in all environments)
+app.UseSwagger();
+app.UseSwaggerUI(options =>
+{
+    options.SwaggerEndpoint("/swagger/v1/swagger.json", "FollowCatcher API v1");
+    options.RoutePrefix = "swagger";
+});
 
 app.UseHttpsRedirection();
 
-// Enable CORS if configured
-// app.UseCors();
+// Enable Rate Limiting
+app.UseRateLimiter();
 
 app.UseAuthorization();
+
+// Map Health Check endpoint
+app.MapHealthChecks("/health");
 
 app.MapControllers();
 

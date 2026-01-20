@@ -21,17 +21,7 @@ public static class DependencyInjection
         // Register DbContext with SQL Server
         services.AddDbContext<ApplicationDbContext>(options =>
         {
-            options.UseSqlServer(connectionString, sqlOptions =>
-            {
-                sqlOptions.EnableRetryOnFailure(
-                    maxRetryCount: 5,
-                    maxRetryDelay: TimeSpan.FromSeconds(30),
-                    errorNumbersToAdd: null);
-            });
-
-            // Enable sensitive data logging in development
-            // options.EnableSensitiveDataLogging();
-            // options.EnableDetailedErrors();
+            options.UseNpgsql(connectionString);
         });
 
         // Register IApplicationDbContext
@@ -44,9 +34,6 @@ public static class DependencyInjection
 
         // Register repositories here
         services.AddScoped<IInstagramTrackedAccountRepository, InstagramTrackedAccountRepository>();
-        // Register Database Seeder
-        services.AddScoped<DatabaseSeeder>();
-
 
         return services;
     }

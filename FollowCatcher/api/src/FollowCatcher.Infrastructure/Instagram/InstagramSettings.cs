@@ -17,7 +17,8 @@ public class InstagramSettings
     public bool EnableDebugLogging { get; set; }
 
 
-    public int RequestDelaySeconds { get; set; } = 2;
+    public int RequestDelayMinSeconds { get; set; } = 2;
+    public int RequestDelayMaxSeconds { get; set; } = 5;
 
 
     public bool UseAuthentication => !string.IsNullOrWhiteSpace(Username) &&

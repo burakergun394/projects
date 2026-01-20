@@ -429,5 +429,9 @@ appsettings.Local.json
 .claude/projects/
 .claude/plans/
 
+# Docker
+docker-compose.yaml
+docker-compose.yml
+
 # Instagram session state files (contain sensitive session tokens)
 *.bin

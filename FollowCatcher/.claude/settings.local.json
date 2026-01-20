@@ -14,7 +14,12 @@
       "Bash(dotnet build:*)",
       "Bash(tree:*)",
       "Bash(curl:*)",
-      "Skill(sc:load)"
+      "Skill(sc:load)",
+      "Bash(dotnet restore:*)",
+      "Bash(dotnet list:*)",
+      "Bash(taskkill:*)",
+      "Bash(dotnet ef migrations add:*)",
+      "Bash(git restore:*)"
     ]
   }
 }

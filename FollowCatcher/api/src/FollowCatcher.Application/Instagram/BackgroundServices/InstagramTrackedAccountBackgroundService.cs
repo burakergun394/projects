@@ -4,13 +4,16 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
+using Microsoft.Extensions.Options;
+
 namespace FollowCatcher.Application.Instagram.BackgroundServices;
 
 public class InstagramTrackedAccountBackgroundService(
     IServiceScopeFactory serviceScopeFactory,
+    IOptions<InstagramMonitoringSettings> options,
     ILogger<InstagramTrackedAccountBackgroundService> logger) : BackgroundService
 {
-    private readonly TimeSpan _checkInterval = TimeSpan.FromMinutes(5);
+    private readonly TimeSpan _checkInterval = options.Value.CheckInterval;
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {

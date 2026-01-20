@@ -6,7 +6,7 @@ public abstract class Entity
     private readonly List<IDomainEvent> _domainEvents = [];
 
 
-    public Guid Id { get; protected set; } = Guid.NewGuid();
+    public Guid Id { get; protected set; } = Guid.CreateVersion7();
 
 
     public DateTime CreatedAt { get; protected set; } = DateTime.UtcNow;
