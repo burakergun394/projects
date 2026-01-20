@@ -1,6 +1,7 @@
 using FollowCatcher.Application;
 using FollowCatcher.Persistence;
 using FollowCatcher.Infrastructure;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,6 +39,13 @@ builder.Services.AddSwaggerGen(options =>
 // });
 
 var app = builder.Build();
+
+// Apply database migrations (creates database and tables if they don't exist)
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    await dbContext.Database.MigrateAsync();
+}
 
 // Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
