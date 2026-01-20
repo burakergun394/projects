@@ -1,4 +1,12 @@
 FROM mcr.microsoft.com/dotnet/aspnet:10.0-preview AS base
+
+# Install SkiaSharp native dependencies
+RUN apt-get update && apt-get install -y \
+    libfontconfig1 \
+    libfreetype6 \
+    libharfbuzz0b \
+    && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
 EXPOSE 8080
 EXPOSE 8081

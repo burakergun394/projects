@@ -16,7 +16,7 @@ public static class DependencyInjection
         services.Configure<InstagramSettings>(instagramSection);
 
         // Register Instagram service
-        services.AddSingleton<IInstagramService, InstagramService>();
+        services.AddSingleton<IInstagramService, InstagramApiSharpService>();
         services.AddScoped<IInstagramProfileCardGenerator, InstagramSkiaProfileCardGenerator>();
 
         // Configure Twitter settings
