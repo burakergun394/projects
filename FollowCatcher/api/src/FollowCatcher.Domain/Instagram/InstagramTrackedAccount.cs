@@ -9,6 +9,15 @@ public class InstagramTrackedAccount(string username) : Entity
     public string FollowingIdsJson { get; private set; } = "[]"; // Serialized List<string>
     public DateTime LastChecked { get; private set; } = DateTime.UtcNow;
 
+    public void UpdateUsername(string username)
+    {
+        if (string.IsNullOrWhiteSpace(username))
+            throw new ArgumentException("Username cannot be empty.", nameof(username));
+
+        Username = username;
+        MarkAsUpdated();
+    }
+
     public void UpdateFollowingAndDetectChanges(List<string> newFollowing, byte[] monitoredProfileCardInfo)
     {
         var previousFollowing = GetCurrentFollowing();
@@ -31,6 +40,11 @@ public class InstagramTrackedAccount(string username) : Entity
         FollowingIdsJson = JsonSerializer.Serialize(newFollowing);
         LastChecked = DateTime.UtcNow;
         MarkAsUpdated();
+    }
+
+    public int GetFollowingCount()
+    {
+        return GetCurrentFollowing().Count;
     }
 
     private List<string> GetCurrentFollowing()
