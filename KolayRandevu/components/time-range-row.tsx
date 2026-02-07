@@ -1,4 +1,5 @@
-import { View, Text, Pressable } from '@/src/tw';
+import { View, Text, Pressable, StyleSheet } from 'react-native';
+import { shadows } from '@/src/styles';
 import type { TimeRange } from '@/store/types';
 
 interface TimeRangeRowProps {
@@ -10,28 +11,63 @@ interface TimeRangeRowProps {
 
 export const TimeRangeRow = ({ range, onStartPress, onEndPress, onRemove }: TimeRangeRowProps) => {
   return (
-    <View className="bg-gray-50 rounded-xl p-3 flex-row items-center gap-3 border-continuous">
-      <Pressable
-        onPress={onStartPress}
-        className="bg-white rounded-lg px-4 py-2 border-continuous shadow-xs">
-        <Text className="text-gray-900 font-semibold text-base tabular-nums">
-          {range.startTime}
-        </Text>
+    <View style={styles.container}>
+      <Pressable onPress={onStartPress} style={[styles.timeBtn, shadows.xs]}>
+        <Text style={styles.timeText}>{range.startTime}</Text>
       </Pressable>
 
-      <Text className="text-gray-400 font-medium">–</Text>
+      <Text style={styles.dash}>–</Text>
 
-      <Pressable
-        onPress={onEndPress}
-        className="bg-white rounded-lg px-4 py-2 border-continuous shadow-xs">
-        <Text className="text-gray-900 font-semibold text-base tabular-nums">{range.endTime}</Text>
+      <Pressable onPress={onEndPress} style={[styles.timeBtn, shadows.xs]}>
+        <Text style={styles.timeText}>{range.endTime}</Text>
       </Pressable>
 
-      <View className="flex-1" />
+      <View style={styles.spacer} />
 
-      <Pressable onPress={onRemove} className="bg-red-50 rounded-lg p-2 border-continuous">
-        <Text className="text-red-500 font-bold text-sm">✕</Text>
+      <Pressable onPress={onRemove} style={styles.removeBtn}>
+        <Text style={styles.removeText}>✕</Text>
       </Pressable>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: '#f9fafb',
+    borderRadius: 12,
+    padding: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    borderCurve: 'continuous',
+  },
+  timeBtn: {
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderCurve: 'continuous',
+  },
+  timeText: {
+    color: '#111827',
+    fontWeight: '600',
+    fontSize: 16,
+    fontVariant: ['tabular-nums'],
+  },
+  dash: {
+    color: '#9ca3af',
+    fontWeight: '500',
+  },
+  spacer: { flex: 1 },
+  removeBtn: {
+    backgroundColor: '#fef2f2',
+    borderRadius: 8,
+    padding: 8,
+    borderCurve: 'continuous',
+  },
+  removeText: {
+    color: '#ef4444',
+    fontWeight: '700',
+    fontSize: 14,
+  },
+});

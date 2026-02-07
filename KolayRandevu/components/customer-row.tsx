@@ -1,6 +1,7 @@
-import { View, Text } from '@/src/tw';
+import { View, Text, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Card } from '@/components/ui/card';
+import { colors } from '@/src/theme';
 import type { Customer } from '@/store/types';
 
 interface CustomerRowProps {
@@ -12,17 +13,56 @@ export const CustomerRow = ({ customer, onPress }: CustomerRowProps) => {
   const { t } = useTranslation();
 
   return (
-    <Card shadow="sm" onPress={onPress} className="p-4 flex-row items-center gap-3">
-      <View className="bg-navy rounded-full w-11 h-11 items-center justify-center">
-        <Text className="text-white font-bold text-base">{customer.name.charAt(0)}</Text>
+    <Card shadow="sm" onPress={onPress} style={styles.card}>
+      <View style={styles.avatar}>
+        <Text style={styles.avatarText}>{customer.name.charAt(0)}</Text>
       </View>
-      <View className="flex-1 gap-0.5">
-        <Text className="text-gray-900 font-semibold text-base">{customer.name}</Text>
-        <Text className="text-gray-500 text-sm">
+      <View style={styles.info}>
+        <Text style={styles.name}>{customer.name}</Text>
+        <Text style={styles.visits}>
           {customer.appointmentCount} {t('customers.visits')}
         </Text>
       </View>
-      <Text className="text-gray-400 text-xs">{customer.lastVisit}</Text>
+      <Text style={styles.date}>{customer.lastVisit}</Text>
     </Card>
   );
 };
+
+const styles = StyleSheet.create({
+  card: {
+    padding: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  avatar: {
+    backgroundColor: colors.navy,
+    borderRadius: 9999,
+    width: 44,
+    height: 44,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  avatarText: {
+    color: '#fff',
+    fontWeight: '700',
+    fontSize: 16,
+  },
+  info: {
+    flex: 1,
+    gap: 2,
+  },
+  name: {
+    color: '#111827',
+    fontWeight: '600',
+    fontSize: 16,
+  },
+  visits: {
+    color: '#6b7280',
+    fontSize: 14,
+  },
+  date: {
+    color: '#9ca3af',
+    fontSize: 12,
+  },
+});

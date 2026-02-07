@@ -1,14 +1,15 @@
 import { useState } from 'react';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
+import { View, Text, ScrollView, Pressable, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { View, Text, ScrollView, Pressable } from '@/src/tw';
 import { TimeRangeRow } from '@/components/time-range-row';
 import { SlotChip } from '@/components/slot-chip';
 import { SectionHeader } from '@/components/section-header';
 import { EmptyState } from '@/components/empty-state';
 import { Card } from '@/components/ui/card';
 import { useStore } from '@/store/store';
+import { colors } from '@/src/theme';
 import type { DayOfWeek, TimeRange } from '@/store/types';
 
 const cycleTime = (current: string, forward: boolean): string => {
@@ -72,22 +73,22 @@ export default function DayDetail() {
   const availableSlots = SLOT_TIMES.filter((time) => !daySchedule.slots.includes(time));
 
   return (
-    <View className="flex-1 bg-gray-50">
-      <View className="bg-navy px-6 pb-6 pt-2">
+    <View style={styles.screen}>
+      <View style={styles.header}>
         <SafeAreaView edges={['top']}>
-          <View className="flex-row items-center mt-4 gap-3">
-            <Pressable onPress={() => router.back()} className="py-1">
-              <Text className="text-white text-base">{t('common.back')}</Text>
+          <View style={styles.navRow}>
+            <Pressable onPress={() => router.back()} style={styles.backBtn}>
+              <Text style={styles.backText}>{t('common.back')}</Text>
             </Pressable>
-            <View className="flex-1" />
+            <View style={styles.flex1} />
           </View>
-          <Text className="text-white text-2xl font-bold mt-2">{t(`schedule.${day}`)}</Text>
+          <Text style={styles.headerTitle}>{t(`schedule.${day}`)}</Text>
         </SafeAreaView>
       </View>
 
-      <ScrollView className="flex-1" contentContainerClassName="px-6 py-4 gap-6 pb-8">
+      <ScrollView style={styles.flex1} contentContainerStyle={styles.scrollContent}>
         {/* Working Hours Section */}
-        <View className="gap-3">
+        <View style={styles.section}>
           <SectionHeader
             title={t('schedule.ranges')}
             actionLabel={t('schedule.addRange')}
@@ -97,7 +98,7 @@ export default function DayDetail() {
           {daySchedule.ranges.length === 0 ? (
             <EmptyState message={t('schedule.noRanges')} />
           ) : (
-            <View className="gap-2">
+            <View style={styles.rangeList}>
               {daySchedule.ranges.map((range) => (
                 <TimeRangeRow
                   key={range.id}
@@ -118,7 +119,7 @@ export default function DayDetail() {
         </View>
 
         {/* Appointment Slots Section */}
-        <View className="gap-3">
+        <View style={styles.section}>
           <SectionHeader
             title={t('schedule.slots')}
             actionLabel={t('schedule.addSlot')}
@@ -126,17 +127,23 @@ export default function DayDetail() {
           />
 
           {showSlotPicker && (
-            <Card shadow="sm" className="p-4 gap-2">
-              <ScrollView className="max-h-48" contentContainerClassName="flex-row flex-wrap gap-2">
+            <Card shadow="sm" style={styles.pickerCard}>
+              <ScrollView style={styles.pickerScroll} contentContainerStyle={styles.pickerGrid}>
                 {availableSlots.map((time) => {
                   const outside = !isTimeInRanges(time, daySchedule.ranges);
                   return (
                     <Pressable
                       key={time}
                       onPress={() => handleAddSlot(time)}
-                      className={`rounded-lg px-3 py-2 border-continuous ${outside ? 'bg-red-50' : 'bg-navy/10'}`}>
+                      style={[
+                        styles.pickerChip,
+                        outside ? styles.pickerChipOutside : styles.pickerChipNormal,
+                      ]}>
                       <Text
-                        className={`text-sm font-medium tabular-nums ${outside ? 'text-red-400' : 'text-navy'}`}>
+                        style={[
+                          styles.pickerChipText,
+                          outside ? styles.pickerChipTextOutside : styles.pickerChipTextNormal,
+                        ]}>
                         {time}
                       </Text>
                     </Pressable>
@@ -149,7 +156,7 @@ export default function DayDetail() {
           {daySchedule.slots.length === 0 ? (
             <EmptyState message={t('schedule.noSlots')} />
           ) : (
-            <View className="flex-row flex-wrap gap-2">
+            <View style={styles.slotGrid}>
               {daySchedule.slots.map((time) => (
                 <SlotChip
                   key={time}
@@ -165,3 +172,36 @@ export default function DayDetail() {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  screen: { flex: 1, backgroundColor: '#f9fafb' },
+  header: {
+    backgroundColor: colors.navy,
+    paddingHorizontal: 24,
+    paddingBottom: 24,
+    paddingTop: 8,
+  },
+  navRow: { flexDirection: 'row', alignItems: 'center', marginTop: 16, gap: 12 },
+  backBtn: { paddingVertical: 4 },
+  backText: { color: '#fff', fontSize: 16 },
+  headerTitle: { color: '#fff', fontSize: 24, fontWeight: '700', marginTop: 8 },
+  flex1: { flex: 1 },
+  scrollContent: { paddingHorizontal: 24, paddingVertical: 16, gap: 24, paddingBottom: 32 },
+  section: { gap: 12 },
+  rangeList: { gap: 8 },
+  pickerCard: { padding: 16, gap: 8 },
+  pickerScroll: { maxHeight: 192 },
+  pickerGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
+  pickerChip: {
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderCurve: 'continuous',
+  },
+  pickerChipNormal: { backgroundColor: 'rgba(26,35,126,0.1)' },
+  pickerChipOutside: { backgroundColor: '#fef2f2' },
+  pickerChipText: { fontSize: 14, fontWeight: '500', fontVariant: ['tabular-nums'] },
+  pickerChipTextNormal: { color: colors.navy },
+  pickerChipTextOutside: { color: '#f87171' },
+  slotGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
+});

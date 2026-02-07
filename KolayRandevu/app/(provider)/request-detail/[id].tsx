@@ -1,12 +1,12 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { Alert } from 'react-native';
+import { Alert, View, Text, ScrollView, Pressable, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { View, Text, ScrollView, Pressable } from '@/src/tw';
 import { StatusBadge } from '@/components/status-badge';
 import { Button } from '@/components/Button';
 import { Card } from '@/components/ui/card';
 import { useStore } from '@/store/store';
+import { colors } from '@/src/theme';
 
 export default function RequestDetail() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -19,8 +19,8 @@ export default function RequestDetail() {
 
   if (!appointment) {
     return (
-      <View className="flex-1 bg-gray-50 items-center justify-center">
-        <Text className="text-gray-400">{t('common.noData')}</Text>
+      <View style={styles.emptyScreen}>
+        <Text style={styles.emptyText}>{t('common.noData')}</Text>
       </View>
     );
   }
@@ -53,23 +53,23 @@ export default function RequestDetail() {
   };
 
   return (
-    <View className="flex-1 bg-gray-50">
-      <View className="bg-navy px-6 pb-6 pt-2">
+    <View style={styles.screen}>
+      <View style={styles.header}>
         <SafeAreaView edges={['top']}>
-          <Pressable onPress={() => router.back()} className="py-2">
-            <Text className="text-white/70 text-sm">{t('common.back')}</Text>
+          <Pressable onPress={() => router.back()} style={styles.backBtn}>
+            <Text style={styles.backText}>{t('common.back')}</Text>
           </Pressable>
-          <Text className="text-white text-2xl font-bold mt-2">{appointment.customerName}</Text>
+          <Text style={styles.headerTitle}>{appointment.customerName}</Text>
         </SafeAreaView>
       </View>
 
-      <ScrollView className="flex-1" contentContainerClassName="px-6 py-6 gap-6">
-        <Card shadow="sm" className="p-5 gap-4">
-          <View className="flex-row justify-between items-center">
-            <Text className="text-gray-500 text-sm">{t('requests.status')}</Text>
+      <ScrollView style={styles.flex1} contentContainerStyle={styles.scrollContent}>
+        <Card shadow="sm" style={styles.detailCard}>
+          <View style={styles.statusRow}>
+            <Text style={styles.detailLabel}>{t('requests.status')}</Text>
             <StatusBadge status={appointment.status} />
           </View>
-          <View className="h-px bg-gray-100" />
+          <View style={styles.divider} />
           <DetailRow label={t('requests.customer')} value={appointment.customerName} />
           <DetailRow label={t('requests.service')} value={appointment.service} />
           <DetailRow label={t('requests.date')} value={appointment.date} />
@@ -78,7 +78,7 @@ export default function RequestDetail() {
         </Card>
 
         {appointment.status === 'pending' && (
-          <View className="gap-3">
+          <View style={styles.actions}>
             <Button title={t('common.approve')} variant="primary" onPress={handleApprove} />
             <Button title={t('common.reject')} variant="danger" onPress={handleReject} />
           </View>
@@ -90,9 +90,42 @@ export default function RequestDetail() {
 
 function DetailRow({ label, value }: { label: string; value: string }) {
   return (
-    <View className="flex-row justify-between items-center">
-      <Text className="text-gray-500 text-sm">{label}</Text>
-      <Text className="text-gray-900 font-medium text-sm">{value}</Text>
+    <View style={detailRowStyles.row}>
+      <Text style={detailRowStyles.label}>{label}</Text>
+      <Text style={detailRowStyles.value}>{value}</Text>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  screen: { flex: 1, backgroundColor: '#f9fafb' },
+  emptyScreen: {
+    flex: 1,
+    backgroundColor: '#f9fafb',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  emptyText: { color: '#9ca3af' },
+  header: {
+    backgroundColor: colors.navy,
+    paddingHorizontal: 24,
+    paddingBottom: 24,
+    paddingTop: 8,
+  },
+  backBtn: { paddingVertical: 8 },
+  backText: { color: 'rgba(255,255,255,0.7)', fontSize: 14 },
+  headerTitle: { color: '#fff', fontSize: 24, fontWeight: '700', marginTop: 8 },
+  flex1: { flex: 1 },
+  scrollContent: { paddingHorizontal: 24, paddingVertical: 24, gap: 24 },
+  detailCard: { padding: 20, gap: 16 },
+  statusRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  detailLabel: { color: '#6b7280', fontSize: 14 },
+  divider: { height: 1, backgroundColor: '#f3f4f6' },
+  actions: { gap: 12 },
+});
+
+const detailRowStyles = StyleSheet.create({
+  row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  label: { color: '#6b7280', fontSize: 14 },
+  value: { color: '#111827', fontWeight: '500', fontSize: 14 },
+});
