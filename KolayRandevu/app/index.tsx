@@ -1,8 +1,8 @@
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { View, Text, Pressable, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Store, UserSearch, ChevronRight } from 'lucide-react-native';
+import { View, Text, Pressable } from '@/src/tw';
 import { LanguageToggle } from '@/components/language-toggle';
 import { Card } from '@/components/ui/card';
 import { IconCircle } from '@/components/ui/icon-circle';
@@ -22,50 +22,60 @@ export default function RoleSelection() {
   };
 
   return (
-    <View style={styles.screen}>
-      <SafeAreaView style={styles.safe}>
-        <View style={styles.content}>
+    <View className="flex-1 bg-navy">
+      <SafeAreaView style={{ flex: 1 }}>
+        <View className="flex-1 px-6">
           {/* Top bar */}
-          <View style={styles.topBar}>
+          <View className="flex-row justify-end pt-2">
             <LanguageToggle />
           </View>
 
           {/* Content */}
-          <View style={styles.center}>
+          <View className="flex-1 justify-center">
             {/* Brand area */}
-            <View style={styles.brand}>
-              <View style={styles.brandRow}>
-                <Text style={styles.brandLight}>Kolay</Text>
-                <Text style={styles.brandBold}>Randevu</Text>
+            <View className="items-center mb-4">
+              <View className="flex-row items-baseline">
+                <Text className="text-surface text-4xl font-light tracking-wide">Kolay</Text>
+                <Text className="text-orange text-4xl font-extrabold tracking-wide">Randevu</Text>
               </View>
-              <Text style={styles.subtitle}>{t('role.subtitle')}</Text>
+              <Text className="text-white/50 text-sm mt-2 text-center">{t('role.subtitle')}</Text>
             </View>
 
             {/* Decorative line */}
-            <View style={styles.decorRow}>
-              <View style={styles.decorLine} />
-              <View style={styles.decorDiamond} />
-              <View style={styles.decorLine} />
+            <View className="flex-row items-center justify-center gap-2.5 mb-8">
+              <View className="w-10 h-px bg-orange/30" />
+              <View
+                className="w-1.5 h-1.5 bg-orange rounded-sm"
+                style={{ transform: [{ rotate: '45deg' }] }}
+              />
+              <View className="w-10 h-px bg-orange/30" />
             </View>
 
             {/* Provider card */}
-            <Card shadow="xl" onPress={() => selectRole('provider')} style={styles.providerCard}>
+            <Card
+              shadow="xl"
+              onPress={() => selectRole('provider')}
+              className="p-5 flex-row items-center gap-4 mb-4">
               <IconCircle icon={Store} size="lg" variant="orange" />
-              <View style={styles.cardText}>
-                <Text style={styles.providerTitle}>{t('role.provider')}</Text>
-                <Text style={styles.providerDesc}>{t('role.providerDesc')}</Text>
+              <View className="flex-1 gap-1">
+                <Text className="text-navy text-lg font-bold">{t('role.provider')}</Text>
+                <Text className="text-muted text-xs leading-[18px]">{t('role.providerDesc')}</Text>
               </View>
               <ChevronRight size={20} color={colors.chevron} strokeWidth={2} />
             </Card>
 
             {/* Customer card */}
-            <Pressable onPress={() => selectRole('customer')} style={styles.customerCard}>
-              <View style={styles.customerIcon}>
+            <Pressable
+              onPress={() => selectRole('customer')}
+              className="rounded-2xl p-5 flex-row items-center gap-4 border border-white/15 bg-white/[0.08] border-continuous">
+              <View className="w-14 h-14 rounded-xl items-center justify-center bg-white/[0.08] border-continuous">
                 <UserSearch size={26} color="rgba(255,255,255,0.75)" strokeWidth={1.8} />
               </View>
-              <View style={styles.cardText}>
-                <Text style={styles.customerTitle}>{t('role.customer')}</Text>
-                <Text style={styles.customerDesc}>{t('role.customerDesc')}</Text>
+              <View className="flex-1 gap-1">
+                <Text className="text-surface text-lg font-bold">{t('role.customer')}</Text>
+                <Text className="text-white/45 text-xs leading-[18px]">
+                  {t('role.customerDesc')}
+                </Text>
               </View>
               <ChevronRight size={20} color="rgba(255,255,255,0.25)" strokeWidth={2} />
             </Pressable>
@@ -75,78 +85,3 @@ export default function RoleSelection() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: colors.navy },
-  safe: { flex: 1 },
-  content: { flex: 1, paddingHorizontal: 24 },
-  topBar: { flexDirection: 'row', justifyContent: 'flex-end', paddingTop: 8 },
-  center: { flex: 1, justifyContent: 'center' },
-  brand: { alignItems: 'center', marginBottom: 16 },
-  brandRow: { flexDirection: 'row', alignItems: 'baseline' },
-  brandLight: {
-    color: colors.surface,
-    fontSize: 36,
-    fontWeight: '300',
-    letterSpacing: 0.5,
-  },
-  brandBold: {
-    color: colors.orange,
-    fontSize: 36,
-    fontWeight: '800',
-    letterSpacing: 0.5,
-  },
-  subtitle: {
-    color: 'rgba(255,255,255,0.5)',
-    fontSize: 14,
-    marginTop: 8,
-    textAlign: 'center',
-  },
-  decorRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 10,
-    marginBottom: 32,
-  },
-  decorLine: { width: 40, height: 1, backgroundColor: 'rgba(255,152,0,0.3)' },
-  decorDiamond: {
-    width: 6,
-    height: 6,
-    backgroundColor: colors.orange,
-    borderRadius: 2,
-    transform: [{ rotate: '45deg' }],
-  },
-  providerCard: {
-    padding: 20,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 16,
-    marginBottom: 16,
-  },
-  cardText: { flex: 1, gap: 4 },
-  providerTitle: { color: colors.navy, fontSize: 18, fontWeight: '700' },
-  providerDesc: { color: colors.muted, fontSize: 12, lineHeight: 18 },
-  customerCard: {
-    borderRadius: 16,
-    padding: 20,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 16,
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.15)',
-    backgroundColor: 'rgba(255,255,255,0.08)',
-    borderCurve: 'continuous',
-  },
-  customerIcon: {
-    width: 56,
-    height: 56,
-    borderRadius: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'rgba(255,255,255,0.08)',
-    borderCurve: 'continuous',
-  },
-  customerTitle: { color: colors.surface, fontSize: 18, fontWeight: '700' },
-  customerDesc: { color: 'rgba(255,255,255,0.45)', fontSize: 12, lineHeight: 18 },
-});

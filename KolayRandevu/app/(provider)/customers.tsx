@@ -1,8 +1,8 @@
 import { useState, useMemo } from 'react';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { View, Text, ScrollView, TextInput, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { View, Text, ScrollView, TextInput } from '@/src/tw';
 import { CustomerRow } from '@/components/customer-row';
 import { EmptyState } from '@/components/empty-state';
 import { useStore } from '@/store/store';
@@ -23,19 +23,19 @@ export default function Customers() {
   );
 
   return (
-    <View style={styles.screen}>
-      <View style={styles.header}>
+    <View className="flex-1 bg-gray-50">
+      <View className="bg-navy px-6 pb-6 pt-2">
         <SafeAreaView edges={['top']}>
-          <Text style={styles.headerTitle}>{t('customers.title')}</Text>
-          <Text style={styles.headerSub}>
+          <Text className="text-white text-2xl font-bold mt-4">{t('customers.title')}</Text>
+          <Text className="text-white/70 text-sm mt-1">
             {t('customers.totalCustomers')}: {customers.length}
           </Text>
         </SafeAreaView>
       </View>
 
-      <View style={styles.searchContainer}>
+      <View className="px-6 pt-4">
         <TextInput
-          style={styles.searchInput}
+          className="bg-white rounded-xl px-4 py-3 text-gray-900"
           placeholder={t('customers.searchPlaceholder')}
           placeholderTextColor={colors.muted}
           value={search}
@@ -43,7 +43,7 @@ export default function Customers() {
         />
       </View>
 
-      <ScrollView style={styles.flex1} contentContainerStyle={styles.scrollContent}>
+      <ScrollView className="flex-1" contentContainerClassName="px-6 py-4 gap-3 pb-8">
         {filtered.length > 0 ? (
           filtered.map((customer) => (
             <CustomerRow
@@ -59,25 +59,3 @@ export default function Customers() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: '#f9fafb' },
-  header: {
-    backgroundColor: colors.navy,
-    paddingHorizontal: 24,
-    paddingBottom: 24,
-    paddingTop: 8,
-  },
-  headerTitle: { color: '#fff', fontSize: 24, fontWeight: '700', marginTop: 16 },
-  headerSub: { color: 'rgba(255,255,255,0.7)', fontSize: 14, marginTop: 4 },
-  searchContainer: { paddingHorizontal: 24, paddingTop: 16 },
-  searchInput: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    color: '#111827',
-  },
-  flex1: { flex: 1 },
-  scrollContent: { paddingHorizontal: 24, paddingVertical: 16, gap: 12, paddingBottom: 32 },
-});

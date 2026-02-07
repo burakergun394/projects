@@ -1,40 +1,31 @@
 import type { ReactNode } from 'react';
-import { View, Pressable, StyleSheet, type ViewStyle } from 'react-native';
-import { shadows } from '@/src/styles';
+import { View, Pressable } from '@/src/tw';
 
-const shadowStyles = {
-  xs: shadows.xs,
-  sm: shadows.sm,
-  md: shadows.md,
-  lg: shadows.lg,
-  xl: shadows.xl,
+const shadowClasses = {
+  xs: 'shadow-xs',
+  sm: 'shadow-sm',
+  md: 'shadow-md',
+  lg: 'shadow-lg',
+  xl: 'shadow-xl',
 } as const;
 
 interface CardProps {
   children: ReactNode;
-  shadow?: keyof typeof shadowStyles;
+  shadow?: keyof typeof shadowClasses;
   onPress?: () => void;
-  style?: ViewStyle;
+  className?: string;
 }
 
-export const Card = ({ children, shadow = 'sm', onPress, style }: CardProps) => {
-  const combined = [styles.base, shadowStyles[shadow], style];
+export const Card = ({ children, shadow = 'sm', onPress, className = '' }: CardProps) => {
+  const base = `bg-white rounded-2xl border-continuous ${shadowClasses[shadow]} ${className}`;
 
   if (onPress) {
     return (
-      <Pressable onPress={onPress} style={combined}>
+      <Pressable onPress={onPress} className={base}>
         {children}
       </Pressable>
     );
   }
 
-  return <View style={combined}>{children}</View>;
+  return <View className={base}>{children}</View>;
 };
-
-const styles = StyleSheet.create({
-  base: {
-    backgroundColor: '#fff',
-    borderRadius: 16,
-    borderCurve: 'continuous',
-  },
-});

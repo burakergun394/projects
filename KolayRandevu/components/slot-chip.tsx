@@ -1,4 +1,4 @@
-import { View, Text, Pressable, StyleSheet } from 'react-native';
+import { View, Text, Pressable } from '@/src/tw';
 
 interface SlotChipProps {
   time: string;
@@ -8,41 +8,21 @@ interface SlotChipProps {
 
 export const SlotChip = ({ time, isOutsideRange, onRemove }: SlotChipProps) => {
   return (
-    <View style={[styles.container, isOutsideRange ? styles.bgOutside : styles.bgNormal]}>
-      <Text style={[styles.time, isOutsideRange ? styles.textOutside : styles.textNormal]}>
+    <View
+      className={`flex-row items-center rounded-xl px-3 py-2 gap-2 border-continuous ${
+        isOutsideRange ? 'bg-red-50' : 'bg-gray-50'
+      }`}>
+      <Text
+        className={`font-semibold text-sm tabular-nums ${
+          isOutsideRange ? 'text-red-500' : 'text-gray-900'
+        }`}>
         {time}
       </Text>
-      <Pressable onPress={onRemove} style={styles.removeBtn}>
-        <Text
-          style={[styles.removeText, isOutsideRange ? styles.removeOutside : styles.removeNormal]}>
+      <Pressable onPress={onRemove} className="ml-0.5">
+        <Text className={`font-bold text-xs ${isOutsideRange ? 'text-red-400' : 'text-gray-400'}`}>
           ✕
         </Text>
       </Pressable>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderRadius: 12,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    gap: 8,
-    borderCurve: 'continuous',
-  },
-  bgNormal: { backgroundColor: '#f9fafb' },
-  bgOutside: { backgroundColor: '#fef2f2' },
-  time: {
-    fontWeight: '600',
-    fontSize: 14,
-    fontVariant: ['tabular-nums'],
-  },
-  textNormal: { color: '#111827' },
-  textOutside: { color: '#ef4444' },
-  removeBtn: { marginLeft: 2 },
-  removeText: { fontWeight: '700', fontSize: 12 },
-  removeNormal: { color: '#9ca3af' },
-  removeOutside: { color: '#f87171' },
-});

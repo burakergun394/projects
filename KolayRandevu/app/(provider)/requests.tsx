@@ -1,12 +1,12 @@
 import { useState, useMemo } from 'react';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { View, Text, ScrollView, Pressable, StyleSheet } from 'react-native';
+import { ScrollView as RNScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { View, Text, ScrollView, Pressable } from '@/src/tw';
 import { AppointmentCard } from '@/components/appointment-card';
 import { EmptyState } from '@/components/empty-state';
 import { useStore } from '@/store/store';
-import { colors } from '@/src/theme';
 import type { AppointmentStatus } from '@/store/types';
 
 type Filter = 'all' | AppointmentStatus;
@@ -30,38 +30,32 @@ export default function Requests() {
   );
 
   return (
-    <View style={styles.screen}>
-      <View style={styles.header}>
+    <View className="flex-1 bg-gray-50">
+      <View className="bg-navy px-6 pb-6 pt-2">
         <SafeAreaView edges={['top']}>
-          <Text style={styles.headerTitle}>{t('requests.title')}</Text>
+          <Text className="text-white text-2xl font-bold mt-4">{t('requests.title')}</Text>
         </SafeAreaView>
       </View>
 
-      <View style={styles.filterContainer}>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          <View style={styles.filterRow}>
+      <View className="px-6 pt-4">
+        <RNScrollView horizontal showsHorizontalScrollIndicator={false}>
+          <View className="flex-row gap-2">
             {filters.map((f) => (
               <Pressable
                 key={f.key}
                 onPress={() => setFilter(f.key)}
-                style={[
-                  styles.filterChip,
-                  filter === f.key ? styles.filterActive : styles.filterInactive,
-                ]}>
+                className={`px-4 py-2 rounded-full ${filter === f.key ? 'bg-navy' : 'bg-white'}`}>
                 <Text
-                  style={[
-                    styles.filterText,
-                    filter === f.key ? styles.filterTextActive : styles.filterTextInactive,
-                  ]}>
+                  className={`text-sm font-semibold ${filter === f.key ? 'text-white' : 'text-gray-600'}`}>
                   {f.label}
                 </Text>
               </Pressable>
             ))}
           </View>
-        </ScrollView>
+        </RNScrollView>
       </View>
 
-      <ScrollView style={styles.flex1} contentContainerStyle={styles.scrollContent}>
+      <ScrollView className="flex-1" contentContainerClassName="px-6 py-4 gap-3 pb-8">
         {filtered.length > 0 ? (
           filtered.map((appointment) => (
             <AppointmentCard
@@ -77,24 +71,3 @@ export default function Requests() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: '#f9fafb' },
-  header: {
-    backgroundColor: colors.navy,
-    paddingHorizontal: 24,
-    paddingBottom: 24,
-    paddingTop: 8,
-  },
-  headerTitle: { color: '#fff', fontSize: 24, fontWeight: '700', marginTop: 16 },
-  filterContainer: { paddingHorizontal: 24, paddingTop: 16 },
-  filterRow: { flexDirection: 'row', gap: 8 },
-  filterChip: { paddingHorizontal: 16, paddingVertical: 8, borderRadius: 9999 },
-  filterActive: { backgroundColor: colors.navy },
-  filterInactive: { backgroundColor: '#fff' },
-  filterText: { fontSize: 14, fontWeight: '600' },
-  filterTextActive: { color: '#fff' },
-  filterTextInactive: { color: '#4b5563' },
-  flex1: { flex: 1 },
-  scrollContent: { paddingHorizontal: 24, paddingVertical: 16, gap: 12, paddingBottom: 32 },
-});

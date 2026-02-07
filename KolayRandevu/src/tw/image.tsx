@@ -1,13 +1,12 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
+import { cssInterop } from 'nativewind';
 import Animated from 'react-native-reanimated';
 import { Image as RNImage } from 'expo-image';
 
 const AnimatedExpoImage = Animated.createAnimatedComponent(RNImage);
 
-export type ImageProps = React.ComponentProps<typeof AnimatedExpoImage>;
-
-export const Image = (props: ImageProps) => {
+const BaseImage = (props: React.ComponentProps<typeof AnimatedExpoImage>) => {
   // @ts-expect-error: Remap objectFit style to contentFit property
   const { objectFit, objectPosition, ...style } = StyleSheet.flatten(props.style) || {};
 
@@ -22,3 +21,6 @@ export const Image = (props: ImageProps) => {
     />
   );
 };
+
+export const Image = cssInterop(BaseImage, { className: 'style' });
+export type ImageProps = React.ComponentProps<typeof Image>;

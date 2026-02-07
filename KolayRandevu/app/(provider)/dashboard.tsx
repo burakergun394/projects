@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
-import { View, Text, ScrollView, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { CalendarDays, Clock, Users, CheckCircle2 } from 'lucide-react-native';
+import { View, Text, ScrollView } from '@/src/tw';
 import { StatCard } from '@/components/stat-card';
 import { AppointmentCard } from '@/components/appointment-card';
 import { SectionHeader } from '@/components/section-header';
@@ -33,8 +33,8 @@ export default function Dashboard() {
   };
 
   return (
-    <View style={styles.screen}>
-      {/* Gradient header */}
+    <View className="flex-1 bg-gray-50">
+      {/* Gradient header — kept as inline style for experimental_backgroundImage */}
       <View
         style={{
           paddingHorizontal: 24,
@@ -46,10 +46,10 @@ export default function Dashboard() {
           borderBottomRightRadius: 24,
         }}>
         <SafeAreaView edges={['top']}>
-          <View style={styles.headerRow}>
-            <View style={styles.headerTextGroup}>
-              <Text style={styles.headerLabel}>{t('dashboard.title')}</Text>
-              <Text style={styles.headerGreeting}>
+          <View className="flex-row items-center justify-between mb-5">
+            <View className="gap-0.5">
+              <Text className="text-white/50 text-xs">{t('dashboard.title')}</Text>
+              <Text className="text-white text-2xl font-bold">
                 {t('dashboard.greeting', { name: provider.name.split(' ')[0] })}
               </Text>
             </View>
@@ -57,16 +57,16 @@ export default function Dashboard() {
           </View>
 
           {/* Business info pill */}
-          <View style={styles.pill}>
-            <View style={styles.pillDot} />
-            <Text style={styles.pillText}>{provider.businessName}</Text>
+          <View className="flex-row items-center gap-2 self-start rounded-full px-3.5 py-1.5 bg-white/10">
+            <View className="w-1.5 h-1.5 rounded-full bg-status-online" />
+            <Text className="text-white/70 text-xs">{provider.businessName}</Text>
           </View>
         </SafeAreaView>
       </View>
 
-      <ScrollView style={styles.flex1} contentContainerStyle={styles.scrollContent}>
+      <ScrollView className="flex-1" contentContainerClassName="px-6 py-5 gap-5 pb-8">
         {/* Stats grid */}
-        <View style={styles.statsRow}>
+        <View className="flex-row gap-3">
           <StatCard
             label={t('dashboard.todayAppointments')}
             value={todayAppointments.length}
@@ -79,7 +79,7 @@ export default function Dashboard() {
             accent
           />
         </View>
-        <View style={styles.statsRow}>
+        <View className="flex-row gap-3">
           <StatCard label={t('dashboard.totalCustomers')} value={customers.length} icon={Users} />
           <StatCard
             label={t('dashboard.weeklyCompleted')}
@@ -92,7 +92,7 @@ export default function Dashboard() {
         <SectionHeader title={t('dashboard.upcomingToday')} />
 
         {todayAppointments.length > 0 ? (
-          <View style={styles.appointmentList}>
+          <View className="gap-3">
             {todayAppointments.map((appointment) => (
               <AppointmentCard
                 key={appointment.id}
@@ -109,37 +109,3 @@ export default function Dashboard() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: '#f9fafb' },
-  flex1: { flex: 1 },
-  scrollContent: { paddingHorizontal: 24, paddingVertical: 20, gap: 20, paddingBottom: 32 },
-  headerRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: 20,
-  },
-  headerTextGroup: { gap: 2 },
-  headerLabel: { color: 'rgba(255,255,255,0.5)', fontSize: 12 },
-  headerGreeting: { color: '#fff', fontSize: 24, fontWeight: '700' },
-  pill: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    alignSelf: 'flex-start',
-    borderRadius: 9999,
-    paddingHorizontal: 14,
-    paddingVertical: 6,
-    backgroundColor: 'rgba(255,255,255,0.1)',
-  },
-  pillDot: {
-    width: 6,
-    height: 6,
-    borderRadius: 9999,
-    backgroundColor: colors.statusOnline,
-  },
-  pillText: { color: 'rgba(255,255,255,0.7)', fontSize: 12 },
-  statsRow: { flexDirection: 'row', gap: 12 },
-  appointmentList: { gap: 12 },
-});

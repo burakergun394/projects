@@ -1,18 +1,18 @@
 import type { ElementType } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View } from '@/src/tw';
 import { colors } from '@/src/theme';
 
 const sizeMap = {
-  sm: { container: { width: 40, height: 40 }, icon: 20 },
-  md: { container: { width: 48, height: 48 }, icon: 22 },
-  lg: { container: { width: 56, height: 56 }, icon: 26 },
-  xl: { container: { width: 64, height: 64 }, icon: 28 },
+  sm: { className: 'w-10 h-10', icon: 20 },
+  md: { className: 'w-12 h-12', icon: 22 },
+  lg: { className: 'w-14 h-14', icon: 26 },
+  xl: { className: 'w-16 h-16', icon: 28 },
 } as const;
 
 const variantMap = {
-  navy: { bg: 'rgba(26,35,126,0.08)', color: colors.navy },
-  orange: { bg: 'rgba(255,152,0,0.1)', color: colors.orange },
-  muted: { bg: 'rgba(26,35,126,0.06)', color: colors.muted },
+  navy: { className: 'bg-navy/[0.08]', color: colors.navy },
+  orange: { className: 'bg-orange/10', color: colors.orange },
+  muted: { className: 'bg-navy/[0.06]', color: colors.muted },
 } as const;
 
 interface IconCircleProps {
@@ -32,17 +32,9 @@ export const IconCircle = ({
   const v = variantMap[variant];
 
   return (
-    <View style={[styles.base, s.container, { backgroundColor: v.bg }]}>
+    <View
+      className={`rounded-xl items-center justify-center border-continuous ${s.className} ${v.className}`}>
       <Icon size={s.icon} color={v.color} strokeWidth={strokeWidth} />
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  base: {
-    borderRadius: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderCurve: 'continuous',
-  },
-});
