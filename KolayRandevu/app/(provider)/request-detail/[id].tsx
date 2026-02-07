@@ -5,6 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, Text, ScrollView, Pressable } from '@/src/tw';
 import { StatusBadge } from '@/components/status-badge';
 import { Button } from '@/components/Button';
+import { Card } from '@/components/ui/card';
 import { useStore } from '@/store/store';
 
 export default function RequestDetail() {
@@ -58,17 +59,12 @@ export default function RequestDetail() {
           <Pressable onPress={() => router.back()} className="py-2">
             <Text className="text-white/70 text-sm">{t('common.back')}</Text>
           </Pressable>
-          <Text className="text-white text-2xl font-bold mt-2">
-            {appointment.customerName}
-          </Text>
+          <Text className="text-white text-2xl font-bold mt-2">{appointment.customerName}</Text>
         </SafeAreaView>
       </View>
 
       <ScrollView className="flex-1" contentContainerClassName="px-6 py-6 gap-6">
-        <View
-          className="bg-white rounded-2xl p-5 gap-4"
-          style={{ borderCurve: 'continuous', boxShadow: '0 1px 3px rgba(0,0,0,0.08)' }}
-        >
+        <Card shadow="sm" className="p-5 gap-4">
           <View className="flex-row justify-between items-center">
             <Text className="text-gray-500 text-sm">{t('requests.status')}</Text>
             <StatusBadge status={appointment.status} />
@@ -78,10 +74,8 @@ export default function RequestDetail() {
           <DetailRow label={t('requests.service')} value={appointment.service} />
           <DetailRow label={t('requests.date')} value={appointment.date} />
           <DetailRow label={t('requests.time')} value={appointment.time} />
-          {appointment.note && (
-            <DetailRow label={t('requests.note')} value={appointment.note} />
-          )}
-        </View>
+          {appointment.note && <DetailRow label={t('requests.note')} value={appointment.note} />}
+        </Card>
 
         {appointment.status === 'pending' && (
           <View className="gap-3">

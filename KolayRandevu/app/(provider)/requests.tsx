@@ -24,10 +24,7 @@ export default function Requests() {
   ];
 
   const filtered = useMemo(
-    () =>
-      filter === 'all'
-        ? appointments
-        : appointments.filter((a) => a.status === filter),
+    () => (filter === 'all' ? appointments : appointments.filter((a) => a.status === filter)),
     [appointments, filter]
   );
 
@@ -46,15 +43,11 @@ export default function Requests() {
               <Pressable
                 key={f.key}
                 onPress={() => setFilter(f.key)}
-                className={`px-4 py-2 rounded-full ${
-                  filter === f.key ? 'bg-navy' : 'bg-white'
-                }`}
-              >
+                className={`px-4 py-2 rounded-full ${filter === f.key ? 'bg-navy' : 'bg-white'}`}>
                 <Text
                   className={`text-sm font-semibold ${
                     filter === f.key ? 'text-white' : 'text-gray-600'
-                  }`}
-                >
+                  }`}>
                   {f.label}
                 </Text>
               </Pressable>
@@ -69,9 +62,7 @@ export default function Requests() {
             <AppointmentCard
               key={appointment.id}
               appointment={appointment}
-              onPress={() =>
-                router.push(`/(provider)/request-detail/${appointment.id}`)
-              }
+              onPress={() => router.push(`/(provider)/request-detail/${appointment.id}`)}
             />
           ))
         ) : (

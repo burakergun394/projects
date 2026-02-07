@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, Text, ScrollView, Pressable } from '@/src/tw';
 import { AppointmentCard } from '@/components/appointment-card';
 import { EmptyState } from '@/components/empty-state';
+import { Card } from '@/components/ui/card';
 import { useStore } from '@/store/store';
 
 export default function CustomerDetail() {
@@ -35,9 +36,7 @@ export default function CustomerDetail() {
           </Pressable>
           <View className="flex-row items-center gap-4 mt-2">
             <View className="bg-white/20 rounded-full w-14 h-14 items-center justify-center">
-              <Text className="text-white font-bold text-xl">
-                {customer.name.charAt(0)}
-              </Text>
+              <Text className="text-white font-bold text-xl">{customer.name.charAt(0)}</Text>
             </View>
             <View className="gap-1">
               <Text className="text-white text-xl font-bold">{customer.name}</Text>
@@ -48,12 +47,9 @@ export default function CustomerDetail() {
       </View>
 
       <ScrollView className="flex-1" contentContainerClassName="px-6 py-4 gap-4 pb-8">
-        <View
-          className="bg-white rounded-2xl p-4 flex-row gap-6"
-          style={{ borderCurve: 'continuous', boxShadow: '0 1px 3px rgba(0,0,0,0.08)' }}
-        >
+        <Card shadow="sm" className="p-4 flex-row gap-6">
           <View className="items-center">
-            <Text className="text-navy text-2xl font-bold" style={{ fontVariant: ['tabular-nums'] }}>
+            <Text className="text-navy text-2xl font-bold tabular-nums">
               {customer.appointmentCount}
             </Text>
             <Text className="text-gray-500 text-xs">{t('customers.visits')}</Text>
@@ -62,11 +58,9 @@ export default function CustomerDetail() {
             <Text className="text-navy text-2xl font-bold">{customer.lastVisit}</Text>
             <Text className="text-gray-500 text-xs">{t('customers.lastVisit')}</Text>
           </View>
-        </View>
+        </Card>
 
-        <Text className="text-gray-900 font-bold text-lg">
-          {t('customers.appointmentHistory')}
-        </Text>
+        <Text className="text-gray-900 font-bold text-lg">{t('customers.appointmentHistory')}</Text>
 
         {customerAppointments.length > 0 ? (
           <View className="gap-3">

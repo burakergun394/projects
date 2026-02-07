@@ -1,7 +1,4 @@
-import {
-  useCssElement,
-  useNativeVariable as useFunctionalVariable,
-} from 'react-native-css';
+import { useCssElement, useNativeVariable as useFunctionalVariable } from 'react-native-css';
 
 import { Link as RouterLink } from 'expo-router';
 import Animated from 'react-native-reanimated';
@@ -28,9 +25,7 @@ Link.Preview = RouterLink.Preview;
 
 // CSS Variable hook
 export const useCSSVariable =
-  process.env.EXPO_OS !== 'web'
-    ? useFunctionalVariable
-    : (variable: string) => `var(${variable})`;
+  process.env.EXPO_OS !== 'web' ? useFunctionalVariable : (variable: string) => `var(${variable})`;
 
 // View
 export type ViewProps = React.ComponentProps<typeof RNView> & {
@@ -43,9 +38,7 @@ export const View = (props: ViewProps) => {
 View.displayName = 'CSS(View)';
 
 // Text
-export const Text = (
-  props: React.ComponentProps<typeof RNText> & { className?: string }
-) => {
+export const Text = (props: React.ComponentProps<typeof RNText> & { className?: string }) => {
   return useCssElement(RNText, props, { className: 'style' });
 };
 Text.displayName = 'CSS(Text)';
@@ -96,18 +89,12 @@ export const AnimatedScrollView = (
 };
 
 // TouchableHighlight with underlayColor extraction
-function XXTouchableHighlight(
-  props: React.ComponentProps<typeof RNTouchableHighlight>
-) {
+function XXTouchableHighlight(props: React.ComponentProps<typeof RNTouchableHighlight>) {
   const { underlayColor, ...style } = StyleSheet.flatten(props.style) || {};
-  return (
-    <RNTouchableHighlight underlayColor={underlayColor} {...props} style={style} />
-  );
+  return <RNTouchableHighlight underlayColor={underlayColor} {...props} style={style} />;
 }
 
-export const TouchableHighlight = (
-  props: React.ComponentProps<typeof RNTouchableHighlight>
-) => {
+export const TouchableHighlight = (props: React.ComponentProps<typeof RNTouchableHighlight>) => {
   return useCssElement(XXTouchableHighlight, props, { className: 'style' });
 };
 TouchableHighlight.displayName = 'CSS(TouchableHighlight)';

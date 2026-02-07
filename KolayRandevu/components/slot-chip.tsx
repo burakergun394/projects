@@ -9,15 +9,11 @@ interface SlotChipProps {
 export const SlotChip = ({ time, isOutsideRange, onRemove }: SlotChipProps) => {
   return (
     <View
-      className={`flex-row items-center rounded-xl px-3 py-2 gap-2 ${
+      className={`flex-row items-center rounded-xl px-3 py-2 gap-2 border-continuous ${
         isOutsideRange ? 'bg-red-50' : 'bg-gray-50'
-      }`}
-      style={{ borderCurve: 'continuous' }}
-    >
+      }`}>
       <Text
-        className={`font-semibold text-sm ${isOutsideRange ? 'text-red-500' : 'text-gray-900'}`}
-        style={{ fontVariant: ['tabular-nums'] }}
-      >
+        className={`font-semibold text-sm tabular-nums ${isOutsideRange ? 'text-red-500' : 'text-gray-900'}`}>
         {time}
       </Text>
       <Pressable onPress={onRemove} className="ml-0.5">

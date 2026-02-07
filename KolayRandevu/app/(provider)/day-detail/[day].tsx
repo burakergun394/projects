@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { Alert } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -8,7 +7,7 @@ import { TimeRangeRow } from '@/components/time-range-row';
 import { SlotChip } from '@/components/slot-chip';
 import { SectionHeader } from '@/components/section-header';
 import { EmptyState } from '@/components/empty-state';
-import { Button } from '@/components/Button';
+import { Card } from '@/components/ui/card';
 import { useStore } from '@/store/store';
 import type { DayOfWeek, TimeRange } from '@/store/types';
 
@@ -104,7 +103,9 @@ export default function DayDetail() {
                   key={range.id}
                   range={range}
                   onStartPress={() =>
-                    updateTimeRange(dayKey, range.id, { startTime: cycleTime(range.startTime, true) })
+                    updateTimeRange(dayKey, range.id, {
+                      startTime: cycleTime(range.startTime, true),
+                    })
                   }
                   onEndPress={() =>
                     updateTimeRange(dayKey, range.id, { endTime: cycleTime(range.endTime, true) })
@@ -125,10 +126,7 @@ export default function DayDetail() {
           />
 
           {showSlotPicker && (
-            <View
-              className="bg-white rounded-2xl p-4 gap-2"
-              style={{ borderCurve: 'continuous', boxShadow: '0 1px 3px rgba(0,0,0,0.08)' }}
-            >
+            <Card shadow="sm" className="p-4 gap-2">
               <ScrollView className="max-h-48" contentContainerClassName="flex-row flex-wrap gap-2">
                 {availableSlots.map((time) => {
                   const outside = !isTimeInRanges(time, daySchedule.ranges);
@@ -136,20 +134,16 @@ export default function DayDetail() {
                     <Pressable
                       key={time}
                       onPress={() => handleAddSlot(time)}
-                      className={`rounded-lg px-3 py-2 ${outside ? 'bg-red-50' : 'bg-navy/10'}`}
-                      style={{ borderCurve: 'continuous' }}
-                    >
+                      className={`rounded-lg px-3 py-2 border-continuous ${outside ? 'bg-red-50' : 'bg-navy/10'}`}>
                       <Text
-                        className={`text-sm font-medium ${outside ? 'text-red-400' : 'text-navy'}`}
-                        style={{ fontVariant: ['tabular-nums'] }}
-                      >
+                        className={`text-sm font-medium tabular-nums ${outside ? 'text-red-400' : 'text-navy'}`}>
                         {time}
                       </Text>
                     </Pressable>
                   );
                 })}
               </ScrollView>
-            </View>
+            </Card>
           )}
 
           {daySchedule.slots.length === 0 ? (

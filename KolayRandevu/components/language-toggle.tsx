@@ -13,7 +13,9 @@ export const LanguageToggle = () => {
   };
 
   return (
-    <Pressable onPress={toggle} className="flex-row items-center bg-white/20 rounded-full px-3 py-1.5">
+    <Pressable
+      onPress={toggle}
+      className="flex-row items-center bg-white/20 rounded-full px-3 py-1.5">
       <View className={`px-2 py-0.5 rounded-full ${locale === 'tr' ? 'bg-white' : ''}`}>
         <Text className={`text-xs font-bold ${locale === 'tr' ? 'text-navy' : 'text-white/70'}`}>
           TR

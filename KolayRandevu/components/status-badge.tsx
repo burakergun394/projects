@@ -14,9 +14,7 @@ export const StatusBadge = ({ status }: { status: AppointmentStatus }) => {
 
   return (
     <View className={`px-3 py-1 rounded-full ${style.bg}`}>
-      <Text className={`text-xs font-semibold ${style.text}`}>
-        {t(`common.${status}`)}
-      </Text>
+      <Text className={`text-xs font-semibold ${style.text}`}>{t(`common.${status}`)}</Text>
     </View>
   );
 };

@@ -6,6 +6,7 @@ import { View, Text, ScrollView, TextInput } from '@/src/tw';
 import { CustomerRow } from '@/components/customer-row';
 import { EmptyState } from '@/components/empty-state';
 import { useStore } from '@/store/store';
+import { colors } from '@/src/theme';
 
 export default function Customers() {
   const { t } = useTranslation();
@@ -16,9 +17,7 @@ export default function Customers() {
   const filtered = useMemo(
     () =>
       search.trim()
-        ? customers.filter((c) =>
-            c.name.toLowerCase().includes(search.toLowerCase())
-          )
+        ? customers.filter((c) => c.name.toLowerCase().includes(search.toLowerCase()))
         : customers,
     [customers, search]
   );
@@ -38,7 +37,7 @@ export default function Customers() {
         <TextInput
           className="bg-white rounded-xl px-4 py-3 text-gray-900"
           placeholder={t('customers.searchPlaceholder')}
-          placeholderTextColor="#9CA3AF"
+          placeholderTextColor={colors.muted}
           value={search}
           onChangeText={setSearch}
         />

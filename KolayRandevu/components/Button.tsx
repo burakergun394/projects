@@ -21,8 +21,7 @@ export const Button = forwardRef<View, ButtonProps>(
       <Pressable
         ref={ref}
         onPress={onPress}
-        className={`items-center rounded-3xl flex-row justify-center mx-4 p-4 ${variantClasses[variant]} ${className}`}
-      >
+        className={`items-center rounded-3xl flex-row justify-center mx-4 p-4 ${variantClasses[variant]} ${className}`}>
         <Text className="text-white text-base font-semibold text-center">{title}</Text>
       </Pressable>
     );

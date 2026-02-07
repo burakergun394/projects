@@ -8,6 +8,7 @@ import { SectionHeader } from '@/components/section-header';
 import { EmptyState } from '@/components/empty-state';
 import { LanguageToggle } from '@/components/language-toggle';
 import { useStore } from '@/store/store';
+import { colors, gradients } from '@/src/theme';
 
 export default function Dashboard() {
   const { t } = useTranslation();
@@ -37,18 +38,15 @@ export default function Dashboard() {
       <View
         className="px-6 pb-7 pt-2"
         style={{
-          backgroundColor: '#0f174a',
-          experimental_backgroundImage: 'linear-gradient(160deg, #263088 0%, #1A237E 50%, #0f174a 100%)',
+          backgroundColor: colors.navyDeep,
+          experimental_backgroundImage: gradients.dashboardHeader,
           borderBottomLeftRadius: 24,
           borderBottomRightRadius: 24,
-        }}
-      >
+        }}>
         <SafeAreaView edges={['top']}>
           <View className="flex-row items-center justify-between mb-5">
             <View className="gap-0.5">
-              <Text style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)' }}>
-                {t('dashboard.title')}
-              </Text>
+              <Text className="text-white/50 text-xs">{t('dashboard.title')}</Text>
               <Text className="text-white text-2xl font-bold">
                 {t('dashboard.greeting', { name: provider.name.split(' ')[0] })}
               </Text>
@@ -57,16 +55,9 @@ export default function Dashboard() {
           </View>
 
           {/* Business info pill */}
-          <View
-            className="flex-row items-center gap-2 self-start rounded-full px-3.5 py-1.5"
-            style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}
-          >
-            <View
-              style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: '#4ade80' }}
-            />
-            <Text style={{ fontSize: 12, color: 'rgba(255,255,255,0.7)' }}>
-              {provider.businessName}
-            </Text>
+          <View className="flex-row items-center gap-2 self-start rounded-full px-3.5 py-1.5 bg-white/10">
+            <View className="w-1.5 h-1.5 rounded-full bg-status-online" />
+            <Text className="text-white/70 text-xs">{provider.businessName}</Text>
           </View>
         </SafeAreaView>
       </View>
@@ -87,11 +78,7 @@ export default function Dashboard() {
           />
         </View>
         <View className="flex-row gap-3">
-          <StatCard
-            label={t('dashboard.totalCustomers')}
-            value={customers.length}
-            icon={Users}
-          />
+          <StatCard label={t('dashboard.totalCustomers')} value={customers.length} icon={Users} />
           <StatCard
             label={t('dashboard.weeklyCompleted')}
             value={weeklyCompleted}

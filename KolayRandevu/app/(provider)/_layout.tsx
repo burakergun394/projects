@@ -1,13 +1,14 @@
 import { Tabs } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { Image } from 'expo-image';
+import { colors } from '@/src/theme';
 
 function TabIcon({ name, focused }: { name: string; focused: boolean }) {
   return (
     <Image
       source={`sf:${name}`}
       style={{ width: 24, height: 24 }}
-      tintColor={focused ? '#1A237E' : '#9CA3AF'}
+      tintColor={focused ? colors.navy : colors.muted}
     />
   );
 }
@@ -19,13 +20,12 @@ export default function ProviderLayout() {
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: '#1A237E',
-        tabBarInactiveTintColor: '#9CA3AF',
+        tabBarActiveTintColor: colors.navy,
+        tabBarInactiveTintColor: colors.muted,
         tabBarStyle: {
-          borderTopColor: '#f3f4f6',
+          borderTopColor: colors.lightBorder,
         },
-      }}
-    >
+      }}>
       <Tabs.Screen
         name="dashboard"
         options={{
@@ -54,18 +54,9 @@ export default function ProviderLayout() {
           tabBarIcon: ({ focused }) => <TabIcon name="person.2.fill" focused={focused} />,
         }}
       />
-      <Tabs.Screen
-        name="request-detail/[id]"
-        options={{ href: null }}
-      />
-      <Tabs.Screen
-        name="customer-detail/[id]"
-        options={{ href: null }}
-      />
-      <Tabs.Screen
-        name="day-detail/[day]"
-        options={{ href: null }}
-      />
+      <Tabs.Screen name="request-detail/[id]" options={{ href: null }} />
+      <Tabs.Screen name="customer-detail/[id]" options={{ href: null }} />
+      <Tabs.Screen name="day-detail/[day]" options={{ href: null }} />
     </Tabs>
   );
 }

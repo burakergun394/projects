@@ -14,8 +14,20 @@ export const mockProvider: Provider = {
 };
 
 const weekdaySlots = [
-  '09:00', '09:30', '10:00', '10:30', '11:00', '11:30',
-  '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30',
+  '09:00',
+  '09:30',
+  '10:00',
+  '10:30',
+  '11:00',
+  '11:30',
+  '14:00',
+  '14:30',
+  '15:00',
+  '15:30',
+  '16:00',
+  '16:30',
+  '17:00',
+  '17:30',
 ];
 
 const saturdaySlots = ['10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30'];
@@ -81,12 +93,42 @@ export const mockSchedule: DaySchedule[] = [
 ];
 
 export const mockCustomers: Customer[] = [
-  { id: 'c1', name: 'Mehmet Demir', phone: '0532 111 2233', appointmentCount: 8, lastVisit: yesterday },
-  { id: 'c2', name: 'Ayşe Kaya', phone: '0533 222 3344', appointmentCount: 5, lastVisit: twoDaysAgo },
+  {
+    id: 'c1',
+    name: 'Mehmet Demir',
+    phone: '0532 111 2233',
+    appointmentCount: 8,
+    lastVisit: yesterday,
+  },
+  {
+    id: 'c2',
+    name: 'Ayşe Kaya',
+    phone: '0533 222 3344',
+    appointmentCount: 5,
+    lastVisit: twoDaysAgo,
+  },
   { id: 'c3', name: 'Fatma Çelik', phone: '0534 333 4455', appointmentCount: 12, lastVisit: today },
-  { id: 'c4', name: 'Ali Öztürk', phone: '0535 444 5566', appointmentCount: 3, lastVisit: threeDaysAgo },
-  { id: 'c5', name: 'Zeynep Arslan', phone: '0536 555 6677', appointmentCount: 7, lastVisit: yesterday },
-  { id: 'c6', name: 'Emre Şahin', phone: '0537 666 7788', appointmentCount: 2, lastVisit: twoDaysAgo },
+  {
+    id: 'c4',
+    name: 'Ali Öztürk',
+    phone: '0535 444 5566',
+    appointmentCount: 3,
+    lastVisit: threeDaysAgo,
+  },
+  {
+    id: 'c5',
+    name: 'Zeynep Arslan',
+    phone: '0536 555 6677',
+    appointmentCount: 7,
+    lastVisit: yesterday,
+  },
+  {
+    id: 'c6',
+    name: 'Emre Şahin',
+    phone: '0537 666 7788',
+    appointmentCount: 2,
+    lastVisit: twoDaysAgo,
+  },
 ];
 
 export const mockAppointments: Appointment[] = [
