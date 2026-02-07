@@ -2,22 +2,20 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 import { Colors } from '../../constants/colors';
 import Button from '../../components/common/Button';
+import type { StackScreenProps } from '@react-navigation/stack';
+import type { AuthStackParamList } from '../../navigation/types';
 
-const RegisterScreen = ({ navigation }) => {
-  const [name, setName] = useState('');
+type LoginScreenProps = StackScreenProps<AuthStackParamList, 'Login'>;
+
+const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Create Account</Text>
+      <Text style={styles.title}>KolayRandevu</Text>
+      <Text style={styles.subtitle}>Easy Appointment</Text>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Full Name"
-        value={name}
-        onChangeText={setName}
-      />
       <TextInput
         style={styles.input}
         placeholder="Email"
@@ -34,9 +32,15 @@ const RegisterScreen = ({ navigation }) => {
         secureTextEntry
       />
 
-      <Button title="Register" onPress={() => navigation.goBack()} />
-      <Text style={styles.link} onPress={() => navigation.goBack()}>
-        Already have an account? Login
+      <Button title="Login as Customer" onPress={() => (navigation as any).replace('CustomerTabs')} />
+      <View style={styles.spacer} />
+      <Button
+        title="Login as Provider"
+        onPress={() => (navigation as any).replace('ProviderTabs')}
+        style={styles.providerButton}
+      />
+      <Text style={styles.link} onPress={() => navigation.navigate('Register')}>
+        Don't have an account? Register
       </Text>
     </View>
   );
@@ -50,9 +54,14 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
   },
   title: {
-    fontSize: 28,
+    fontSize: 32,
     fontWeight: 'bold',
     color: Colors.primary,
+    textAlign: 'center',
+  },
+  subtitle: {
+    fontSize: 16,
+    color: Colors.gray,
     textAlign: 'center',
     marginBottom: 40,
   },
@@ -64,6 +73,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 16,
   },
+  spacer: {
+    height: 12,
+  },
+  providerButton: {
+    backgroundColor: Colors.primary,
+  },
   link: {
     color: Colors.primary,
     textAlign: 'center',
@@ -72,4 +87,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RegisterScreen;
+export default LoginScreen;

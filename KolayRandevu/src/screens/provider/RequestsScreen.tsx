@@ -2,11 +2,11 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Colors } from '../../constants/colors';
 
-const ScheduleScreen = () => {
+const RequestsScreen: React.FC = () => {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Schedule</Text>
-      <Text style={styles.placeholder}>Manage your working hours and availability.</Text>
+      <Text style={styles.title}>Requests</Text>
+      <Text style={styles.placeholder}>Approve or reject reservation requests.</Text>
     </View>
   );
 };
@@ -32,4 +32,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ScheduleScreen;
+export default RequestsScreen;

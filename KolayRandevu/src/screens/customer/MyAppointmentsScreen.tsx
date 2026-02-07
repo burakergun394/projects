@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Colors } from '../../constants/colors';
 
-const MyAppointmentsScreen = () => {
+const MyAppointmentsScreen: React.FC = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>My Appointments</Text>

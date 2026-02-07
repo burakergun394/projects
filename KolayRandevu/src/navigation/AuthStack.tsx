@@ -3,10 +3,11 @@ import { createStackNavigator } from '@react-navigation/stack';
 import LoginScreen from '../screens/auth/LoginScreen';
 import RegisterScreen from '../screens/auth/RegisterScreen';
 import { Colors } from '../constants/colors';
+import { AuthStackParamList } from './types';
 
-const Stack = createStackNavigator();
+const Stack = createStackNavigator<AuthStackParamList>();
 
-const AuthStack = () => {
+const AuthStack: React.FC = () => {
   return (
     <Stack.Navigator
       screenOptions={{

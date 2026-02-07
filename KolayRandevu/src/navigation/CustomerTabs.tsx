@@ -4,10 +4,11 @@ import HomeScreen from '../screens/customer/HomeScreen';
 import BookingScreen from '../screens/customer/BookingScreen';
 import MyAppointmentsScreen from '../screens/customer/MyAppointmentsScreen';
 import { Colors } from '../constants/colors';
+import { CustomerTabParamList } from './types';
 
-const Tab = createBottomTabNavigator();
+const Tab = createBottomTabNavigator<CustomerTabParamList>();
 
-const CustomerTabs = () => {
+const CustomerTabs: React.FC = () => {
   return (
     <Tab.Navigator
       screenOptions={{

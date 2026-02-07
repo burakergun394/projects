@@ -4,10 +4,11 @@ import DashboardScreen from '../screens/provider/DashboardScreen';
 import ScheduleScreen from '../screens/provider/ScheduleScreen';
 import RequestsScreen from '../screens/provider/RequestsScreen';
 import { Colors } from '../constants/colors';
+import { ProviderTabParamList } from './types';
 
-const Tab = createBottomTabNavigator();
+const Tab = createBottomTabNavigator<ProviderTabParamList>();
 
-const ProviderTabs = () => {
+const ProviderTabs: React.FC = () => {
   return (
     <Tab.Navigator
       screenOptions={{

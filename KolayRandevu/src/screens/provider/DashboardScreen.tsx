@@ -2,11 +2,11 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Colors } from '../../constants/colors';
 
-const HomeScreen = () => {
+const DashboardScreen: React.FC = () => {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Search Providers</Text>
-      <Text style={styles.placeholder}>Find and browse service providers near you.</Text>
+      <Text style={styles.title}>Dashboard</Text>
+      <Text style={styles.placeholder}>Overview of your appointments and analytics.</Text>
     </View>
   );
 };
@@ -32,4 +32,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomeScreen;
+export default DashboardScreen;

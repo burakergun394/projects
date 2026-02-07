@@ -13,6 +13,7 @@ Two user roles:
 ## Tech Stack
 
 - **Framework:** Expo (React Native)
+- **Language:** TypeScript (strict mode)
 - **Navigation:** React Navigation (Stack and Tab navigators)
 - **Component Style:** Functional components with Hooks, clean and modular
 
@@ -28,34 +29,37 @@ Two user roles:
 - `npx expo start --android` — Start for Android
 - `npx expo start --ios` — Start for iOS
 - `npm install` — Install dependencies
+- `npm run typecheck` — Run TypeScript type checker (no emit)
 
 ## Repository Structure
 
 ```
-├── App.js                          # Entry point
+├── App.tsx                         # Entry point
+├── tsconfig.json                   # TypeScript configuration
 ├── src/
 │   ├── navigation/
-│   │   ├── AppNavigator.js         # Root navigator (Auth vs Main)
-│   │   ├── AuthStack.js            # Login / Register stack
-│   │   ├── CustomerTabs.js         # Customer bottom tab navigator
-│   │   └── ProviderTabs.js         # Provider bottom tab navigator
+│   │   ├── types.ts                # Navigation param list type definitions
+│   │   ├── AppNavigator.tsx        # Root navigator (Auth vs Main)
+│   │   ├── AuthStack.tsx           # Login / Register stack
+│   │   ├── CustomerTabs.tsx        # Customer bottom tab navigator
+│   │   └── ProviderTabs.tsx        # Provider bottom tab navigator
 │   ├── screens/
 │   │   ├── auth/
-│   │   │   ├── LoginScreen.js
-│   │   │   └── RegisterScreen.js
+│   │   │   ├── LoginScreen.tsx
+│   │   │   └── RegisterScreen.tsx
 │   │   ├── customer/
-│   │   │   ├── HomeScreen.js
-│   │   │   ├── BookingScreen.js
-│   │   │   └── MyAppointmentsScreen.js
+│   │   │   ├── HomeScreen.tsx
+│   │   │   ├── BookingScreen.tsx
+│   │   │   └── MyAppointmentsScreen.tsx
 │   │   └── provider/
-│   │       ├── DashboardScreen.js
-│   │       ├── ScheduleScreen.js
-│   │       └── RequestsScreen.js
+│   │       ├── DashboardScreen.tsx
+│   │       ├── ScheduleScreen.tsx
+│   │       └── RequestsScreen.tsx
 │   ├── components/
 │   │   └── common/
-│   │       └── Button.js
+│   │       └── Button.tsx
 │   ├── constants/
-│   │   └── colors.js
+│   │   └── colors.ts
 │   ├── hooks/
 │   └── utils/
 └── prompts/                        # Architecture and setup prompts
