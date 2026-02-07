@@ -1,42 +1,32 @@
 import { forwardRef } from 'react';
-import { StyleSheet, Text, TouchableOpacity, TouchableOpacityProps, View } from 'react-native';
+import { View } from 'react-native';
+import { Pressable, Text } from '@/src/tw';
 
 type ButtonProps = {
   title?: string;
-} & TouchableOpacityProps;
+  variant?: 'primary' | 'secondary' | 'danger';
+  className?: string;
+  onPress?: () => void;
+};
 
-export const Button = forwardRef<View, ButtonProps>(({ title, ...touchableProps }, ref) => {
-  return (
-    <TouchableOpacity ref={ref} {...touchableProps} style={[styles.button, touchableProps.style]}>
-      <Text style={styles.buttonText}>{title}</Text>
-    </TouchableOpacity>
-  );
-});
+const variantClasses = {
+  primary: 'bg-navy',
+  secondary: 'bg-orange',
+  danger: 'bg-red-600',
+};
+
+export const Button = forwardRef<View, ButtonProps>(
+  ({ title, variant = 'primary', className = '', onPress }, ref) => {
+    return (
+      <Pressable
+        ref={ref}
+        onPress={onPress}
+        className={`items-center rounded-3xl flex-row justify-center mx-4 p-4 ${variantClasses[variant]} ${className}`}
+      >
+        <Text className="text-white text-base font-semibold text-center">{title}</Text>
+      </Pressable>
+    );
+  }
+);
 
 Button.displayName = 'Button';
-
-const styles = StyleSheet.create({
-  button: {
-    alignItems: 'center',
-    backgroundColor: '#6366F1',
-    borderRadius: 24,
-    elevation: 5,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginHorizontal: 16,
-    padding: 16,
-    shadowColor: '#000',
-    shadowOffset: {
-      height: 2,
-      width: 0,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-  },
-  buttonText: {
-    color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: '600',
-    textAlign: 'center',
-  },
-});

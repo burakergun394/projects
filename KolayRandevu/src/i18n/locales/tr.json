@@ -1,0 +1,72 @@
+{
+  "common": {
+    "approve": "Onayla",
+    "reject": "Reddet",
+    "cancel": "İptal",
+    "save": "Kaydet",
+    "back": "Geri",
+    "today": "Bugün",
+    "tomorrow": "Yarın",
+    "pending": "Bekleyen",
+    "approved": "Onaylanan",
+    "rejected": "Reddedilen",
+    "all": "Tümü",
+    "search": "Ara",
+    "noData": "Veri bulunamadı"
+  },
+  "role": {
+    "title": "KolayRandevu",
+    "subtitle": "Nasıl devam etmek istersiniz?",
+    "provider": "Hizmet Veren",
+    "providerDesc": "Randevularınızı yönetin, çalışma saatlerinizi belirleyin",
+    "customer": "Müşteri",
+    "customerDesc": "Randevu arayın ve rezervasyon yapın"
+  },
+  "dashboard": {
+    "title": "Anasayfa",
+    "greeting": "Merhaba, {{name}}",
+    "todayAppointments": "Bugünkü Randevular",
+    "pendingRequests": "Bekleyen Talepler",
+    "totalCustomers": "Toplam Müşteri",
+    "weeklyCompleted": "Haftalık Tamamlanan",
+    "noAppointments": "Bugün randevu yok",
+    "upcomingToday": "Bugünkü Randevular"
+  },
+  "schedule": {
+    "title": "Takvim",
+    "workingHours": "Çalışma Saatleri",
+    "dayOff": "Tatil",
+    "startTime": "Başlangıç",
+    "endTime": "Bitiş",
+    "saved": "Kaydedildi",
+    "monday": "Pazartesi",
+    "tuesday": "Salı",
+    "wednesday": "Çarşamba",
+    "thursday": "Perşembe",
+    "friday": "Cuma",
+    "saturday": "Cumartesi",
+    "sunday": "Pazar"
+  },
+  "requests": {
+    "title": "Talepler",
+    "noRequests": "Talep bulunamadı",
+    "approveConfirm": "Bu randevuyu onaylamak istiyor musunuz?",
+    "rejectConfirm": "Bu randevuyu reddetmek istiyor musunuz?",
+    "service": "Hizmet",
+    "date": "Tarih",
+    "time": "Saat",
+    "customer": "Müşteri",
+    "note": "Not",
+    "status": "Durum"
+  },
+  "customers": {
+    "title": "Müşteriler",
+    "totalCustomers": "Toplam Müşteri",
+    "searchPlaceholder": "Müşteri ara...",
+    "appointmentHistory": "Randevu Geçmişi",
+    "noCustomers": "Müşteri bulunamadı",
+    "visits": "ziyaret",
+    "lastVisit": "Son Ziyaret",
+    "phone": "Telefon"
+  }
+}

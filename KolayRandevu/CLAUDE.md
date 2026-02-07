@@ -54,3 +54,13 @@ Do not create inline `StyleSheet` definitions in every component.
 - **ESLint:** Flat config with `eslint-config-expo`, `react/display-name` disabled
 - **Tailwind CSS v4 + NativeWind v5:** Styling via `className` on CSS-wrapped components from `@/src/tw`. Metro config wrapped with `withNativewind`. PostCSS configured with `@tailwindcss/postcss`. Global CSS in `src/global.css`.
 - **Platforms:** iOS and Android (defined in app.json). Web supported via metro bundler with static output.
+
+## Skills
+
+Load these plugin skills at the start of relevant tasks:
+
+- **UI / Styling:** `expo-app-design:building-native-ui`, `expo-app-design:expo-tailwind-setup`, `frontend-design:frontend-design`
+- **Data / Networking:** `expo-app-design:native-data-fetching`, `expo-app-design:expo-api-routes`
+- **Native / Build:** `expo-app-design:expo-dev-client`, `expo-app-design:use-dom`
+- **Deployment / CI:** `expo-deployment:expo-deployment`, `expo-deployment:expo-cicd-workflows`
+- **Upgrading:** `upgrading-expo:upgrading-expo`

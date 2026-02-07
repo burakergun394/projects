@@ -1,15 +1,24 @@
 import { create } from 'zustand';
+import type { AppState, AppointmentStatus, DaySchedule } from './types';
+import { mockAppointments, mockCustomers, mockProvider, mockSchedule } from './mock-data';
 
-export interface BearState {
-  bears: number;
-  increasePopulation: () => void;
-  removeAllBears: () => void;
-  updateBears: (newBears: number) => void;
-}
+export const useStore = create<AppState>((set) => ({
+  locale: 'tr',
+  setLocale: (locale) => set({ locale }),
 
-export const useStore = create<BearState>((set) => ({
-  bears: 0,
-  increasePopulation: () => set((state) => ({ bears: state.bears + 1 })),
-  removeAllBears: () => set({ bears: 0 }),
-  updateBears: (newBears) => set({ bears: newBears }),
+  role: null,
+  setRole: (role) => set({ role }),
+
+  provider: mockProvider,
+
+  schedule: mockSchedule,
+  setSchedule: (schedule: DaySchedule[]) => set({ schedule }),
+
+  appointments: mockAppointments,
+  updateAppointmentStatus: (id: string, status: AppointmentStatus) =>
+    set((state) => ({
+      appointments: state.appointments.map((a) => (a.id === id ? { ...a, status } : a)),
+    })),
+
+  customers: mockCustomers,
 }));

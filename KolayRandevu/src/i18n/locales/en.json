@@ -1,0 +1,72 @@
+{
+  "common": {
+    "approve": "Approve",
+    "reject": "Reject",
+    "cancel": "Cancel",
+    "save": "Save",
+    "back": "Back",
+    "today": "Today",
+    "tomorrow": "Tomorrow",
+    "pending": "Pending",
+    "approved": "Approved",
+    "rejected": "Rejected",
+    "all": "All",
+    "search": "Search",
+    "noData": "No data found"
+  },
+  "role": {
+    "title": "KolayRandevu",
+    "subtitle": "How would you like to continue?",
+    "provider": "Service Provider",
+    "providerDesc": "Manage your appointments, set your working hours",
+    "customer": "Customer",
+    "customerDesc": "Search for appointments and make reservations"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "greeting": "Hello, {{name}}",
+    "todayAppointments": "Today's Appointments",
+    "pendingRequests": "Pending Requests",
+    "totalCustomers": "Total Customers",
+    "weeklyCompleted": "Weekly Completed",
+    "noAppointments": "No appointments today",
+    "upcomingToday": "Today's Appointments"
+  },
+  "schedule": {
+    "title": "Schedule",
+    "workingHours": "Working Hours",
+    "dayOff": "Day Off",
+    "startTime": "Start",
+    "endTime": "End",
+    "saved": "Saved",
+    "monday": "Monday",
+    "tuesday": "Tuesday",
+    "wednesday": "Wednesday",
+    "thursday": "Thursday",
+    "friday": "Friday",
+    "saturday": "Saturday",
+    "sunday": "Sunday"
+  },
+  "requests": {
+    "title": "Requests",
+    "noRequests": "No requests found",
+    "approveConfirm": "Do you want to approve this appointment?",
+    "rejectConfirm": "Do you want to reject this appointment?",
+    "service": "Service",
+    "date": "Date",
+    "time": "Time",
+    "customer": "Customer",
+    "note": "Note",
+    "status": "Status"
+  },
+  "customers": {
+    "title": "Customers",
+    "totalCustomers": "Total Customers",
+    "searchPlaceholder": "Search customers...",
+    "appointmentHistory": "Appointment History",
+    "noCustomers": "No customers found",
+    "visits": "visits",
+    "lastVisit": "Last Visit",
+    "phone": "Phone"
+  }
+}
