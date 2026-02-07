@@ -1,5 +1,8 @@
 # CLAUDE.md
 
+You are acting as a senior Expo, React Native, and mobile developer.
+Follow best practices, avoid duplication, and prefer clean, maintainable architecture.
+
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Project Overview
@@ -45,6 +48,8 @@ npm run format       # Auto-fix ESLint + Prettier
 Use **Tailwind CSS v4 + NativeWind v5** via `className` for styling. Import components from `@/src/tw` (not from `react-native` directly) to get `className` support. Use Tailwind utility classes like `className="flex-1 bg-navy text-white p-4"`. Custom theme colors `navy` and `orange` are available (e.g., `bg-navy`, `text-orange`).
 
 Do not create inline `StyleSheet` definitions in every component.
+
+**Icons:** Use `lucide-react-native` for all icons. Do not use `@expo/vector-icons`, SF Symbols, or other icon libraries.
 
 ## Key Config
 

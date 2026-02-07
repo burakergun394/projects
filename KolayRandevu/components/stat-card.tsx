@@ -1,26 +1,44 @@
+import type { ElementType } from 'react';
 import { View, Text } from '@/src/tw';
 
 interface StatCardProps {
   label: string;
   value: number | string;
   accent?: boolean;
+  icon?: ElementType;
 }
 
-export const StatCard = ({ label, value, accent = false }: StatCardProps) => {
+export const StatCard = ({ label, value, accent = false, icon: Icon }: StatCardProps) => {
   return (
     <View
-      className={`flex-1 rounded-2xl p-4 ${accent ? 'bg-orange' : 'bg-white'}`}
-      style={{ borderCurve: 'continuous' }}
+      className="flex-1 bg-white rounded-2xl p-4 gap-3"
+      style={{
+        borderCurve: 'continuous',
+        boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+      }}
     >
-      <Text
-        className={`text-2xl font-bold ${accent ? 'text-white' : 'text-navy'}`}
-        style={{ fontVariant: ['tabular-nums'] }}
-      >
-        {value}
-      </Text>
-      <Text className={`text-xs mt-1 ${accent ? 'text-white/80' : 'text-gray-500'}`}>
-        {label}
-      </Text>
+      <View className="flex-row items-center justify-between">
+        {Icon && (
+          <View
+            className="rounded-xl items-center justify-center"
+            style={{
+              width: 40,
+              height: 40,
+              borderCurve: 'continuous',
+              backgroundColor: accent ? 'rgba(255,152,0,0.1)' : 'rgba(26,35,126,0.08)',
+            }}
+          >
+            <Icon size={20} color={accent ? '#FF9800' : '#1A237E'} strokeWidth={2} />
+          </View>
+        )}
+        <Text
+          className="text-navy font-bold"
+          style={{ fontSize: 28, fontVariant: ['tabular-nums'] }}
+        >
+          {value}
+        </Text>
+      </View>
+      <Text className="text-gray-500 text-xs">{label}</Text>
     </View>
   );
 };
