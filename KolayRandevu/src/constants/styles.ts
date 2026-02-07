@@ -41,6 +41,13 @@ export const Styles = StyleSheet.create({
     marginTop: 24,
     fontSize: 14,
   },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: Colors.primary,
+    marginBottom: 12,
+    marginTop: 20,
+  },
 
   // Form
   input: {
@@ -50,6 +57,23 @@ export const Styles = StyleSheet.create({
     padding: 14,
     fontSize: 16,
     marginBottom: 16,
+  },
+
+  // Cards & Layout
+  card: {
+    backgroundColor: Colors.white,
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 12,
+    shadowColor: Colors.black,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 });
 
