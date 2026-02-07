@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 import { Colors } from '../../constants/colors';
+import { Styles } from '../../constants/styles';
 import Button from '../../components/common/Button';
 import type { StackScreenProps } from '@react-navigation/stack';
 import type { AuthStackParamList } from '../../navigation/types';
@@ -13,17 +14,17 @@ const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation }) => {
   const [password, setPassword] = useState('');
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Create Account</Text>
+    <View style={Styles.authContainer}>
+      <Text style={localStyles.title}>Create Account</Text>
 
       <TextInput
-        style={styles.input}
+        style={Styles.input}
         placeholder="Full Name"
         value={name}
         onChangeText={setName}
       />
       <TextInput
-        style={styles.input}
+        style={Styles.input}
         placeholder="Email"
         value={email}
         onChangeText={setEmail}
@@ -31,7 +32,7 @@ const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation }) => {
         autoCapitalize="none"
       />
       <TextInput
-        style={styles.input}
+        style={Styles.input}
         placeholder="Password"
         value={password}
         onChangeText={setPassword}
@@ -39,40 +40,20 @@ const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation }) => {
       />
 
       <Button title="Register" onPress={() => navigation.goBack()} />
-      <Text style={styles.link} onPress={() => navigation.goBack()}>
+      <Text style={Styles.link} onPress={() => navigation.goBack()}>
         Already have an account? Login
       </Text>
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    padding: 24,
-    backgroundColor: Colors.white,
-  },
+const localStyles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: 'bold',
     color: Colors.primary,
     textAlign: 'center',
     marginBottom: 40,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: Colors.gray,
-    borderRadius: 8,
-    padding: 14,
-    fontSize: 16,
-    marginBottom: 16,
-  },
-  link: {
-    color: Colors.primary,
-    textAlign: 'center',
-    marginTop: 24,
-    fontSize: 14,
   },
 });
 

@@ -59,7 +59,8 @@ Two user roles:
 │   │   └── common/
 │   │       └── Button.tsx
 │   ├── constants/
-│   │   └── colors.ts
+│   │   ├── colors.ts              # Color design tokens
+│   │   └── styles.ts              # Centralized shared styles
 │   ├── hooks/
 │   └── utils/
 └── prompts/                        # Architecture and setup prompts

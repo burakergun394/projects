@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 import { Colors } from '../../constants/colors';
+import { Styles } from '../../constants/styles';
 import Button from '../../components/common/Button';
 import type { StackScreenProps } from '@react-navigation/stack';
 import type { AuthStackParamList } from '../../navigation/types';
@@ -12,12 +13,12 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
   const [password, setPassword] = useState('');
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>KolayRandevu</Text>
-      <Text style={styles.subtitle}>Easy Appointment</Text>
+    <View style={Styles.authContainer}>
+      <Text style={Styles.authTitle}>KolayRandevu</Text>
+      <Text style={[Styles.subtitle, localStyles.subtitleSpacing]}>Easy Appointment</Text>
 
       <TextInput
-        style={styles.input}
+        style={Styles.input}
         placeholder="Email"
         value={email}
         onChangeText={setEmail}
@@ -25,7 +26,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
         autoCapitalize="none"
       />
       <TextInput
-        style={styles.input}
+        style={Styles.input}
         placeholder="Password"
         value={password}
         onChangeText={setPassword}
@@ -33,57 +34,28 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
       />
 
       <Button title="Login as Customer" onPress={() => (navigation as any).replace('CustomerTabs')} />
-      <View style={styles.spacer} />
+      <View style={localStyles.spacer} />
       <Button
         title="Login as Provider"
         onPress={() => (navigation as any).replace('ProviderTabs')}
-        style={styles.providerButton}
+        style={localStyles.providerButton}
       />
-      <Text style={styles.link} onPress={() => navigation.navigate('Register')}>
+      <Text style={Styles.link} onPress={() => navigation.navigate('Register')}>
         Don't have an account? Register
       </Text>
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    padding: 24,
-    backgroundColor: Colors.white,
-  },
-  title: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: Colors.primary,
-    textAlign: 'center',
-  },
-  subtitle: {
-    fontSize: 16,
-    color: Colors.gray,
-    textAlign: 'center',
+const localStyles = StyleSheet.create({
+  subtitleSpacing: {
     marginBottom: 40,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: Colors.gray,
-    borderRadius: 8,
-    padding: 14,
-    fontSize: 16,
-    marginBottom: 16,
   },
   spacer: {
     height: 12,
   },
   providerButton: {
     backgroundColor: Colors.primary,
-  },
-  link: {
-    color: Colors.primary,
-    textAlign: 'center',
-    marginTop: 24,
-    fontSize: 14,
   },
 });
 

@@ -4,6 +4,7 @@ import HomeScreen from '../screens/customer/HomeScreen';
 import BookingScreen from '../screens/customer/BookingScreen';
 import MyAppointmentsScreen from '../screens/customer/MyAppointmentsScreen';
 import { Colors } from '../constants/colors';
+import { headerScreenOptions } from '../constants/styles';
 import { CustomerTabParamList } from './types';
 
 const Tab = createBottomTabNavigator<CustomerTabParamList>();
@@ -12,9 +13,7 @@ const CustomerTabs: React.FC = () => {
   return (
     <Tab.Navigator
       screenOptions={{
-        headerStyle: { backgroundColor: Colors.primary },
-        headerTintColor: Colors.white,
-        headerTitleStyle: { fontWeight: 'bold' },
+        ...headerScreenOptions,
         tabBarActiveTintColor: Colors.cta,
         tabBarInactiveTintColor: Colors.gray,
       }}

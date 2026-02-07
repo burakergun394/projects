@@ -2,20 +2,14 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import LoginScreen from '../screens/auth/LoginScreen';
 import RegisterScreen from '../screens/auth/RegisterScreen';
-import { Colors } from '../constants/colors';
+import { headerScreenOptions } from '../constants/styles';
 import { AuthStackParamList } from './types';
 
 const Stack = createStackNavigator<AuthStackParamList>();
 
 const AuthStack: React.FC = () => {
   return (
-    <Stack.Navigator
-      screenOptions={{
-        headerStyle: { backgroundColor: Colors.primary },
-        headerTintColor: Colors.white,
-        headerTitleStyle: { fontWeight: 'bold' },
-      }}
-    >
+    <Stack.Navigator screenOptions={headerScreenOptions}>
       <Stack.Screen
         name="Login"
         component={LoginScreen}
