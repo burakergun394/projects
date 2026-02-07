@@ -62,6 +62,10 @@ export default function ProviderLayout() {
         name="customer-detail/[id]"
         options={{ href: null }}
       />
+      <Tabs.Screen
+        name="day-detail/[day]"
+        options={{ href: null }}
+      />
     </Tabs>
   );
 }

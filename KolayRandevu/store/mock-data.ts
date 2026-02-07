@@ -13,14 +13,71 @@ export const mockProvider: Provider = {
   category: 'Kuaför',
 };
 
+const weekdaySlots = [
+  '09:00', '09:30', '10:00', '10:30', '11:00', '11:30',
+  '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30',
+];
+
+const saturdaySlots = ['10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30'];
+
 export const mockSchedule: DaySchedule[] = [
-  { day: 'monday', isActive: true, startTime: '09:00', endTime: '18:00' },
-  { day: 'tuesday', isActive: true, startTime: '09:00', endTime: '18:00' },
-  { day: 'wednesday', isActive: true, startTime: '09:00', endTime: '18:00' },
-  { day: 'thursday', isActive: true, startTime: '09:00', endTime: '18:00' },
-  { day: 'friday', isActive: true, startTime: '09:00', endTime: '18:00' },
-  { day: 'saturday', isActive: true, startTime: '10:00', endTime: '14:00' },
-  { day: 'sunday', isActive: false, startTime: '09:00', endTime: '18:00' },
+  {
+    day: 'monday',
+    isActive: true,
+    ranges: [
+      { id: 'r1', startTime: '09:00', endTime: '12:00' },
+      { id: 'r2', startTime: '14:00', endTime: '18:00' },
+    ],
+    slots: weekdaySlots,
+  },
+  {
+    day: 'tuesday',
+    isActive: true,
+    ranges: [
+      { id: 'r3', startTime: '09:00', endTime: '12:00' },
+      { id: 'r4', startTime: '14:00', endTime: '18:00' },
+    ],
+    slots: weekdaySlots,
+  },
+  {
+    day: 'wednesday',
+    isActive: true,
+    ranges: [
+      { id: 'r5', startTime: '09:00', endTime: '12:00' },
+      { id: 'r6', startTime: '14:00', endTime: '18:00' },
+    ],
+    slots: weekdaySlots,
+  },
+  {
+    day: 'thursday',
+    isActive: true,
+    ranges: [
+      { id: 'r7', startTime: '09:00', endTime: '12:00' },
+      { id: 'r8', startTime: '14:00', endTime: '18:00' },
+    ],
+    slots: weekdaySlots,
+  },
+  {
+    day: 'friday',
+    isActive: true,
+    ranges: [
+      { id: 'r9', startTime: '09:00', endTime: '12:00' },
+      { id: 'r10', startTime: '14:00', endTime: '18:00' },
+    ],
+    slots: weekdaySlots,
+  },
+  {
+    day: 'saturday',
+    isActive: true,
+    ranges: [{ id: 'r11', startTime: '10:00', endTime: '14:00' }],
+    slots: saturdaySlots,
+  },
+  {
+    day: 'sunday',
+    isActive: false,
+    ranges: [],
+    slots: [],
+  },
 ];
 
 export const mockCustomers: Customer[] = [

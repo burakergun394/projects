@@ -16,11 +16,17 @@ export interface Provider {
   category: string;
 }
 
+export interface TimeRange {
+  id: string;
+  startTime: string;
+  endTime: string;
+}
+
 export interface DaySchedule {
   day: DayOfWeek;
   isActive: boolean;
-  startTime: string;
-  endTime: string;
+  ranges: TimeRange[];
+  slots: string[];
 }
 
 export interface Customer {
@@ -52,6 +58,12 @@ export interface AppState {
   provider: Provider;
   schedule: DaySchedule[];
   setSchedule: (schedule: DaySchedule[]) => void;
+  toggleDay: (day: DayOfWeek, isActive: boolean) => void;
+  addTimeRange: (day: DayOfWeek, range: TimeRange) => void;
+  removeTimeRange: (day: DayOfWeek, rangeId: string) => void;
+  updateTimeRange: (day: DayOfWeek, rangeId: string, updates: Partial<TimeRange>) => void;
+  addSlot: (day: DayOfWeek, time: string) => void;
+  removeSlot: (day: DayOfWeek, time: string) => void;
 
   appointments: Appointment[];
   updateAppointmentStatus: (id: string, status: AppointmentStatus) => void;
