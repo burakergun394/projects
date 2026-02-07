@@ -13,38 +13,14 @@ export const LanguageToggle = () => {
   };
 
   return (
-    <Pressable
-      onPress={toggle}
-      className="flex-row items-center rounded-full px-1 py-1"
-      style={{ backgroundColor: 'rgba(255,255,255,0.08)' }}
-    >
-      <View
-        className="px-2.5 py-1 rounded-full"
-        style={locale === 'tr' ? { backgroundColor: 'rgba(255,255,255,0.18)' } : undefined}
-      >
-        <Text
-          className="font-semibold"
-          style={{
-            fontSize: 10,
-            color: locale === 'tr' ? '#F8F9FA' : 'rgba(255,255,255,0.4)',
-            letterSpacing: 0.5,
-          }}
-        >
+    <Pressable onPress={toggle} className="flex-row items-center bg-white/20 rounded-full px-3 py-1.5">
+      <View className={`px-2 py-0.5 rounded-full ${locale === 'tr' ? 'bg-white' : ''}`}>
+        <Text className={`text-xs font-bold ${locale === 'tr' ? 'text-navy' : 'text-white/70'}`}>
           TR
         </Text>
       </View>
-      <View
-        className="px-2.5 py-1 rounded-full"
-        style={locale === 'en' ? { backgroundColor: 'rgba(255,255,255,0.18)' } : undefined}
-      >
-        <Text
-          className="font-semibold"
-          style={{
-            fontSize: 10,
-            color: locale === 'en' ? '#F8F9FA' : 'rgba(255,255,255,0.4)',
-            letterSpacing: 0.5,
-          }}
-        >
+      <View className={`px-2 py-0.5 rounded-full ${locale === 'en' ? 'bg-white' : ''}`}>
+        <Text className={`text-xs font-bold ${locale === 'en' ? 'text-navy' : 'text-white/70'}`}>
           EN
         </Text>
       </View>

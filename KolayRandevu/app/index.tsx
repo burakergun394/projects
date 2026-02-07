@@ -24,14 +24,8 @@ export default function RoleSelection() {
   const ringSize = width * 0.85;
 
   return (
-    <View
-      className="flex-1"
-      style={{
-        backgroundColor: '#0f174a',
-        experimental_backgroundImage: 'linear-gradient(180deg, #263088 0%, #0f174a 100%)',
-      }}
-    >
-      {/* ── Decorative background rings ── */}
+    <View className="flex-1 bg-navy">
+      {/* ── Decorative background rings (clock/time motif) ── */}
       <Animated.View
         entering={FadeIn.duration(1000).delay(100)}
         style={{
@@ -103,15 +97,12 @@ export default function RoleSelection() {
                 ))}
               </View>
 
-              {/* Split brand: "Kolay" light + "Randevu" bold orange */}
-              <View className="flex-row items-baseline">
-                <Text style={{ fontSize: 36, fontWeight: '300', color: '#F8F9FA', letterSpacing: 2 }}>
-                  Kolay
-                </Text>
-                <Text style={{ fontSize: 36, fontWeight: '800', color: '#FF9800', letterSpacing: 2 }}>
-                  Randevu
-                </Text>
-              </View>
+              <Text
+                className="text-white font-bold"
+                style={{ fontSize: 36, letterSpacing: 4 }}
+              >
+                {t('role.title')}
+              </Text>
 
               {/* Diamond separator */}
               <View className="flex-row items-center gap-3">
@@ -128,100 +119,89 @@ export default function RoleSelection() {
                 <View style={{ width: 36, height: 1, backgroundColor: 'rgba(255,152,0,0.35)' }} />
               </View>
 
-              <Text
-                className="text-base text-center"
-                style={{ color: 'rgba(248,249,250,0.55)', letterSpacing: 0.3 }}
-              >
+              <Text className="text-white/55 text-base text-center" style={{ letterSpacing: 0.3 }}>
                 {t('role.subtitle')}
               </Text>
             </Animated.View>
 
-            {/* ── Role cards (solid navy with orange border) ── */}
+            {/* ── Role cards ── */}
             <View className="gap-4">
-              {/* Provider card */}
+              {/* Provider — solid white, primary action */}
               <Animated.View entering={FadeInUp.duration(550).delay(450)}>
                 <Pressable
                   onPress={() => selectRole('provider')}
-                  className="rounded-3xl p-5 flex-row items-center gap-4"
+                  className="bg-white rounded-3xl p-5 flex-row items-center gap-4"
                   style={{
                     borderCurve: 'continuous',
-                    backgroundColor: '#1c2670',
-                    borderWidth: 1,
-                    borderColor: 'rgba(255,152,0,0.3)',
-                    boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
+                    boxShadow: '0 10px 40px rgba(0,0,0,0.35)',
                   }}
                 >
                   <View
                     className="rounded-2xl items-center justify-center"
                     style={{
-                      width: 64,
-                      height: 64,
+                      width: 52,
+                      height: 52,
                       borderCurve: 'continuous',
-                      backgroundColor: 'rgba(255,152,0,0.12)',
+                      backgroundColor: 'rgba(255,152,0,0.1)',
                     }}
                   >
                     <Image
-                      source="sf:storefront.fill"
-                      style={{ width: 30, height: 30 }}
+                      source="sf:calendar.badge.clock"
+                      style={{ width: 24, height: 24 }}
                       tintColor="#FF9800"
                     />
                   </View>
                   <View className="flex-1 gap-1">
-                    <Text style={{ fontSize: 18, fontWeight: '700', color: '#F8F9FA' }}>
-                      {t('role.provider')}
-                    </Text>
-                    <Text style={{ fontSize: 13, color: 'rgba(248,249,250,0.5)', lineHeight: 18 }}>
+                    <Text className="text-navy text-lg font-bold">{t('role.provider')}</Text>
+                    <Text className="text-gray-400 text-sm" style={{ lineHeight: 18 }}>
                       {t('role.providerDesc')}
                     </Text>
                   </View>
                   <Image
                     source="sf:chevron.right"
-                    style={{ width: 14, height: 14 }}
-                    tintColor="rgba(255,152,0,0.5)"
+                    style={{ width: 13, height: 13 }}
+                    tintColor="#c4c8d0"
                   />
                 </Pressable>
               </Animated.View>
 
-              {/* Customer card */}
+              {/* Customer — glass-like, secondary */}
               <Animated.View entering={FadeInUp.duration(550).delay(600)}>
                 <Pressable
                   onPress={() => selectRole('customer')}
                   className="rounded-3xl p-5 flex-row items-center gap-4"
                   style={{
                     borderCurve: 'continuous',
-                    backgroundColor: '#1c2670',
+                    backgroundColor: 'rgba(255,255,255,0.06)',
                     borderWidth: 1,
-                    borderColor: 'rgba(255,152,0,0.3)',
-                    boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
+                    borderColor: 'rgba(255,255,255,0.1)',
                   }}
                 >
                   <View
                     className="rounded-2xl items-center justify-center"
                     style={{
-                      width: 64,
-                      height: 64,
+                      width: 52,
+                      height: 52,
                       borderCurve: 'continuous',
-                      backgroundColor: 'rgba(255,152,0,0.12)',
+                      backgroundColor: 'rgba(255,255,255,0.07)',
                     }}
                   >
                     <Image
-                      source="sf:person.fill"
-                      style={{ width: 28, height: 28 }}
-                      tintColor="#FF9800"
+                      source="sf:magnifyingglass"
+                      style={{ width: 22, height: 22 }}
+                      tintColor="rgba(255,255,255,0.75)"
                     />
                   </View>
                   <View className="flex-1 gap-1">
-                    <Text style={{ fontSize: 18, fontWeight: '700', color: '#F8F9FA' }}>
-                      {t('role.customer')}
-                    </Text>
-                    <Text style={{ fontSize: 13, color: 'rgba(248,249,250,0.5)', lineHeight: 18 }}>
+                    <Text className="text-white text-lg font-bold">{t('role.customer')}</Text>
+                    <Text className="text-white/45 text-sm" style={{ lineHeight: 18 }}>
                       {t('role.customerDesc')}
                     </Text>
                   </View>
                   <Image
                     source="sf:chevron.right"
-                    style={{ width: 14, height: 14 }}
-                    tintColor="rgba(255,152,0,0.5)"
+                    style={{ width: 13, height: 13 }}
+                    tintColor="rgba(255,255,255,0.25)"
                   />
                 </Pressable>
               </Animated.View>
