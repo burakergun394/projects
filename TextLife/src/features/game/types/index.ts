@@ -2,6 +2,27 @@ export type Gender = 'M' | 'F';
 export type Screen = 'menu' | 'create' | 'game' | 'dead';
 export type TabId = 'life' | 'job' | 'edu' | 'actions' | 'relations';
 export type LogType = 'birth' | 'good' | 'bad' | 'milestone' | 'death' | 'event';
+export type EducationLevel = 'none' | 'ilkokul' | 'ortaokul' | 'lise' | 'universite' | 'yuksek_lisans' | 'doktora';
+
+export type Faculty =
+  | 'Tıp' | 'Hukuk' | 'Mühendislik' | 'İşletme'
+  | 'Fen-Edebiyat' | 'Eğitim' | 'İletişim'
+  | 'Mimarlık' | 'Eczacılık' | 'Güzel Sanatlar'
+  | 'Sağlık Bilimleri' | 'Havacılık';
+
+export interface Department {
+  id: string;
+  name: string;
+  faculty: Faculty;
+  minScore: number;
+  type: 'devlet' | 'ozel';
+  annualCost: number;
+  totalYears: number;
+  smartsGain: number;
+  prestige: number;
+  unlockedCareers: string[];
+  description: string;
+}
 
 export interface ZodiacSign {
   name: string;
@@ -20,6 +41,42 @@ export interface Relationship {
   isAlive: boolean;
 }
 
+export interface Job {
+  id: string;
+  title: string;
+  sector: 'entry' | 'trade' | 'public' | 'private' | 'professional' | 'executive';
+  baseSalary: number;
+  minSmarts: number;
+  minEducation: EducationLevel;
+  minAge: number;
+  maxAge: number;
+  promotionChain: string[];
+  experienceYearsForPromo: number;
+  fireChance: number;
+  respectGain: number;
+}
+
+export interface JobHistoryEntry {
+  jobTitle: string;
+  sector: string;
+  startAge: number;
+  endAge: number;
+  endReason: 'quit' | 'fired' | 'promoted' | 'retired';
+  finalSalary: number;
+}
+
+export interface CareerState {
+  currentJob: Job | null;
+  currentSalary: number;
+  yearsInCurrentJob: number;
+  totalWorkYears: number;
+  performanceScore: number;
+  jobHistory: JobHistoryEntry[];
+  isRetired: boolean;
+  pension: number;
+  lifetimeEarnings: number;
+}
+
 export interface Character {
   name: string;
   surname: string;
@@ -33,7 +90,7 @@ export interface Character {
   smarts: number;
   looks: number;
   money: number;
-  job: Job | null;
+  career: CareerState;
   education: string[];
   currentEdu: Education | null;
   eduYearsLeft: number;
@@ -45,26 +102,23 @@ export interface Character {
   childCount: number;
   achievements: string[];
   actionCounts: Record<string, number>;
-  jobHistory: string[];
   travelCount: number;
   crimeCount: number;
   lowestHealth: number;
   highestHealth: number;
   divorceCount: number;
   marriageYear: number | null;
+  // YKS sınav ve bölüm sistemi
+  examStudyCount: number;
+  lastExamScore: number | null;
+  lastExamAge: number | null;
+  universityDepartment: Department | null;
 }
 
 export interface LogEntry {
   age: number;
   text: string;
   type: LogType;
-}
-
-export interface Job {
-  title: string;
-  salary: number;
-  req: number;
-  category: 'entry' | 'skilled' | 'professional' | 'executive';
 }
 
 export interface Education {
@@ -128,10 +182,13 @@ export interface GameStore {
   setScreen: (screen: Screen) => void;
   createCharacter: (gender: Gender) => void;
   ageUp: () => void;
-  getJob: (job: Job) => void;
+  applyForJob: (jobId: string) => void;
   quitJob: () => void;
+  retire: () => void;
   startEdu: (edu: Education) => void;
   dropOut: () => void;
+  takeExam: () => void;
+  selectDepartment: (deptId: string) => void;
   doAction: (actionId: string) => void;
   newGame: () => void;
   setActiveTab: (tab: TabId) => void;

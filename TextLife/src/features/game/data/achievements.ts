@@ -6,7 +6,8 @@ export const ACHIEVEMENTS: readonly Achievement[] = [
     title: 'İlk Maaş',
     description: 'İlk işine başla',
     emoji: '💼',
-    condition: (character) => character.jobHistory.length > 0,
+    condition: (character) =>
+      character.career.currentJob !== null || character.career.jobHistory.length > 0,
   },
   {
     id: 'millionaire',
@@ -61,9 +62,20 @@ export const ACHIEVEMENTS: readonly Achievement[] = [
   {
     id: 'ceo',
     title: 'Patron',
-    description: 'Müdür ol',
+    description: 'CEO ol',
     emoji: '👔',
-    condition: (character) => character.job?.title === 'Müdür',
+    condition: (character) =>
+      character.career.currentJob?.title === 'CEO' ||
+      character.career.jobHistory.some((h) => h.jobTitle === 'CEO'),
+  },
+  {
+    id: 'executive',
+    title: 'Üst Düzey Yönetici',
+    description: 'Executive pozisyona ulaş',
+    emoji: '🏆',
+    condition: (character) =>
+      character.career.currentJob?.sector === 'executive' ||
+      character.career.jobHistory.some((h) => h.sector === 'executive'),
   },
   {
     id: 'family_person',
@@ -150,6 +162,6 @@ export const ACHIEVEMENTS: readonly Achievement[] = [
     title: 'Her İşin Adamı',
     description: '5 farklı işte çalış',
     emoji: '🔄',
-    condition: (character) => character.jobHistory.length >= 5,
+    condition: (character) => character.career.jobHistory.length >= 5,
   },
 ] as const;

@@ -8,8 +8,19 @@ export {
   ELDER_EVENTS,
   getEventsForAge,
 } from './events';
-export { JOBS, JOB_CATEGORY_LABELS } from './jobs';
+export { JOBS, SECTOR_LABELS, SECTOR_ORDER, getTaxRate, meetsEducationReq, getJobById } from './jobs';
 export { EDUCATION_LIST, hasCompletedEdu } from './education';
+export {
+  DEPARTMENTS,
+  getDepartmentById,
+  getAvailableDepartments,
+  getAllDepartmentsSorted,
+  GENERAL_UNI_JOBS,
+  isGeneralUniJob,
+  getScoreDescription,
+  RELATED_FACULTIES,
+  isFacultyCompatible,
+} from './departments';
 export { ACTIVITIES } from './activities';
 export { ACHIEVEMENTS } from './achievements';
 export { MARRIAGE_EVENTS, FRIENDSHIP_EVENTS, FAMILY_EVENTS } from './relationships';

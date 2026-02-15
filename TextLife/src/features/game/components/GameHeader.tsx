@@ -15,6 +15,8 @@ export const GameHeader = () => {
   const moneyVariant =
     character.money >= 0 ? ('success' as const) : ('danger' as const);
 
+  const currentJob = character.career.currentJob;
+
   return (
     <View className="bg-bg-elevated px-lg py-md border-b border-border">
       <View className="flex-row items-center justify-between">
@@ -52,15 +54,25 @@ export const GameHeader = () => {
               className="text-xs font-outfit text-brand-primary"
               numberOfLines={1}
             >
-              📚 {character.currentEdu.name} ({character.eduYearsLeft}y)
+              📚 {character.universityDepartment
+                ? `Üniversite — ${character.universityDepartment.name} (${character.eduYearsLeft}y)`
+                : `${character.currentEdu.name} (${character.eduYearsLeft}y)`}
             </Text>
           )}
-          {character.job && (
+          {currentJob && (
             <Text
               className="text-xs font-outfit text-text-secondary"
               numberOfLines={1}
             >
-              {character.job.title}
+              {currentJob.title}
+            </Text>
+          )}
+          {character.career.isRetired && (
+            <Text
+              className="text-xs font-outfit text-success"
+              numberOfLines={1}
+            >
+              🏖️ Emekli
             </Text>
           )}
         </View>

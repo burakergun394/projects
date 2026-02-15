@@ -44,35 +44,8 @@ export const EDUCATION_LIST: readonly Education[] = [
     examPassRate: 0,
     dropCanAge: 16,
   },
-  // Yükseköğretim (oyuncu seçer)
-  {
-    name: 'Üniversite (Devlet)',
-    cost: 5000,
-    smartsReq: 30,
-    smartsGain: 20,
-    years: 4,
-    minAge: 18,
-    maxAge: 30,
-    auto: false,
-    prereq: 'Lise',
-    examRequired: true,
-    examPassRate: 60,
-    dropCanAge: 0,
-  },
-  {
-    name: 'Üniversite (Özel)',
-    cost: 120_000,
-    smartsReq: 20,
-    smartsGain: 18,
-    years: 4,
-    minAge: 18,
-    maxAge: 35,
-    auto: false,
-    prereq: 'Lise',
-    examRequired: true,
-    examPassRate: 85,
-    dropCanAge: 0,
-  },
+  // Üniversite artık YKS sınav + bölüm seçim sistemiyle çalışıyor (departments.ts)
+  // Sadece Yüksek Lisans ve Doktora eski startEdu akışını kullanır
   {
     name: 'Yüksek Lisans',
     cost: 15_000,
@@ -103,9 +76,10 @@ export const EDUCATION_LIST: readonly Education[] = [
   },
 ] as const;
 
-/** Tamamlanmış eğitim kontrolü — "Üniversite" prereq'i Devlet veya Özel'i kabul eder */
+/** Tamamlanmış eğitim kontrolü — "Üniversite" prereq'i tüm üniversite biçimlerini kabul eder */
 export const hasCompletedEdu = (education: string[], name: string): boolean => {
   if (name === 'Üniversite') {
+    // "Üniversite — Bilgisayar Müh." vb. tüm biçimleri kabul et
     return education.some((e) => e.startsWith('Üniversite'));
   }
   return education.includes(name);

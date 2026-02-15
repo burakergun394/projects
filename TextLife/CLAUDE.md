@@ -87,8 +87,10 @@ MENU → CREATE → GAME (5 tabs: Life, Job, Edu, Actions, Relations) → DEATH 
 | Action | Description |
 |---|---|
 | `createCharacter(gender)` | Generate character with random stats, parents, optional sibling |
-| `ageUp()` | Core loop: age++, health decay, salary, edu progress, random events, relationship events, friend generation, achievement check, death check |
-| `getJob(job)` / `quitJob()` | Employment management (tracks jobHistory) |
+| `ageUp()` | Core loop: age++, health decay, career processing (salary+tax, performance review, raise, promotion, firing), edu progress, random events, relationship events, friend generation, achievement check, death check |
+| `applyForJob(jobId)` | Apply for job (interview chance, hire/reject) |
+| `quitJob()` | Voluntary quit with career history |
+| `retire()` | Retire at 60+ with pension calculation |
 | `startEdu(edu)` | Start higher education (exam system, prereqs, diploma check) |
 | `dropOut()` | Drop out of current education (if allowed) |
 | `doAction(actionId)` | Activities — special mechanics for gamble, crime, travel |
@@ -101,7 +103,7 @@ MENU → CREATE → GAME (5 tabs: Life, Job, Edu, Actions, Relations) → DEATH 
 | Data | Count | File |
 |---|---|---|
 | Events (5 age pools) | 168 total (24/36/36/45/27) | `data/events.ts` |
-| Jobs (4 categories) | 24 | `data/jobs.ts` |
+| Jobs (6 sectors, career ladders) | 70+ | `data/jobs.ts` |
 | Activities | 14 | `data/activities.ts` |
 | Achievements | 20 | `data/achievements.ts` |
 | Relationship event pools | 36 (14 marriage + 10 friendship + 12 family) | `data/relationships.ts` |
@@ -131,11 +133,13 @@ type Screen = 'menu' | 'create' | 'game' | 'dead';
 type TabId = 'life' | 'job' | 'edu' | 'actions' | 'relations';
 type LogType = 'birth' | 'good' | 'bad' | 'milestone' | 'death' | 'event';
 
+type EducationLevel = 'none' | 'ilkokul' | 'ortaokul' | 'lise' | 'universite' | 'yuksek_lisans' | 'doktora';
+
 interface Character {
   name, surname, gender, city, zodiac, birthYear, age,
   health, happiness, smarts, looks,    // 0-100
   money,                                // can go negative (cap -100K)
-  job: Job | null,
+  career: CareerState,                  // full career system
   education: string[],
   currentEdu: Education | null,
   eduYearsLeft: number,
@@ -149,18 +153,46 @@ interface Character {
   // Tracking & achievements
   achievements: string[],
   actionCounts: Record<string, number>,
-  jobHistory: string[],
   travelCount: number,
   crimeCount: number,
   lowestHealth: number,
   highestHealth: number,
 }
 
+interface CareerState {
+  currentJob: Job | null,
+  currentSalary: number,               // actual salary (base + raises)
+  yearsInCurrentJob: number,
+  totalWorkYears: number,
+  performanceScore: number,            // 0-100
+  jobHistory: JobHistoryEntry[],
+  isRetired: boolean,
+  pension: number,
+  lifetimeEarnings: number,
+}
+
+interface JobHistoryEntry {
+  jobTitle: string,
+  sector: string,
+  startAge: number,
+  endAge: number,
+  endReason: 'quit' | 'fired' | 'promoted' | 'retired',
+  finalSalary: number,
+}
+
 interface Job {
+  id: string;
   title: string;
-  salary: number;
-  req: number;                          // minimum smarts
-  category: 'entry' | 'skilled' | 'professional' | 'executive';
+  sector: 'entry' | 'trade' | 'public' | 'private' | 'professional' | 'executive';
+  baseSalary: number;                   // monthly TL
+  minSmarts: number;
+  minEducation: EducationLevel;
+  minAge: number;
+  maxAge: number;
+  promotionChain: string[];             // ordered job IDs for promotion
+  experienceYearsForPromo: number;
+  fireChance: number;                   // annual % (0-100)
+  respectGain: number;
 }
 
 interface Education {

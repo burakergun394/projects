@@ -5,6 +5,9 @@ import { Card, ProgressBar } from '@/shared/components/ui';
 import { formatMoney } from '@/shared/utils';
 import { colors } from '@/shared/theme';
 
+import { getScoreDescription } from '@/features/game/data/departments';
+import { EDUCATION_LIST } from '@/features/game/data/education';
+
 import type { Character } from '@/features/game/types';
 
 interface CharacterCardProps {
@@ -15,6 +18,13 @@ export const CharacterCard = ({ character }: CharacterCardProps) => {
   const genderEmoji = character.gender === 'M' ? '👦' : '👧';
   const aliveRelations = character.relationships.filter((r) => r.isAlive);
   const spouseCount = character.relationships.filter((r) => r.type === 'spouse').length;
+  const { career } = character;
+
+  // En yüksek pozisyon
+  const highestPosition =
+    career.jobHistory.length > 0
+      ? career.jobHistory.reduce((best, h) => (h.finalSalary > best.finalSalary ? h : best)).jobTitle
+      : career.currentJob?.title ?? null;
 
   // Hayat Puanı — basit bir skor hesabı
   const lifeScore = Math.round(
@@ -23,7 +33,9 @@ export const CharacterCard = ({ character }: CharacterCardProps) => {
       character.achievements.length * 5 +
       Math.min(character.money / 10000, 50) +
       character.childCount * 3 +
-      (character.isMarried ? 10 : 0),
+      (character.isMarried ? 10 : 0) +
+      career.totalWorkYears * 1 +
+      (career.isRetired ? 10 : 0),
   );
 
   return (
@@ -76,16 +88,6 @@ export const CharacterCard = ({ character }: CharacterCardProps) => {
             {formatMoney(character.money)}
           </Text>
         </View>
-        {character.job && (
-          <View className="flex-row justify-between">
-            <Text className="text-sm font-outfit text-text-secondary">
-              Son İş
-            </Text>
-            <Text className="text-sm font-outfit text-text-primary">
-              {character.job.title}
-            </Text>
-          </View>
-        )}
         <View className="flex-row justify-between">
           <Text className="text-sm font-outfit text-text-secondary">
             Eğitim
@@ -96,14 +98,117 @@ export const CharacterCard = ({ character }: CharacterCardProps) => {
               : 'Eğitimsiz'}
           </Text>
         </View>
-        {character.jobHistory.length > 0 && (
+        {character.universityDepartment && (
+          <>
+            <View className="flex-row justify-between">
+              <Text className="text-sm font-outfit text-text-secondary">
+                Bölüm
+              </Text>
+              <Text className="text-sm font-outfit text-text-primary">
+                {character.universityDepartment.name} ({character.universityDepartment.type === 'devlet' ? 'Devlet' : 'Özel'})
+              </Text>
+            </View>
+            {character.lastExamScore !== null && (
+              <View className="flex-row justify-between">
+                <Text className="text-sm font-outfit text-text-secondary">
+                  YKS Puanı
+                </Text>
+                <Text className="text-sm font-mono text-text-primary">
+                  {character.lastExamScore}/500 ({getScoreDescription(character.lastExamScore).percentile})
+                </Text>
+              </View>
+            )}
+            <View className="flex-row justify-between">
+              <Text className="text-sm font-outfit text-text-secondary">
+                Prestij
+              </Text>
+              <Text className="text-sm font-mono text-text-primary">
+                {'★'.repeat(character.universityDepartment.prestige)}{'☆'.repeat(10 - character.universityDepartment.prestige)}
+              </Text>
+            </View>
+            {character.education.includes('Yüksek Lisans') && (
+              <View className="flex-row justify-between">
+                <Text className="text-sm font-outfit text-text-secondary">
+                  Ek Eğitim
+                </Text>
+                <Text className="text-sm font-outfit text-text-primary">
+                  Yüksek Lisans{character.education.includes('Doktora') ? ' + Doktora' : ''}
+                </Text>
+              </View>
+            )}
+          </>
+        )}
+        <View className="flex-row justify-between">
+          <Text className="text-sm font-outfit text-text-secondary">
+            Toplam Eğitim
+          </Text>
+          <Text className="text-sm font-mono text-text-primary">
+            {character.education.reduce((total, eduName) => {
+              const edu = EDUCATION_LIST.find((e) => e.name === eduName);
+              if (edu) return total + edu.years;
+              // Üniversite — bölüm adı formatı
+              if (eduName.startsWith('Üniversite') && character.universityDepartment) return total + character.universityDepartment.totalYears;
+              return total;
+            }, 0)} yıl
+          </Text>
+        </View>
+      </View>
+
+      {/* Kariyer Özeti */}
+      <View className="border-t border-border pt-md mt-md gap-xs">
+        <Text className="text-sm font-outfit-semibold text-text-primary mb-xs">
+          Kariyer
+        </Text>
+        <View className="flex-row justify-between">
+          <Text className="text-sm font-outfit text-text-secondary">
+            Toplam Çalışma
+          </Text>
+          <Text className="text-sm font-mono text-text-primary">
+            {career.totalWorkYears} yıl
+          </Text>
+        </View>
+        {highestPosition && (
           <View className="flex-row justify-between">
             <Text className="text-sm font-outfit text-text-secondary">
-              Çalıştığı İşler
+              En Yüksek Pozisyon
             </Text>
-            <Text className="text-sm font-mono text-text-primary">
-              {character.jobHistory.length}
+            <Text className="text-sm font-outfit text-text-primary">
+              {highestPosition}
             </Text>
+          </View>
+        )}
+        <View className="flex-row justify-between">
+          <Text className="text-sm font-outfit text-text-secondary">
+            Toplam Kazanç
+          </Text>
+          <Text className="text-sm font-mono text-text-primary">
+            {formatMoney(career.lifetimeEarnings)}
+          </Text>
+        </View>
+        {career.isRetired && career.pension > 0 && (
+          <View className="flex-row justify-between">
+            <Text className="text-sm font-outfit text-text-secondary">
+              Emekli Maaşı
+            </Text>
+            <Text className="text-sm font-mono text-success">
+              ₺{career.pension.toLocaleString('tr-TR')}/ay
+            </Text>
+          </View>
+        )}
+        {career.jobHistory.length > 0 && (
+          <View className="mt-xs">
+            <Text className="text-xs font-outfit text-text-tertiary mb-1">
+              İş Geçmişi:
+            </Text>
+            {career.jobHistory.map((h, i) => (
+              <Text key={`${h.jobTitle}-${h.startAge}-${i}`} className="text-xs font-outfit text-text-tertiary">
+                {h.jobTitle} ({h.startAge}–{h.endAge} yaş) → {
+                  h.endReason === 'promoted' ? 'Terfi' :
+                  h.endReason === 'fired' ? 'Çıkarıldı' :
+                  h.endReason === 'retired' ? 'Emekli' : 'İstifa'
+                }
+              </Text>
+            ))}
           </View>
         )}
       </View>
