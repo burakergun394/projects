@@ -47,6 +47,14 @@ export const GameHeader = () => {
             label={formatMoney(character.money)}
             variant={moneyVariant}
           />
+          {character.currentEdu && (
+            <Text
+              className="text-xs font-outfit text-brand-primary"
+              numberOfLines={1}
+            >
+              📚 {character.currentEdu.name} ({character.eduYearsLeft}y)
+            </Text>
+          )}
           {character.job && (
             <Text
               className="text-xs font-outfit text-text-secondary"

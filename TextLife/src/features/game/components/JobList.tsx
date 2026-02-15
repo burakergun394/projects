@@ -23,9 +23,19 @@ export const JobList = () => {
   const getJob = useGameStore((s) => s.getJob);
   const quitJob = useGameStore((s) => s.quitJob);
 
+  const hasLise = character?.education.includes('Lise') ?? false;
+  const hasUni = character?.education.some((e) => e.startsWith('Üniversite')) ?? false;
+  const isHigherEduStudent = character?.currentEdu && !character.currentEdu.auto;
+
   const groupedJobs = useMemo(() => {
     if (!character) return {};
-    const available = JOBS.filter((j) => character.smarts >= j.req);
+    const available = JOBS.filter((j) => {
+      if (character.smarts < j.req) return false;
+      // Diploma gereksinimleri
+      if (j.req >= 40 && !hasUni) return false;
+      if (j.req >= 20 && !hasLise) return false;
+      return true;
+    });
     const grouped: Partial<Record<JobCategory, Job[]>> = {};
     for (const job of available) {
       if (!grouped[job.category]) {
@@ -34,7 +44,7 @@ export const JobList = () => {
       grouped[job.category]!.push(job);
     }
     return grouped;
-  }, [character?.smarts]);
+  }, [character?.smarts, hasLise, hasUni]);
 
   const handleGetJob = useCallback(
     (job: Job) => {
@@ -49,8 +59,31 @@ export const JobList = () => {
 
   if (!character) return null;
 
+  if (character.age < 18) {
+    return (
+      <ScrollView className="flex-1" contentContainerClassName="p-lg gap-md">
+        <Card>
+          <Text className="text-sm font-outfit text-text-tertiary text-center">
+            İş başvurusu yapabilmek için 18 yaşını doldurmalısın.
+          </Text>
+        </Card>
+      </ScrollView>
+    );
+  }
+
+  const hasAnyJobs = CATEGORY_ORDER.some((c) => (groupedJobs[c]?.length ?? 0) > 0);
+
   return (
     <ScrollView className="flex-1" contentContainerClassName="p-lg gap-md">
+      {/* Öğrenci uyarısı */}
+      {isHigherEduStudent && (
+        <Card>
+          <Text className="text-sm font-outfit text-warning text-center">
+            📚 {character.currentEdu!.name} öğrencisisin — tam zamanlı çalışamazsın.
+          </Text>
+        </Card>
+      )}
+
       {/* Mevcut İş */}
       {character.job ? (
         <Card>
@@ -70,15 +103,23 @@ export const JobList = () => {
             <Button label="İşten Ayrıl" onPress={handleQuitJob} variant="danger" />
           </View>
         </Card>
-      ) : (
+      ) : !isHigherEduStudent ? (
         <Card>
           <Text className="text-sm font-outfit text-text-tertiary text-center">
             Şu anda çalışmıyorsun.
           </Text>
         </Card>
-      )}
+      ) : null}
 
       {/* Kategorilere Göre Açık Pozisyonlar */}
+      {!hasAnyJobs && !character.job && (
+        <Card>
+          <Text className="text-sm font-outfit text-text-tertiary text-center">
+            Eğitim seviyene uygun açık pozisyon yok.
+          </Text>
+        </Card>
+      )}
+
       {CATEGORY_ORDER.map((category) => {
         const jobs = groupedJobs[category];
         if (!jobs || jobs.length === 0) return null;
@@ -106,7 +147,7 @@ export const JobList = () => {
                   <Button
                     label="Başvur"
                     onPress={() => handleGetJob(job)}
-                    variant={character.job ? 'disabled' : 'secondary'}
+                    variant={character.job || isHigherEduStudent ? 'disabled' : 'secondary'}
                   />
                 </View>
               </Card>

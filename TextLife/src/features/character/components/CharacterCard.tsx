@@ -86,16 +86,16 @@ export const CharacterCard = ({ character }: CharacterCardProps) => {
             </Text>
           </View>
         )}
-        {character.education.length > 0 && (
-          <View className="flex-row justify-between">
-            <Text className="text-sm font-outfit text-text-secondary">
-              Eğitim
-            </Text>
-            <Text className="text-sm font-outfit text-text-primary">
-              {character.education[character.education.length - 1]}
-            </Text>
-          </View>
-        )}
+        <View className="flex-row justify-between">
+          <Text className="text-sm font-outfit text-text-secondary">
+            Eğitim
+          </Text>
+          <Text className="text-sm font-outfit text-text-primary">
+            {character.education.length > 0
+              ? character.education[character.education.length - 1]
+              : 'Eğitimsiz'}
+          </Text>
+        </View>
         {character.jobHistory.length > 0 && (
           <View className="flex-row justify-between">
             <Text className="text-sm font-outfit text-text-secondary">

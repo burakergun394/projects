@@ -50,6 +50,13 @@ export const ActionGrid = () => {
     [doAction],
   );
 
+  const availableActivities = useMemo(() => {
+    if (!character) return ACTIVITIES as unknown as Activity[];
+    return (ACTIVITIES as unknown as Activity[]).filter(
+      (a) => character.age >= a.minAge,
+    );
+  }, [character?.age]);
+
   const renderItem = useCallback(
     ({ item }: { item: Activity }) => (
       <ActionCard
@@ -65,7 +72,7 @@ export const ActionGrid = () => {
 
   return (
     <FlatList
-      data={ACTIVITIES as unknown as Activity[]}
+      data={availableActivities}
       renderItem={renderItem}
       keyExtractor={keyExtractor}
       numColumns={2}

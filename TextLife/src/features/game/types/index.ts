@@ -74,6 +74,12 @@ export interface Education {
   smartsGain: number;
   years: number;
   minAge: number;
+  maxAge: number;
+  auto: boolean;
+  prereq: string | null;
+  examRequired: boolean;
+  examPassRate: number;
+  dropCanAge: number | null;
 }
 
 export interface GameEvent {
@@ -92,6 +98,7 @@ export interface Activity {
   name: string;
   emoji: string;
   cost: number;
+  minAge: number;
   fx: {
     health?: number;
     happiness?: number;
@@ -124,6 +131,7 @@ export interface GameStore {
   getJob: (job: Job) => void;
   quitJob: () => void;
   startEdu: (edu: Education) => void;
+  dropOut: () => void;
   doAction: (actionId: string) => void;
   newGame: () => void;
   setActiveTab: (tab: TabId) => void;

@@ -89,7 +89,8 @@ MENU → CREATE → GAME (5 tabs: Life, Job, Edu, Actions, Relations) → DEATH 
 | `createCharacter(gender)` | Generate character with random stats, parents, optional sibling |
 | `ageUp()` | Core loop: age++, health decay, salary, edu progress, random events, relationship events, friend generation, achievement check, death check |
 | `getJob(job)` / `quitJob()` | Employment management (tracks jobHistory) |
-| `startEdu(edu)` | Start education tier (validates prereqs) |
+| `startEdu(edu)` | Start higher education (exam system, prereqs, diploma check) |
+| `dropOut()` | Drop out of current education (if allowed) |
 | `doAction(actionId)` | Activities — special mechanics for gamble, crime, travel |
 | `marry()` / `divorce()` / `haveChild()` | Relationship lifecycle |
 | `interactRelation(id, type)` | spend_time / argue — affects closeness |
@@ -104,7 +105,7 @@ MENU → CREATE → GAME (5 tabs: Life, Job, Edu, Actions, Relations) → DEATH 
 | Activities | 14 | `data/activities.ts` |
 | Achievements | 20 | `data/achievements.ts` |
 | Relationship event pools | 36 (14 marriage + 10 friendship + 12 family) | `data/relationships.ts` |
-| Education tiers | 4 (Lise → Doktora) | `data/education.ts` |
+| Education tiers | 7 (İlkokul→Ortaokul→Lise + Üni Devlet/Özel→YL→Doktora) | `data/education.ts` |
 | Names/Cities | 24M + 24F + 20 surnames + 16 cities | `data/names.ts` |
 
 ## Save/Load System
@@ -160,6 +161,21 @@ interface Job {
   salary: number;
   req: number;                          // minimum smarts
   category: 'entry' | 'skilled' | 'professional' | 'executive';
+}
+
+interface Education {
+  name: string;
+  cost: number;
+  smartsReq: number;
+  smartsGain: number;
+  years: number;
+  minAge: number;
+  maxAge: number;
+  auto: boolean;                        // true = compulsory (İlkokul/Ortaokul/Lise)
+  prereq: string | null;
+  examRequired: boolean;
+  examPassRate: number;
+  dropCanAge: number | null;            // null = cannot drop
 }
 
 interface Relationship {

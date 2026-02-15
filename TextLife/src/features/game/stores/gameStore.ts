@@ -6,6 +6,7 @@ import { MALE_NAMES, FEMALE_NAMES, SURNAMES, CITIES } from '../data/names';
 import { getZodiac } from '../data/zodiac';
 import { getEventsForAge } from '../data/events';
 import { MARRIAGE_EVENTS, FRIENDSHIP_EVENTS, FAMILY_EVENTS } from '../data/relationships';
+import { EDUCATION_LIST, hasCompletedEdu } from '../data/education';
 import { ACTIVITIES } from '../data/activities';
 import { rand, pick, clamp, pct } from '../utils';
 
@@ -33,6 +34,7 @@ const createInitialCharacter = (gender: Gender): Character => {
   const birthDay = rand(1, 28);
   const zodiac = getZodiac(birthMonth, birthDay);
   const currentYear = new Date().getFullYear();
+  const initialHealth = rand(40, 80);
 
   // Anne ve baba oluştur
   const motherName = pick(FEMALE_NAMES);
@@ -82,7 +84,7 @@ const createInitialCharacter = (gender: Gender): Character => {
     zodiac,
     birthYear: currentYear,
     age: 0,
-    health: rand(40, 80),
+    health: initialHealth,
     happiness: rand(50, 90),
     smarts: rand(20, 60),
     looks: rand(30, 80),
@@ -102,8 +104,8 @@ const createInitialCharacter = (gender: Gender): Character => {
     jobHistory: [],
     travelCount: 0,
     crimeCount: 0,
-    lowestHealth: rand(40, 80),
-    highestHealth: rand(40, 80),
+    lowestHealth: initialHealth,
+    highestHealth: initialHealth,
     divorceCount: 0,
     marriageYear: null,
   };
@@ -112,8 +114,6 @@ const createInitialCharacter = (gender: Gender): Character => {
 const AGE_MILESTONES: Record<number, string> = {
   1: 'İlk yaş günün kutlu olsun! 🎂',
   4: 'Anaokulu çağına geldin!',
-  6: 'İlkokula başladın! 📝',
-  10: 'Çift haneli yaşlara hoş geldin!',
   13: 'Artık bir genç oluyorsun!',
   18: 'Reşit oldun! Yetişkin hayatına hoş geldin! 🎓',
   30: '30 yaşına girdin. Hayat hızla geçiyor...',
@@ -203,6 +203,26 @@ export const useGameStore = create<GameStore>((set, get) => ({
       }
     }
 
+    // Zorunlu eğitim otomatik başlatma
+    if (!currentEdu) {
+      const autoEdu = EDUCATION_LIST.find(
+        (e) =>
+          e.auto &&
+          age === e.minAge &&
+          !education.includes(e.name) &&
+          (e.prereq === null || hasCompletedEdu(education, e.prereq)),
+      );
+      if (autoEdu) {
+        currentEdu = autoEdu;
+        eduYearsLeft = autoEdu.years;
+        newLog.push({
+          age,
+          text: `${autoEdu.name} eğitimine başladın! 📚`,
+          type: 'milestone',
+        });
+      }
+    }
+
     // İlişkileri yaşlandır
     relationships = relationships.map((r) => ({
       ...r,
@@ -256,6 +276,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     if (age >= 18 && pct(15) && relationships.filter((r) => r.type === 'friend' && r.isAlive).length < 5) {
       const friendGender = pct(50) ? 'M' : 'F';
       const friendNames = friendGender === 'M' ? MALE_NAMES : FEMALE_NAMES;
+      const friendAge = Math.max(16, age + rand(-5, 5));
       relationships = [
         ...relationships,
         {
@@ -263,7 +284,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
           name: pick(friendNames),
           surname: pick(SURNAMES),
           type: 'friend',
-          age: age + rand(-5, 5),
+          age: friendAge,
           closeness: rand(40, 70),
           isAlive: true,
         },
@@ -398,7 +419,16 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   getJob: (job: Job) => {
     const { character, log } = get();
-    if (!character) return;
+    if (!character || !character.isAlive) return;
+    if (character.age < 18) return;
+    if (character.job) return; // Önce mevcut işten ayrılmalı
+
+    // Yükseköğretim öğrencisi tam zamanlı çalışamaz
+    if (character.currentEdu && !character.currentEdu.auto) return;
+
+    // Diploma gereksinimi
+    if (job.req >= 40 && !character.education.some((e) => e.startsWith('Üniversite'))) return;
+    if (job.req >= 20 && !character.education.includes('Lise')) return;
 
     const jobHistory = character.jobHistory.includes(job.title)
       ? character.jobHistory
@@ -419,7 +449,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   quitJob: () => {
     const { character, log } = get();
-    if (!character || !character.job) return;
+    if (!character || !character.isAlive || !character.job) return;
 
     const oldJob = character.job.title;
     set({
@@ -437,11 +467,50 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   startEdu: (edu: Education) => {
     const { character, log } = get();
-    if (!character) return;
+    if (!character || !character.isAlive) return;
     if (character.currentEdu) return;
+    if (edu.auto) return; // Zorunlu eğitim manuel başlatılamaz
     if (character.smarts < edu.smartsReq) return;
     if (character.age < edu.minAge) return;
+    if (character.age > edu.maxAge) return;
     if (character.education.includes(edu.name)) return;
+
+    // Ön koşul kontrolü
+    if (edu.prereq && !hasCompletedEdu(character.education, edu.prereq)) return;
+
+    // Çift üniversite engeli
+    if (edu.name.startsWith('Üniversite') && character.education.some((e) => e.startsWith('Üniversite'))) return;
+
+    // Giriş sınavı
+    if (edu.examRequired) {
+      const smartsBonus = Math.max(0, (character.smarts - edu.smartsReq) * 0.8);
+      const passChance = Math.min(95, edu.examPassRate + smartsBonus);
+      if (!pct(passChance)) {
+        set({
+          character: { ...character, happiness: clamp(character.happiness - 8) },
+          log: [
+            ...log,
+            {
+              age: character.age,
+              text: `${edu.name} giriş sınavını geçemedin. 😔`,
+              type: 'bad',
+            },
+          ],
+        });
+        return;
+      }
+      // Sınavı geçti
+      set((prev) => ({
+        log: [
+          ...prev.log,
+          {
+            age: character.age,
+            text: `${edu.name} giriş sınavını başarıyla geçtin! 🎉`,
+            type: 'good',
+          },
+        ],
+      }));
+    }
 
     set({
       character: {
@@ -451,11 +520,41 @@ export const useGameStore = create<GameStore>((set, get) => ({
         money: character.money - edu.cost,
       },
       log: [
-        ...log,
+        ...get().log,
         {
           age: character.age,
           text: `${edu.name} eğitimine başladın! (${edu.years} yıl, ${edu.cost > 0 ? `₺${edu.cost.toLocaleString('tr-TR')}` : 'Ücretsiz'})`,
           type: 'good',
+        },
+      ],
+    });
+  },
+
+  dropOut: () => {
+    const { character, log } = get();
+    if (!character || !character.isAlive || !character.currentEdu) return;
+
+    const edu = character.currentEdu;
+
+    // Zorunlu eğitim bırakılamaz
+    if (edu.dropCanAge === null) return;
+
+    // Yaş sınırı kontrolü
+    if (edu.auto && character.age < edu.dropCanAge) return;
+
+    set({
+      character: {
+        ...character,
+        currentEdu: null,
+        eduYearsLeft: 0,
+        happiness: clamp(character.happiness - 10),
+      },
+      log: [
+        ...log,
+        {
+          age: character.age,
+          text: `${edu.name} eğitimini yarıda bıraktın.`,
+          type: 'bad',
         },
       ],
     });
@@ -467,6 +566,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     const activity = ACTIVITIES.find((a) => a.id === actionId);
     if (!activity) return;
+    if (character.age < activity.minAge) return;
     if (character.money < activity.cost) return;
 
     let { health, happiness, smarts, looks, money } = character;
@@ -628,16 +728,17 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   marry: () => {
     const { character, log } = get();
-    if (!character || character.isMarried || character.age < 20) return;
+    if (!character || !character.isAlive || character.isMarried || character.age < 20) return;
 
     const spouseGender = character.gender === 'M' ? 'F' : 'M';
     const spouseNames = spouseGender === 'M' ? MALE_NAMES : FEMALE_NAMES;
+    const spouseAge = Math.max(18, character.age + rand(-5, 5));
     const spouse: Relationship = {
       id: genRelationId(),
       name: pick(spouseNames),
       surname: pick(SURNAMES),
       type: 'spouse',
-      age: character.age + rand(-5, 5),
+      age: spouseAge,
       closeness: rand(70, 95),
       isAlive: true,
     };
@@ -663,7 +764,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   divorce: () => {
     const { character, log } = get();
-    if (!character || !character.isMarried) return;
+    if (!character || !character.isAlive || !character.isMarried) return;
 
     const relationships = character.relationships.map((r) =>
       r.type === 'spouse' && r.isAlive ? { ...r, type: 'friend' as const, closeness: 20 } : r,
@@ -692,7 +793,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   haveChild: () => {
     const { character, log } = get();
-    if (!character || !character.isMarried || character.age < 22) return;
+    if (!character || !character.isAlive || !character.isMarried || character.age < 22) return;
 
     const childGender = pct(50) ? 'M' : 'F';
     const childNames = childGender === 'M' ? MALE_NAMES : FEMALE_NAMES;
@@ -726,7 +827,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   interactRelation: (relationId: string, type: 'spend_time' | 'argue') => {
     const { character, log } = get();
-    if (!character) return;
+    if (!character || !character.isAlive) return;
 
     const relationships = character.relationships.map((r) => {
       if (r.id !== relationId || !r.isAlive) return r;
