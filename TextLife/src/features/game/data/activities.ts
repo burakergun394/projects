@@ -1,0 +1,68 @@
+import type { Activity } from '../types';
+
+export const ACTIVITIES: readonly Activity[] = [
+  {
+    id: 'gym',
+    name: 'Spor Salonu',
+    emoji: '💪',
+    cost: 500,
+    fx: { health: 8, happiness: 3, looks: 3 },
+    description: 'Spor salonuna git ve egzersiz yap.',
+  },
+  {
+    id: 'meditate',
+    name: 'Meditasyon',
+    emoji: '🧘',
+    cost: 0,
+    fx: { happiness: 10, health: 3 },
+    description: 'Zihnini dinlendir ve meditasyon yap.',
+  },
+  {
+    id: 'study',
+    name: 'Kendi Kendine Çalış',
+    emoji: '📚',
+    cost: 0,
+    fx: { smarts: 8, happiness: -3 },
+    description: 'Kitap oku ve yeni şeyler öğren.',
+  },
+  {
+    id: 'party',
+    name: 'Parti',
+    emoji: '🎉',
+    cost: 2000,
+    fx: { happiness: 15, health: -5 },
+    description: 'Arkadaşlarınla eğlenceli bir gece geçir.',
+  },
+  {
+    id: 'hospital',
+    name: 'Hastane',
+    emoji: '🏥',
+    cost: 5000,
+    fx: { health: 20 },
+    description: 'Doktora git ve sağlık kontrolü yaptır.',
+  },
+  {
+    id: 'invest',
+    name: 'Yatırım Yap',
+    emoji: '📈',
+    cost: 10000,
+    fx: {},
+    description: 'Borsaya yatırım yap. Riskli ama kazançlı olabilir!',
+  },
+  {
+    id: 'lottery',
+    name: 'Piyango',
+    emoji: '🎰',
+    cost: 100,
+    fx: {},
+    description: 'Şansını dene! Büyük ikramiye %1 ihtimal.',
+  },
+  {
+    id: 'beauty',
+    name: 'Güzellik Bakımı',
+    emoji: '💅',
+    cost: 3000,
+    fx: { looks: 10, happiness: 5 },
+    description: 'Güzellik salonuna git ve bakım yaptır.',
+  },
+] as const;
