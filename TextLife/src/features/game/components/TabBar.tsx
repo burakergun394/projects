@@ -16,6 +16,7 @@ const TABS: readonly Tab[] = [
   { id: 'job', emoji: '💼', label: 'İş' },
   { id: 'edu', emoji: '🎓', label: 'Eğitim' },
   { id: 'actions', emoji: '⚡', label: 'Aktivite' },
+  { id: 'relations', emoji: '❤️', label: 'İlişkiler' },
 ] as const;
 
 export const TabBar = () => {
@@ -41,7 +42,7 @@ export const TabBar = () => {
               isActive ? 'border-b-2 border-brand-primary' : ''
             }`}
           >
-            <Text className="text-base">{tab.emoji}</Text>
+            <Text className="text-sm">{tab.emoji}</Text>
             <Text
               className={`text-xs mt-1 ${
                 isActive

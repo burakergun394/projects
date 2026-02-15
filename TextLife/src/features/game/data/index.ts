@@ -8,6 +8,8 @@ export {
   ELDER_EVENTS,
   getEventsForAge,
 } from './events';
-export { JOBS } from './jobs';
+export { JOBS, JOB_CATEGORY_LABELS } from './jobs';
 export { EDUCATION_LIST } from './education';
 export { ACTIVITIES } from './activities';
+export { ACHIEVEMENTS } from './achievements';
+export { MARRIAGE_EVENTS, FRIENDSHIP_EVENTS, FAMILY_EVENTS } from './relationships';

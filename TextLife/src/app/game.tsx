@@ -12,6 +12,7 @@ import {
   ActionGrid,
   JobList,
   EduList,
+  RelationList,
 } from '@/features/game/components';
 import { useCharacter, useActiveTab } from '@/features/game/stores/gameStore';
 import { useAutoSave } from '@/features/save';
@@ -48,6 +49,8 @@ export default function GameScreen() {
         return <EduList />;
       case 'actions':
         return <ActionGrid />;
+      case 'relations':
+        return <RelationList />;
     }
   };
 

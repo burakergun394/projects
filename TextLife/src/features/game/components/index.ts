@@ -7,3 +7,4 @@ export { AgeButton } from './AgeButton';
 export { ActionGrid } from './ActionGrid';
 export { JobList } from './JobList';
 export { EduList } from './EduList';
+export { RelationList } from './RelationList';

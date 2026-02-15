@@ -25,3 +25,6 @@ export const DEATH_REASONS = [
   'Hastalık',
   'Doğal nedenler',
 ] as const;
+
+export { SOUND_EVENTS } from './sounds';
+export type { SoundEvent } from './sounds';

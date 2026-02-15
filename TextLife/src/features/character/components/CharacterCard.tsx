@@ -13,6 +13,18 @@ interface CharacterCardProps {
 
 export const CharacterCard = ({ character }: CharacterCardProps) => {
   const genderEmoji = character.gender === 'M' ? '👦' : '👧';
+  const aliveRelations = character.relationships.filter((r) => r.isAlive);
+  const spouseCount = character.relationships.filter((r) => r.type === 'spouse').length;
+
+  // Hayat Puanı — basit bir skor hesabı
+  const lifeScore = Math.round(
+    (character.health + character.happiness + character.smarts + character.looks) / 4 +
+      character.education.length * 10 +
+      character.achievements.length * 5 +
+      Math.min(character.money / 10000, 50) +
+      character.childCount * 3 +
+      (character.isMarried ? 10 : 0),
+  );
 
   return (
     <Card className="mx-lg">
@@ -26,6 +38,7 @@ export const CharacterCard = ({ character }: CharacterCardProps) => {
         </Text>
       </View>
 
+      {/* Statlar */}
       <View className="gap-sm mb-lg">
         <StatSummary
           label="Sağlık"
@@ -53,6 +66,7 @@ export const CharacterCard = ({ character }: CharacterCardProps) => {
         />
       </View>
 
+      {/* Hayat Özeti */}
       <View className="border-t border-border pt-md gap-xs">
         <View className="flex-row justify-between">
           <Text className="text-sm font-outfit text-text-secondary">
@@ -82,6 +96,78 @@ export const CharacterCard = ({ character }: CharacterCardProps) => {
             </Text>
           </View>
         )}
+        {character.jobHistory.length > 0 && (
+          <View className="flex-row justify-between">
+            <Text className="text-sm font-outfit text-text-secondary">
+              Çalıştığı İşler
+            </Text>
+            <Text className="text-sm font-mono text-text-primary">
+              {character.jobHistory.length}
+            </Text>
+          </View>
+        )}
+      </View>
+
+      {/* İlişkiler Özeti */}
+      <View className="border-t border-border pt-md mt-md gap-xs">
+        <Text className="text-sm font-outfit-semibold text-text-primary mb-xs">
+          İlişkiler
+        </Text>
+        <View className="flex-row justify-between">
+          <Text className="text-sm font-outfit text-text-secondary">
+            Evlilik
+          </Text>
+          <Text className="text-sm font-outfit text-text-primary">
+            {spouseCount > 0 ? `${spouseCount} kez` : 'Hiç evlenmedi'}
+          </Text>
+        </View>
+        <View className="flex-row justify-between">
+          <Text className="text-sm font-outfit text-text-secondary">
+            Çocuklar
+          </Text>
+          <Text className="text-sm font-mono text-text-primary">
+            {character.childCount}
+          </Text>
+        </View>
+        <View className="flex-row justify-between">
+          <Text className="text-sm font-outfit text-text-secondary">
+            Hayatta Kalan Yakınlar
+          </Text>
+          <Text className="text-sm font-mono text-text-primary">
+            {aliveRelations.length}
+          </Text>
+        </View>
+      </View>
+
+      {/* Başarılar */}
+      {character.achievements.length > 0 && (
+        <View className="border-t border-border pt-md mt-md">
+          <Text className="text-sm font-outfit-semibold text-text-primary mb-sm">
+            Başarılar ({character.achievements.length})
+          </Text>
+          <View className="flex-row flex-wrap gap-xs">
+            {character.achievements.map((id) => (
+              <View
+                key={id}
+                className="bg-brand-subtle px-sm py-1 rounded-sm"
+              >
+                <Text className="text-xs font-outfit-medium text-brand-primary">
+                  {id}
+                </Text>
+              </View>
+            ))}
+          </View>
+        </View>
+      )}
+
+      {/* Hayat Puanı */}
+      <View className="border-t border-border pt-md mt-md items-center">
+        <Text className="text-xs font-outfit text-text-tertiary">
+          Hayat Puanı
+        </Text>
+        <Text className="text-3xl font-outfit-extrabold text-brand-primary">
+          {lifeScore}
+        </Text>
       </View>
     </Card>
   );

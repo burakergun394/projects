@@ -1,6 +1,6 @@
 export type Gender = 'M' | 'F';
 export type Screen = 'menu' | 'create' | 'game' | 'dead';
-export type TabId = 'life' | 'job' | 'edu' | 'actions';
+export type TabId = 'life' | 'job' | 'edu' | 'actions' | 'relations';
 export type LogType = 'birth' | 'good' | 'bad' | 'milestone' | 'death' | 'event';
 
 export interface ZodiacSign {
@@ -8,6 +8,16 @@ export interface ZodiacSign {
   emoji: string;
   m: number;
   d: number;
+}
+
+export interface Relationship {
+  id: string;
+  name: string;
+  surname: string;
+  type: 'spouse' | 'child' | 'friend' | 'parent' | 'sibling';
+  age: number;
+  closeness: number;
+  isAlive: boolean;
 }
 
 export interface Character {
@@ -30,6 +40,18 @@ export interface Character {
   isAlive: boolean;
   deathAge: number | null;
   deathReason: string | null;
+  relationships: Relationship[];
+  isMarried: boolean;
+  childCount: number;
+  achievements: string[];
+  actionCounts: Record<string, number>;
+  jobHistory: string[];
+  travelCount: number;
+  crimeCount: number;
+  lowestHealth: number;
+  highestHealth: number;
+  divorceCount: number;
+  marriageYear: number | null;
 }
 
 export interface LogEntry {
@@ -42,6 +64,7 @@ export interface Job {
   title: string;
   salary: number;
   req: number;
+  category: 'entry' | 'skilled' | 'professional' | 'executive';
 }
 
 export interface Education {
@@ -79,6 +102,14 @@ export interface Activity {
   description: string;
 }
 
+export interface Achievement {
+  id: string;
+  title: string;
+  description: string;
+  emoji: string;
+  condition: (character: Character, log: LogEntry[]) => boolean;
+}
+
 export interface GameStore {
   // State
   screen: Screen;
@@ -96,4 +127,8 @@ export interface GameStore {
   doAction: (actionId: string) => void;
   newGame: () => void;
   setActiveTab: (tab: TabId) => void;
+  marry: () => void;
+  divorce: () => void;
+  haveChild: () => void;
+  interactRelation: (relationId: string, type: 'spend_time' | 'argue') => void;
 }
