@@ -673,8 +673,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const job = getJobById(jobId);
     if (!job) return;
 
-    // Executive pozisyonlar doğrudan başvuruya kapalı
-    if (job.sector === 'executive') return;
+    // Terfi-yoluyla pozisyonlara doğrudan başvuru yapılamaz
+    if (job.hireType === 'promotion_only') return;
 
     // Yaş kontrolü
     if (character.age < job.minAge || character.age > job.maxAge) return;
@@ -1062,10 +1062,15 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const activity = ACTIVITIES.find((a) => a.id === actionId);
     if (!activity) return;
     if (character.age < activity.minAge) return;
-    if (character.money < activity.cost) return;
+
+    // 18 yaş altında hastane masraflarını aile karşılar
+    const familyPays = actionId === 'hospital' && character.age < 18;
+    const effectiveCost = familyPays ? 0 : activity.cost;
+
+    if (character.money < effectiveCost) return;
 
     let { health, happiness, smarts, looks, money } = character;
-    money -= activity.cost;
+    money -= effectiveCost;
 
     const newLog: LogEntry[] = [];
     const actionCounts = { ...character.actionCounts };
@@ -1216,11 +1221,19 @@ export const useGameStore = create<GameStore>((set, get) => ({
       if (activity.fx.looks) looks += activity.fx.looks;
       if (activity.fx.money) money += activity.fx.money;
 
-      newLog.push({
-        age: character.age,
-        text: `${activity.emoji} ${activity.name} aktivitesini yaptın.`,
-        type: 'good',
-      });
+      if (familyPays) {
+        newLog.push({
+          age: character.age,
+          text: `🏥 Hastaneye gittiniz. Masrafları ailen karşıladı. (+${activity.fx.health ?? 0} sağlık)`,
+          type: 'good',
+        });
+      } else {
+        newLog.push({
+          age: character.age,
+          text: `${activity.emoji} ${activity.name} aktivitesini yaptın.`,
+          type: 'good',
+        });
+      }
     }
 
     set({

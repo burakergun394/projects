@@ -2,11 +2,10 @@ import React, { useCallback, useMemo } from 'react';
 import { View, Text, ScrollView } from 'react-native';
 
 import { Card, Button, Badge, ProgressBar } from '@/shared/components/ui';
-import { formatMoney } from '@/shared/utils';
 import { colors } from '@/shared/theme';
 
 import { useGameStore, useCharacter } from '../stores/gameStore';
-import { JOBS, SECTOR_LABELS, SECTOR_ORDER, meetsEducationReq, getJobById } from '../data/jobs';
+import { JOBS, SECTOR_LABELS, SECTOR_ORDER, meetsEducationReq, getJobById, getFullCareerPath } from '../data/jobs';
 import { GENERAL_UNI_JOBS } from '../data/departments';
 
 import type { Job, CareerState } from '../types';
@@ -34,6 +33,17 @@ const getPerformanceColor = (score: number): string => {
   return colors.success;
 };
 
+/** Zincirin kök işini bul (promotesFrom'u geriye doğru takip et) */
+const findChainRoot = (job: Job): Job => {
+  let current = job;
+  while (current.promotesFrom) {
+    const parent = getJobById(current.promotesFrom);
+    if (!parent) break;
+    current = parent;
+  }
+  return current;
+};
+
 export const JobList = () => {
   const character = useCharacter();
   const applyForJob = useGameStore((s) => s.applyForJob);
@@ -42,14 +52,14 @@ export const JobList = () => {
 
   const isHigherEduStudent = character?.currentEdu && !character.currentEdu.auto;
 
-  // İşe alınabilecek pozisyonları grupla (executive hariç)
+  // İşe alınabilecek pozisyonları grupla (promotion_only hariç)
   const groupedJobs = useMemo(() => {
     if (!character) return {};
     const grouped: Partial<Record<Job['sector'], { job: Job; locked: boolean; lockReason: string | null }[]>> = {};
 
     for (const job of JOBS) {
-      // Executive pozisyonlar listelenmez
-      if (job.sector === 'executive') continue;
+      // Terfi-yoluyla pozisyonlar listelenmez
+      if (job.hireType === 'promotion_only') continue;
 
       const eduOk = meetsEducationReq(character.education, job.minEducation);
       const smartsOk = character.smarts >= job.minSmarts;
@@ -69,6 +79,17 @@ export const JobList = () => {
         lockReason = character.age < job.minAge
           ? `${job.minAge} yaş gerekli`
           : 'Yaş sınırı aşıldı';
+      } else if (job.minEducation === 'universite') {
+        // Bölüm kilidi kontrolü
+        const dept = character.universityDepartment;
+        if (dept) {
+          const isUnlockedByDept = dept.unlockedCareers.includes(job.id);
+          const isGeneralJob = GENERAL_UNI_JOBS.has(job.id);
+          if (!isUnlockedByDept && !isGeneralJob) {
+            locked = true;
+            lockReason = 'Bölümün bu kariyer yolunu açmıyor';
+          }
+        }
       }
 
       const sector = job.sector;
@@ -77,7 +98,7 @@ export const JobList = () => {
     }
 
     return grouped;
-  }, [character?.smarts, character?.age, character?.education]);
+  }, [character?.smarts, character?.age, character?.education, character?.universityDepartment]);
 
   const handleApply = useCallback(
     (jobId: string) => applyForJob(jobId),
@@ -145,6 +166,7 @@ export const JobList = () => {
         <CurrentJobCard
           career={career as CareerState & { currentJob: Job }}
           age={character.age}
+          smarts={character.smarts}
           onQuit={handleQuit}
           onRetire={character.age >= 60 ? handleRetire : undefined}
         />
@@ -221,11 +243,13 @@ export const JobList = () => {
 const CurrentJobCard = ({
   career,
   age,
+  smarts,
   onQuit,
   onRetire,
 }: {
   career: CareerState & { currentJob: Job };
   age: number;
+  smarts: number;
   onQuit: () => void;
   onRetire?: () => void;
 }) => {
@@ -234,6 +258,10 @@ const CurrentJobCard = ({
   const nextJob = nextJobId ? getJobById(nextJobId) : null;
   const yearsLeft = Math.max(0, job.experienceYearsForPromo - career.yearsInCurrentJob);
   const atTop = job.promotionChain.length === 0;
+
+  // Kariyer yolunun tamamını bul
+  const rootJob = findChainRoot(job);
+  const fullPath = getFullCareerPath(rootJob.id);
 
   return (
     <Card>
@@ -273,21 +301,56 @@ const CurrentJobCard = ({
         />
       </View>
 
+      {/* Kariyer Yolu */}
+      {fullPath.length > 1 && (
+        <View className="mt-md border-t border-border pt-md">
+          <Text className="text-xs font-outfit-bold text-text-secondary uppercase mb-1">
+            Kariyer Yolu
+          </Text>
+          <Text className="text-xs font-outfit text-text-tertiary">
+            {fullPath.map((p, i) => (
+              <Text key={p.id}>
+                {i > 0 && ' → '}
+                <Text className={p.id === job.id ? 'font-outfit-bold text-brand-primary' : 'text-text-tertiary'}>
+                  {p.title}
+                </Text>
+              </Text>
+            ))}
+          </Text>
+        </View>
+      )}
+
       {/* Sonraki terfi bilgisi */}
-      <View className="mt-md border-t border-border pt-md">
+      <View className={`${fullPath.length <= 1 ? 'mt-md border-t border-border pt-md' : 'mt-md'}`}>
         {atTop ? (
           <Text className="text-xs font-outfit text-brand-primary text-center">
             🏆 Kariyerinin zirvesine ulaştın!
           </Text>
         ) : nextJob ? (
           <View>
+            <Text className="text-xs font-outfit-bold text-text-secondary uppercase mb-1">
+              Sonraki Terfi
+            </Text>
             <Text className="text-xs font-outfit text-text-secondary">
-              Sonraki terfi: <Text className="font-outfit-semibold text-text-primary">{nextJob.title}</Text>
+              → <Text className="font-outfit-semibold text-text-primary">{nextJob.title}</Text>
             </Text>
             <Text className="text-xs font-outfit text-text-tertiary mt-1">
-              Gerekli: {yearsLeft > 0 ? `${yearsLeft} yıl daha + ` : ''}performans 65+
+              Gerekli: {job.experienceYearsForPromo} yıl kıdem + performans 65+
               {nextJob.minSmarts > 0 ? ` + zeka ${nextJob.minSmarts}+` : ''}
             </Text>
+            <View className="flex-row gap-md mt-1">
+              <Text className="text-xs font-mono text-text-tertiary">
+                Kıdem: {career.yearsInCurrentJob}/{job.experienceYearsForPromo} yıl {career.yearsInCurrentJob >= job.experienceYearsForPromo ? '✅' : '❌'}
+              </Text>
+              <Text className="text-xs font-mono text-text-tertiary">
+                Performans: {career.performanceScore}/65 {career.performanceScore >= 65 ? '✅' : '❌'}
+              </Text>
+              {nextJob.minSmarts > 0 && (
+                <Text className="text-xs font-mono text-text-tertiary">
+                  Zeka: {smarts}/{nextJob.minSmarts} {smarts >= nextJob.minSmarts ? '✅' : '❌'}
+                </Text>
+              )}
+            </View>
           </View>
         ) : null}
       </View>

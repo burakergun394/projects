@@ -3,6 +3,7 @@ export type Screen = 'menu' | 'create' | 'game' | 'dead';
 export type TabId = 'life' | 'job' | 'edu' | 'actions' | 'relations';
 export type LogType = 'birth' | 'good' | 'bad' | 'milestone' | 'death' | 'event';
 export type EducationLevel = 'none' | 'ilkokul' | 'ortaokul' | 'lise' | 'universite' | 'yuksek_lisans' | 'doktora';
+export type HireType = 'direct' | 'promotion_only';
 
 export type Faculty =
   | 'Tıp' | 'Hukuk' | 'Mühendislik' | 'İşletme'
@@ -54,6 +55,8 @@ export interface Job {
   experienceYearsForPromo: number;
   fireChance: number;
   respectGain: number;
+  hireType: HireType;
+  promotesFrom: string | null;
 }
 
 export interface JobHistoryEntry {

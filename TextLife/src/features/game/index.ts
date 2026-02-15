@@ -17,6 +17,7 @@ export type {
   TabId,
   LogType,
   EducationLevel,
+  HireType,
   Faculty,
   Character,
   LogEntry,
