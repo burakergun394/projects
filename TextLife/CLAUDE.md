@@ -47,8 +47,8 @@ src/
 │   │   │                   # ActionGrid, JobList, EduList, RelationList
 │   │   ├── hooks/          # useGameEngine
 │   │   ├── stores/         # gameStore.ts (Zustand — single source of truth)
-│   │   ├── data/           # events, jobs, education, activities, relationships,
-│   │   │                   # achievements, names, zodiac
+│   │   ├── data/           # events, jobs, departments, education, activities,
+│   │   │                   # relationships, achievements, names, zodiac
 │   │   ├── types/          # Character, LogEntry, Job, Education, GameEvent,
 │   │   │                   # Activity, Relationship, Achievement
 │   │   └── utils/          # rand, pick, clamp, pct
@@ -88,12 +88,14 @@ MENU → CREATE → GAME (5 tabs: Life, Job, Edu, Actions, Relations) → DEATH 
 |---|---|
 | `createCharacter(gender)` | Generate character with random stats, parents, optional sibling |
 | `ageUp()` | Core loop: age++, health decay, career processing (salary+tax, performance review, raise, promotion, firing), edu progress, random events, relationship events, friend generation, achievement check, death check |
-| `applyForJob(jobId)` | Apply for job (interview chance, hire/reject) |
+| `applyForJob(jobId)` | Apply for job (hireType check, department lock, prestige salary bonus, interview chance) |
 | `quitJob()` | Voluntary quit with career history |
 | `retire()` | Retire at 60+ with pension calculation |
 | `startEdu(edu)` | Start higher education (exam system, prereqs, diploma check) |
 | `dropOut()` | Drop out of current education (if allowed) |
-| `doAction(actionId)` | Activities — special mechanics for gamble, crime, travel |
+| `doAction(actionId)` | Activities — special mechanics for gamble, crime, travel; family pays hospital for age<18 |
+| `takeExam()` | YKS university entrance exam (smarts×3 + study bonus + luck) |
+| `selectDepartment(deptId)` | Enroll in university department after YKS score |
 | `marry()` / `divorce()` / `haveChild()` | Relationship lifecycle |
 | `interactRelation(id, type)` | spend_time / argue — affects closeness |
 | `newGame()` | Full reset |
@@ -103,7 +105,8 @@ MENU → CREATE → GAME (5 tabs: Life, Job, Edu, Actions, Relations) → DEATH 
 | Data | Count | File |
 |---|---|---|
 | Events (5 age pools) | 168 total (24/36/36/45/27) | `data/events.ts` |
-| Jobs (6 sectors, career ladders) | 70+ | `data/jobs.ts` |
+| Jobs (6 sectors, career ladders) | 111 (direct + promotion_only) | `data/jobs.ts` |
+| University departments | 20 (12 faculties, devlet/özel) | `data/departments.ts` |
 | Activities | 14 | `data/activities.ts` |
 | Achievements | 20 | `data/achievements.ts` |
 | Relationship event pools | 36 (14 marriage + 10 friendship + 12 family) | `data/relationships.ts` |
@@ -134,6 +137,8 @@ type TabId = 'life' | 'job' | 'edu' | 'actions' | 'relations';
 type LogType = 'birth' | 'good' | 'bad' | 'milestone' | 'death' | 'event';
 
 type EducationLevel = 'none' | 'ilkokul' | 'ortaokul' | 'lise' | 'universite' | 'yuksek_lisans' | 'doktora';
+type HireType = 'direct' | 'promotion_only';
+type Faculty = 'Tıp' | 'Hukuk' | 'Mühendislik' | ... ; // 12 faculties
 
 interface Character {
   name, surname, gender, city, zodiac, birthYear, age,
@@ -157,6 +162,11 @@ interface Character {
   crimeCount: number,
   lowestHealth: number,
   highestHealth: number,
+  // YKS sınav ve bölüm sistemi
+  examStudyCount: number,
+  lastExamScore: number | null,
+  lastExamAge: number | null,
+  universityDepartment: Department | null,
 }
 
 interface CareerState {
@@ -193,6 +203,22 @@ interface Job {
   experienceYearsForPromo: number;
   fireChance: number;                   // annual % (0-100)
   respectGain: number;
+  hireType: HireType;                   // 'direct' = apply, 'promotion_only' = promo only
+  promotesFrom: string | null;          // job ID that promotes into this role
+}
+
+interface Department {
+  id: string;
+  name: string;
+  faculty: Faculty;
+  minScore: number;                     // YKS min score to enroll
+  type: 'devlet' | 'ozel';
+  annualCost: number;
+  totalYears: number;
+  smartsGain: number;
+  prestige: number;                     // affects starting salary bonus
+  unlockedCareers: string[];            // job IDs this dept unlocks
+  description: string;
 }
 
 interface Education {

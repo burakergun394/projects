@@ -13,10 +13,11 @@ interface ActionCardProps {
   activity: Activity;
   onPress: (id: string) => void;
   canAfford: boolean;
+  familyPays: boolean;
 }
 
 const ActionCard = React.memo(
-  ({ activity, onPress, canAfford }: ActionCardProps) => (
+  ({ activity, onPress, canAfford, familyPays }: ActionCardProps) => (
     <Pressable
       onPress={() => onPress(activity.id)}
       className="flex-1 m-1"
@@ -29,11 +30,15 @@ const ActionCard = React.memo(
         <Text className="text-sm font-outfit-semibold text-text-primary text-center">
           {activity.name}
         </Text>
-        {activity.cost > 0 && (
+        {familyPays ? (
+          <Text className="text-xs font-outfit text-success mt-1">
+            Aile karşılar
+          </Text>
+        ) : activity.cost > 0 ? (
           <Text className="text-xs font-mono text-text-tertiary mt-1">
             {formatMoney(activity.cost)}
           </Text>
-        )}
+        ) : null}
       </Card>
     </Pressable>
   ),
@@ -62,7 +67,11 @@ export const ActionGrid = () => {
       <ActionCard
         activity={item}
         onPress={handlePress}
-        canAfford={(character?.money ?? 0) >= item.cost}
+        familyPays={item.id === 'hospital' && (character?.age ?? 0) < 18}
+        canAfford={
+          (item.id === 'hospital' && (character?.age ?? 0) < 18)
+            || (character?.money ?? 0) >= item.cost
+        }
       />
     ),
     [handlePress, character?.money],

@@ -1067,7 +1067,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const familyPays = actionId === 'hospital' && character.age < 18;
     const effectiveCost = familyPays ? 0 : activity.cost;
 
-    if (character.money < effectiveCost) return;
+    if (!familyPays && character.money < effectiveCost) return;
 
     let { health, happiness, smarts, looks, money } = character;
     money -= effectiveCost;
